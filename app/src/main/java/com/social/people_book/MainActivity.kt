@@ -1,7 +1,7 @@
 package com.social.people_book
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -25,7 +25,7 @@ import com.social.people_book.ui.theme.ThemeViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val context = this
+        val context: Context = this
         setContent {
             val viewModel = viewModel<ThemeViewModel>(
                 factory = object : ViewModelProvider.Factory {
@@ -36,8 +36,7 @@ class MainActivity : ComponentActivity() {
             )
 
             //Theme mode state
-//            val isSystemDarkTheme = isSystemInDarkTheme()
-            val isSystemDarkTheme = true
+            val isSystemDarkTheme = isSystemInDarkTheme()
             var isDarkMode by remember {
                 mutableStateOf(
                     viewModel.isDarkMode ?: isSystemDarkTheme
@@ -46,10 +45,9 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(key1 = viewModel.isDarkMode) {
                 isDarkMode = viewModel.isDarkMode ?: isSystemDarkTheme
-                Log.d("DarkModeValueViewModel***", viewModel.isDarkMode.toString())
             }
+
             PeopleBookTheme(darkTheme = isDarkMode) {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -57,7 +55,8 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavigationGraph(
                         navController = navController,
-                        isDarkMode = isDarkMode
+                        isDarkMode = isDarkMode,
+                        themeViewModel = viewModel
                     )
                 }
             }

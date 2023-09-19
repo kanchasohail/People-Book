@@ -10,17 +10,16 @@ import androidx.lifecycle.ViewModel
 class ThemeViewModel(context: Context) : ViewModel() {
     private val isDarkThemeKey: String = "is_dark_theme"
 
-//    private val darkModeSetting: Boolean? = isThemeDarkMode()
-    private val darkModeSetting: Boolean? = null
+    private val prefs: SharedPreferences by lazy {
+        context.getSharedPreferences("people_book_prefs", Context.MODE_PRIVATE)
+    }
+
+    private val darkModeSetting: Boolean? = isThemeDarkMode()
 
     var isDarkMode by mutableStateOf(
         darkModeSetting
     )
 
-
-    private val prefs: SharedPreferences by lazy {
-        context.getSharedPreferences("people_book_prefs", Context.MODE_PRIVATE)
-    }
 
     fun setThemeMode(isDarkMode: Boolean) {
         val stringValue = if (isDarkMode) "true" else "false"
