@@ -39,20 +39,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.social.people_book.R
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.theme.ThemeViewModel
 import com.social.people_book.views.side_drawer.DrawerContent
 import com.social.people_book.views.side_drawer.DrawerHeader
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun HomeScreen(navController: NavController, isDarkMode: Boolean) {
+fun HomeScreen(navController: NavController, isDarkMode: Boolean , themeViewModel: ThemeViewModel) {
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
@@ -89,6 +92,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean) {
 
                 DrawerContent(
                     navController = navController,
+                    viewModel = themeViewModel
                 )
             }
         }) {
@@ -124,10 +128,10 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean) {
                     actions = {
                         IconButton(onClick = { /*TODO*/ }) {
                             Icon(
-                                imageVector = Icons.Default.List,
+                                painter = painterResource(id = R.drawable.ic_settings_icon),
                                 contentDescription = "More",
                                 tint = appBarTextColor,
-                                modifier = Modifier.size(35.dp)
+                                modifier = Modifier.size(30.dp)
                             )
                         }
                     }
@@ -193,7 +197,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean) {
 @Composable
 fun TagsChip(
     modifier: Modifier = Modifier,
-    chipText:String,
+    chipText: String,
     textColor: Color,
     isSelected: Boolean,
     onClick: () -> Unit
