@@ -20,8 +20,7 @@ fun MyText(
 ) {
     Text(
         text = text,
-        modifier = modifier
-            .padding(start = 8.dp),
+        modifier = modifier,
         textAlign = TextAlign.Start,
         fontWeight = FontWeight.W500,
         fontSize = fontSize.sp,
