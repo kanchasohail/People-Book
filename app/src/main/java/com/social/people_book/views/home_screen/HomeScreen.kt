@@ -1,30 +1,26 @@
 package com.social.people_book.views.home_screen
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,36 +34,26 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.views.side_drawer.DrawerContent
 import com.social.people_book.views.side_drawer.DrawerHeader
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showSystemUi = true)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-//fun HomeScreen(navController: NavController, isDarkMode: Boolean) {
-fun HomeScreen(
-    navController: NavController = rememberNavController(),
-    isDarkMode: Boolean = false
-) {
+fun HomeScreen(navController: NavController, isDarkMode: Boolean) {
+
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
     val appBarTextColor =
@@ -78,13 +64,7 @@ fun HomeScreen(
     val localCoroutineScope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
-    var isTagExpanded by remember {
-        mutableStateOf(false)
-    }
-
-    // Create a list of items to display in the grid
-    val items = (1..50).map { "Item $it" }
-
+    val viewModel = viewModel<HomeScreenViewModel>()
 
     // To close the drawer on backPress
     BackHandler(drawerState.isOpen) {
@@ -163,16 +143,18 @@ fun HomeScreen(
                     MyDivider()
                 }
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     MyText(text = "Search by tags", textColor = textColor)
                     IconButton(onClick = {
-                        isTagExpanded = !isTagExpanded
+                        viewModel.isTagExpanded = !viewModel.isTagExpanded
                     }) {
                         Icon(
-                            imageVector = if (isTagExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                            imageVector = if (viewModel.isTagExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                             contentDescription = "More",
                             tint = textColor,
                             modifier = Modifier.size(35.dp)
@@ -180,43 +162,55 @@ fun HomeScreen(
                     }
                 }
 
-                if (isTagExpanded) {
-                    LazyRow {
-                        items(5) {
-                            AssistChip(
-                                onClick = { /*TODO*/ },
-                                label = { MyText(text = "Friend") },
-                                modifier = Modifier.padding(4.dp)
-                            )
+                if (viewModel.isTagExpanded) {
+                    FlowRow {
+                        viewModel.tags.forEach { tagItem ->
+                            TagsChip(
+                                chipText = tagItem,
+                                textColor = textColor,
+                                isSelected = tagItem == viewModel.selectedTagItem
+                            ) {
+                                viewModel.selectedTagItem = tagItem
+                            }
                         }
                     }
                 }
 
-                LazyVerticalStaggeredGrid(
-                    state = rememberLazyStaggeredGridState(),
-                    columns = StaggeredGridCells.Adaptive(150.dp),
+                LazyVerticalGrid(
+                    state = rememberLazyGridState(),
+                    columns = GridCells.Adaptive(150.dp),
                 ) {
-                    items(items.size) {
-                        Card(
-                            modifier = Modifier
-                                .size(150.dp)
-                                .padding(8.dp),
-                            elevation = CardDefaults.cardElevation(
-                                6.dp
-                            )
-                        ) {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(text = items[it])
-                            }
-                        }
-
+                    items(viewModel.items.size) {
+                        ItemCard(text = viewModel.items[it], textColor = textColor)
                     }
                 }
 
             }
         }
+    }
+}
+
+@Composable
+fun TagsChip(
+    modifier: Modifier = Modifier,
+    chipText:String,
+    textColor: Color,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = modifier
+            .padding(4.dp)
+            .clickable {
+                onClick()
+            }, colors = CardDefaults.cardColors(
+            containerColor = if (isSelected) Color.White else Color.Gray,
+        )
+    ) {
+        MyText(
+            text = chipText,
+            textColor = if (isSelected) Color.Black else textColor,
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 12.dp)
+        )
     }
 }
