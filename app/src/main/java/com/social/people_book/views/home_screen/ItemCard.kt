@@ -1,6 +1,7 @@
 package com.social.people_book.views.home_screen
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,12 +16,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ItemCard(modifier: Modifier = Modifier, text: String , textColor:Color) {
+fun ItemCard(modifier: Modifier = Modifier, text: String, textColor: Color, onClick: () -> Unit) {
     Card(
         modifier = modifier
             .size(150.dp)
-            .padding(8.dp),
-        border = BorderStroke(.7.dp , textColor),
+            .padding(8.dp)
+            .clickable {
+                onClick()
+            },
+        border = BorderStroke(.7.dp, textColor),
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent,
             contentColor = textColor
