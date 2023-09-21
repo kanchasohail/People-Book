@@ -1,6 +1,7 @@
 package com.social.people_book.views.home_screen
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,8 +20,11 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ChipColors
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -46,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.social.people_book.R
+import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.ThemeViewModel
@@ -55,7 +60,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun HomeScreen(navController: NavController, isDarkMode: Boolean , themeViewModel: ThemeViewModel) {
+fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel: ThemeViewModel) {
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
@@ -146,46 +151,56 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean , themeViewMode
                 if (isDarkMode) {
                     MyDivider()
                 }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    MyText(text = "Search by tags", textColor = textColor)
-                    IconButton(onClick = {
-                        viewModel.isTagExpanded = !viewModel.isTagExpanded
-                    }) {
-                        Icon(
-                            imageVector = if (viewModel.isTagExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                            contentDescription = "More",
-                            tint = textColor,
-                            modifier = Modifier.size(35.dp)
-                        )
-                    }
-                }
 
-                if (viewModel.isTagExpanded) {
-                    FlowRow {
-                        viewModel.tags.forEach { tagItem ->
-                            TagsChip(
-                                chipText = tagItem,
-                                textColor = textColor,
-                                isSelected = tagItem == viewModel.selectedTagItem
-                            ) {
-                                viewModel.selectedTagItem = tagItem
+                //Actual Home Screen Content
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        MyText(text = "Search by tags", textColor = textColor)
+                        IconButton(onClick = {
+                            viewModel.isTagExpanded = !viewModel.isTagExpanded
+                        }) {
+                            Icon(
+                                imageVector = if (viewModel.isTagExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                                contentDescription = "More",
+                                tint = textColor,
+                                modifier = Modifier.size(35.dp)
+                            )
+                        }
+                    }
+
+                    if (viewModel.isTagExpanded) {
+                        FlowRow {
+                            viewModel.tags.forEach { tagItem ->
+                                TagsChip(
+                                    chipText = tagItem,
+                                    textColor = textColor,
+                                    isSelected = tagItem == viewModel.selectedTagItem
+                                ) {
+                                    viewModel.selectedTagItem = tagItem
+                                }
                             }
                         }
                     }
-                }
 
-                LazyVerticalGrid(
-                    state = rememberLazyGridState(),
-                    columns = GridCells.Adaptive(150.dp),
-                ) {
-                    items(viewModel.items.size) {
-                        ItemCard(text = viewModel.items[it], textColor = textColor)
+                    LazyVerticalGrid(
+                        state = rememberLazyGridState(),
+                        columns = GridCells.Adaptive(150.dp),
+                    ) {
+                        items(viewModel.items.size) {
+                            ItemCard(text = viewModel.items[it], textColor = textColor, onClick = {
+                                navController.navigate(Screens.PersonDetailsScreen.route)
+                            })
+                        }
                     }
                 }
 
@@ -194,6 +209,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean , themeViewMode
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TagsChip(
     modifier: Modifier = Modifier,
@@ -202,19 +218,40 @@ fun TagsChip(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    Card(
-        modifier = modifier
-            .padding(4.dp)
-            .clickable {
-                onClick()
-            }, colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) Color.White else Color.Gray,
-        )
-    ) {
-        MyText(
-            text = chipText,
-            textColor = if (isSelected) Color.Black else textColor,
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 12.dp)
-        )
-    }
+    val borderColor: Color? = if (isSelected) Color.White else null
+
+    AssistChip(
+        onClick = onClick, label = {
+            MyText(
+                text = chipText,
+                textColor = if (isSelected) Color.Black else textColor,
+            )
+        },
+        colors = AssistChipDefaults.assistChipColors(
+            containerColor = if (isSelected) Color.White else Color.Transparent
+        ),
+//        border = borderColor?.let {
+//            AssistChipDefaults.assistChipBorder(
+//                borderColor = it
+//            )
+//        },
+        modifier = modifier.padding(4.dp)
+    )
+
+
+//    Card(
+//        modifier = modifier
+//            .padding(4.dp)
+//            .clickable {
+//                onClick()
+//            }, colors = CardDefaults.cardColors(
+//            containerColor = if (isSelected) Color.White else Color.Gray,
+//        )
+//    ) {
+//        MyText(
+//            text = chipText,
+//            textColor = if (isSelected) Color.Black else textColor,
+//            modifier = Modifier.padding(vertical = 8.dp, horizontal = 12.dp)
+//        )
+//    }
 }
