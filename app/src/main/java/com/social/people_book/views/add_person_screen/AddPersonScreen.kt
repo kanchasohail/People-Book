@@ -1,35 +1,47 @@
 package com.social.people_book.views.add_person_screen
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.social.people_book.ui.layout.MyDivider
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Preview(showSystemUi = true)
 @Composable
-fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
+//fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
+fun AddPersonScreen(
+    navController: NavController = rememberNavController(),
+    isDarkMode: Boolean = true
+) {
+
+    val viewModel = viewModel<AddPersonViewModel>()
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
@@ -53,7 +65,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                       navController.popBackStack()
+                        navController.popBackStack()
                     }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -93,6 +105,49 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     .fillMaxSize()
                     .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
+                TextField(
+                    value = viewModel.name,
+                    onValueChange = {
+                        viewModel.name = it
+                    },
+                    label = { Text(text = "Name") },
+                    modifier = Modifier.padding(8.dp)
+                )
+                TextField(
+                    value = viewModel.number,
+                    onValueChange = {
+                        viewModel.number = it
+                    },
+                    label = { Text(text = "Number") },
+                    modifier = Modifier.padding(8.dp)
+                )
+                TextField(
+                    value = viewModel.email,
+                    onValueChange = {
+                        viewModel.email = it
+                    },
+                    label = { Text(text = "Email") },
+                    modifier = Modifier.padding(8.dp)
+                )
+                TextField(
+                    value = viewModel.about,
+                    onValueChange = {
+                        viewModel.about = it
+                    },
+                    label = { Text(text = "About") },
+                    modifier = Modifier.padding(8.dp)
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+                Button(
+                    onClick = {
+                       viewModel.addPerson()
+                    }, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(text = "Save")
+                }
             }
 
         }
