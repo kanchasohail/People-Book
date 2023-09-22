@@ -8,14 +8,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.List
@@ -27,6 +30,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ChipColors
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -112,8 +116,8 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                         Text(
                             text = "People Book",
                             color = appBarTextColor,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.SemiBold
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.W500
                         )
                     },
                     navigationIcon = {
@@ -136,11 +140,20 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                                 painter = painterResource(id = R.drawable.ic_settings_icon),
                                 contentDescription = "More",
                                 tint = appBarTextColor,
-                                modifier = Modifier.size(30.dp)
+                                modifier = Modifier.size(26.dp)
                             )
                         }
                     }
                 )
+            },
+            floatingActionButton = {
+                ExtendedFloatingActionButton(onClick = {
+                    navController.navigate(Screens.AddPersonScreen.route)
+                }) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    MyText(text = "Add")
+                }
             }
         ) { paddingValues ->
             Column(

@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -61,7 +63,7 @@ fun PersonDetailsScreen(isDarkMode: Boolean = true) {
                     Text(
                         text = "Shimul Riley",
                         color = appBarTextColor,
-                        fontSize = 30.sp,
+                        fontSize = 26.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 },
@@ -73,7 +75,7 @@ fun PersonDetailsScreen(isDarkMode: Boolean = true) {
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Back",
                             tint = appBarTextColor,
-                            modifier = Modifier.size(35.dp)
+                            modifier = Modifier.size(32.dp)
                         )
                     }
                 },
@@ -84,7 +86,7 @@ fun PersonDetailsScreen(isDarkMode: Boolean = true) {
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = "Delete",
                                 tint = appBarTextColor,
-                                modifier = Modifier.size(30.dp)
+                                modifier = Modifier.size(26.dp)
                             )
                         }
 
@@ -93,7 +95,7 @@ fun PersonDetailsScreen(isDarkMode: Boolean = true) {
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Edit",
                                 tint = appBarTextColor,
-                                modifier = Modifier.size(30.dp)
+                                modifier = Modifier.size(26.dp)
                             )
                         }
                     }
@@ -101,7 +103,6 @@ fun PersonDetailsScreen(isDarkMode: Boolean = true) {
             )
         }
     ) { paddingValues ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -111,11 +112,11 @@ fun PersonDetailsScreen(isDarkMode: Boolean = true) {
                 MyDivider()
             }
 
-//Actual Screen Content
+            //Actual Screen Content
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 12.dp , vertical = 8.dp)
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
 
                 Column(
