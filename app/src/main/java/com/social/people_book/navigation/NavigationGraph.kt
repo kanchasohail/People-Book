@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.social.people_book.ui.theme.ThemeViewModel
+import com.social.people_book.views.add_person_screen.AddPersonScreen
 import com.social.people_book.views.home_screen.HomeScreen
 import com.social.people_book.views.person_details_screen.PersonDetailsScreen
 import com.social.people_book.views.premium_screen.PremiumScreen
@@ -30,6 +31,11 @@ fun NavigationGraph(
                 isDarkMode = isDarkMode,
                 themeViewModel = themeViewModel
             )
+        }
+
+        //Add Person Screen
+        composable(Screens.AddPersonScreen.route){
+            AddPersonScreen(navController , isDarkMode)
         }
 
         //Person Details Screen
