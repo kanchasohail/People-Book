@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "371748172937",
+    "project_id": "people-book-e6b8d",
+    "storage_bucket": "people-book-e6b8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371748172937:android:fc786f70d70dc1f5ac8258",
+        "android_client_info": {
+          "package_name": "com.social.people_book"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBCOj45__Mub4h4q6VCALzR78z4de7Q7o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

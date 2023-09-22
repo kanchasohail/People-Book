@@ -42,6 +42,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -77,6 +79,10 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     val viewModel = viewModel<HomeScreenViewModel>()
+
+    SideEffect {
+        viewModel.loadPerson()
+    }
 
     // To close the drawer on backPress
     BackHandler(drawerState.isOpen) {
@@ -210,7 +216,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                         columns = GridCells.Adaptive(150.dp),
                     ) {
                         items(viewModel.items.size) {
-                            ItemCard(text = viewModel.items[it], textColor = textColor, onClick = {
+                            ItemCard(text = viewModel.items[it].name, textColor = textColor, onClick = {
                                 navController.navigate(Screens.PersonDetailsScreen.route)
                             })
                         }

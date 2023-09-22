@@ -4,9 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.social.people_book.model.data_models.Person
 
 class HomeScreenViewModel : ViewModel() {
 
+    private val db = Firebase.firestore
 
     var selectedTagItem by mutableStateOf("All")
 
@@ -15,7 +19,25 @@ class HomeScreenViewModel : ViewModel() {
 
 
     // Create a list of items to display in the grid
-    val items = (1..50).map { "Item $it" }
+    var items = mutableListOf<Person>()
+
+    fun loadPerson() {
+        db.collection("users").get().addOnSuccessListener { result ->
+            items = mutableListOf()
+            for (document in result) {
+                val thisPerson = Person(
+                    personId = null,
+                    name = document["name"].toString(),
+                    number = document["number"].toString(),
+                    email = document["email"].toString(),
+                    about = null
+                )
+                items.add(thisPerson)
+            }
+
+        }
+//        items =
+    }
 
     val tags = listOf("All", "Friends", "colleagues", "Cousin", "Girlfriends", "Call Girls")
 
