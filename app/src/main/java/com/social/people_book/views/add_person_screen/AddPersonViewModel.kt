@@ -6,11 +6,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class AddPersonViewModel : ViewModel() {
     private val db = Firebase.firestore
+    private val auth = Firebase.auth
 
     var name by mutableStateOf("")
     var number by mutableStateOf("")
@@ -29,6 +31,8 @@ class AddPersonViewModel : ViewModel() {
 
         // Add a new document with a generated ID
         db.collection("users")
+            .document(auth.currentUser?.uid.toString())
+            .collection("persons")
             .add(person)
             .addOnSuccessListener { documentReference ->
                 Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
