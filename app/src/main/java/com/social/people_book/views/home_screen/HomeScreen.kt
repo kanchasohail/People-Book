@@ -141,7 +141,9 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                         }
                     },
                     actions = {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = { /*TODO*/
+                            navController.navigate(Screens.AuthScreen.route)
+                        }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_settings_icon),
                                 contentDescription = "More",
