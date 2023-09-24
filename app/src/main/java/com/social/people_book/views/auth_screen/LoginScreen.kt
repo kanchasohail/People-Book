@@ -19,10 +19,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,6 +34,7 @@ import androidx.navigation.NavController
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
+import com.social.people_book.ui.layout.MyText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +45,8 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
     val appBarTextColor =
         if (isDarkMode) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
     val textColor = if (isDarkMode) Color.White else Color.Black
+
+    val passwordFocusRequester = remember { FocusRequester() }
 
     Scaffold(
         topBar = {
@@ -85,7 +92,9 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                         imeAction = androidx.compose.ui.text.input.ImeAction.Next
                     ),
                     keyboardActions = KeyboardActions(
-                        onNext = { /* Handle the next action */ }
+                        onNext = {
+                            passwordFocusRequester.requestFocus()
+                        }
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -108,12 +117,13 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
+                        .focusRequester(passwordFocusRequester)
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Login button
-                if(!viewModel.isLoading){
+                if (!viewModel.isLoading) {
                     Button(
                         onClick = {
                             viewModel.login(navController, context)
@@ -124,12 +134,12 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                     ) {
                         Text("Login")
                     }
-                }else {
+                } else {
                     LoadingIndicator()
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Create a new account", modifier = Modifier.clickable {
+                MyText(text = "Create a new account", modifier = Modifier.clickable {
                     navController.navigate(Screens.SignUpScreen.route)
                 })
             }

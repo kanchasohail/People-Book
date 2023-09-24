@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -15,7 +16,7 @@ import androidx.compose.ui.unit.sp
 fun MyText(
     modifier: Modifier = Modifier,
     text: String,
-    fontSize: Int = 19,
+    fontSize: TextUnit = 19.sp,
     textColor: Color = MaterialTheme.colorScheme.onPrimaryContainer
 ) {
     Text(
@@ -23,7 +24,7 @@ fun MyText(
         modifier = modifier,
         textAlign = TextAlign.Start,
         fontWeight = FontWeight.W500,
-        fontSize = fontSize.sp,
+        fontSize = fontSize,
         color = textColor
     )
 }
