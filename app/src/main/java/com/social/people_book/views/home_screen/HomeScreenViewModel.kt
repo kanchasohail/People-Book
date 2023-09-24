@@ -39,7 +39,6 @@ class HomeScreenViewModel : ViewModel() {
             }
 
         }
-//        items =
     }
 
     val tags = listOf("All", "Friends", "colleagues", "Cousin", "Girlfriends", "Call Girls")

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.social.people_book.navigation.Screens
+import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -112,15 +113,19 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Login button
-                Button(
-                    onClick = {
-                        viewModel.login(navController, context)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                ) {
-                    Text("Login")
+                if(!viewModel.isLoading){
+                    Button(
+                        onClick = {
+                            viewModel.login(navController, context)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text("Login")
+                    }
+                }else {
+                    LoadingIndicator()
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

@@ -20,9 +20,13 @@ class AuthViewModel : ViewModel() {
     var password by mutableStateOf("")
     var name by mutableStateOf("")
 
+    var isLoading by mutableStateOf(false)
+
 
     fun signUp(navController: NavController, context: Context) {
+        isLoading = true
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            isLoading = false
             if (task.isSuccessful) {
                 saveUser(context)
                 navController.navigate(Screens.HomeScreen.route)
@@ -37,7 +41,9 @@ class AuthViewModel : ViewModel() {
     }
 
     fun login(navController: NavController, context: Context) {
+        isLoading = true
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            isLoading = false
             if (task.isSuccessful) {
                 saveUser(context)
                 navController.navigate(Screens.HomeScreen.route)
