@@ -65,7 +65,8 @@ class MainActivity : ComponentActivity() {
                     NavigationGraph(
                         navController = navController,
                         isDarkMode = isDarkMode,
-                        themeViewModel = viewModel
+                        themeViewModel = viewModel,
+                        auth = auth
                     )
                     if(auth.currentUser == null){
                         navController.navigate(Screens.AuthScreen.route)

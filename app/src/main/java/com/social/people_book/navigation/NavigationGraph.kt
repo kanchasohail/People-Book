@@ -21,13 +21,14 @@ import com.social.people_book.views.splash_screen.SplashScreen
 fun NavigationGraph(
     navController: NavHostController,
     isDarkMode: Boolean,
-    themeViewModel: ThemeViewModel
+    themeViewModel: ThemeViewModel,
+    auth: FirebaseAuth
 ) {
-//    NavHost(navController = navController, startDestination = Screens.SplashScreen.route) {
-    NavHost(navController = navController, startDestination = Screens.HomeScreen.route) {
+    NavHost(navController = navController, startDestination = Screens.SplashScreen.route) {
+//    NavHost(navController = navController, startDestination = Screens.HomeScreen.route) {
         //Splash Screen
         composable(Screens.SplashScreen.route) {
-            SplashScreen(navController = navController, isDarkMode = isDarkMode)
+            SplashScreen(navController = navController, isDarkMode = isDarkMode, auth = auth)
         }
 
         //Home Screen

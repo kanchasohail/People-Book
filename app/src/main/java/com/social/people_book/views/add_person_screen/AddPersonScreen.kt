@@ -21,8 +21,10 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,6 +43,7 @@ fun AddPersonScreen(
     navController: NavController = rememberNavController(),
     isDarkMode: Boolean = true
 ) {
+    val context = LocalContext.current
 
     val viewModel = viewModel<AddPersonViewModel>()
 
@@ -103,7 +107,8 @@ fun AddPersonScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TextField(
                     value = viewModel.name,
@@ -139,14 +144,18 @@ fun AddPersonScreen(
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
-                Button(
-                    onClick = {
-                       viewModel.addPerson()
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    Text(text = "Save")
+                if (!viewModel.isLoading) {
+                    Button(
+                        onClick = {
+                            viewModel.addPerson(context)
+                        }, modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+                        Text(text = "Save")
+                    }
+                } else {
+                    LoadingIndicator()
                 }
             }
 

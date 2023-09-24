@@ -21,12 +21,13 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import com.social.people_book.R
 import com.social.people_book.navigation.Screens
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController, isDarkMode :Boolean) {
+fun SplashScreen(navController: NavController, isDarkMode: Boolean, auth: FirebaseAuth) {
 
     val iconColor = MaterialTheme.colorScheme.primary
 
@@ -42,7 +43,11 @@ fun SplashScreen(navController: NavController, isDarkMode :Boolean) {
         )
         delay(800L)
         navController.popBackStack()
-        navController.navigate(Screens.HomeScreen.route)
+        if (auth.currentUser != null) {
+            navController.navigate(Screens.HomeScreen.route)
+        } else {
+            navController.navigate(Screens.AuthScreen.route)
+        }
     }
 
     Column(
