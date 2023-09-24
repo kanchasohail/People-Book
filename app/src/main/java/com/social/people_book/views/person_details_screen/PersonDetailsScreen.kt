@@ -131,7 +131,7 @@ fun PersonDetailsScreen(isDarkMode: Boolean = true) {
                             .clip(RoundedCornerShape(18.dp))
                             .size(200.dp)
                     )
-                    MyText(text = "Shimul Riley", fontSize = 28, textColor = textColor)
+                    MyText(text = "Shimul Riley", fontSize = 28.sp, textColor = textColor)
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))

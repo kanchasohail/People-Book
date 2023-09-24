@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.social.people_book.R
 import com.social.people_book.ui.layout.CustomSwitch
@@ -87,7 +88,7 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                MyText(text = "Theme", fontSize = 21, textColor = textColor)
+                MyText(text = "Theme", fontSize = 21.sp, textColor = textColor)
 
                 CustomSwitch(checked = isDarkMode, onCheckedChange = {
                     isDarkMode = it
