@@ -26,29 +26,30 @@ class AddPersonViewModel : ViewModel() {
 
     fun addPerson(context: Context) {
         isLoading = true
-        // Create a new user with a first and last name
-        val person = mapOf(
-            "name" to name,
-            "number" to number,
-            "email" to email,
-            "detail" to about
-        )
 
         // Add a new document with a generated ID
-        db.collection("users")
+        val thisDocument = db.collection("users")
             .document(auth.currentUser?.uid.toString())
-            .collection("persons")
-            .add(person)
-            .addOnSuccessListener { documentReference ->
-                isLoading = false
-                Toast.makeText(context, "Person added successfully!", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-                isLoading = false
-                Toast.makeText(context, "Failed to add Person!", Toast.LENGTH_SHORT).show()
-                Log.w(TAG, "Error adding document", e)
-            }
+            .collection("persons").document()
+
+        // Set the data in tha document
+        thisDocument.set(
+            // Create a map of data to be saved
+            mapOf(
+                "person_id" to thisDocument.id,
+                "name" to name,
+                "number" to number,
+                "email" to email,
+                "detail" to about
+            )
+        ).addOnSuccessListener {
+            isLoading = false
+            Toast.makeText(context, "Person added successfully!", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener { e ->
+            isLoading = false
+            Toast.makeText(context, "Failed to add Person!", Toast.LENGTH_SHORT).show()
+            Log.w(TAG, "Error adding document", e)
+        }
 
 
     }

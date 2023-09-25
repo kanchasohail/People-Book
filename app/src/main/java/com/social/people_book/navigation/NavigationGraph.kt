@@ -2,9 +2,11 @@ package com.social.people_book.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import com.social.people_book.ui.theme.ThemeViewModel
 import com.social.people_book.util.sharedViewModel
@@ -48,7 +50,7 @@ fun NavigationGraph(
             //Login Screen
             composable(Screens.LoginScreen.route) { entry ->
                 val viewModel = entry.sharedViewModel<AuthViewModel>(navController)
-                LoginScreen(isDarkMode, viewModel , navController)
+                LoginScreen(isDarkMode, viewModel, navController)
             }
             //SignUp Screen
             composable(Screens.SignUpScreen.route) { entry ->
@@ -63,9 +65,15 @@ fun NavigationGraph(
         }
 
         //Person Details Screen
-        composable(Screens.PersonDetailsScreen.route) {
+        composable(Screens.PersonDetailsScreen.route + "/{person_id}", arguments = listOf(
+            navArgument("person_id") {
+                type = NavType.StringType
+            }
+        )) { entry ->
             PersonDetailsScreen(
+                navController = navController,
                 isDarkMode = isDarkMode,
+                personId = entry.arguments?.getString("person_id").toString()
             )
         }
 

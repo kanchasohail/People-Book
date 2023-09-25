@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -134,7 +135,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                         }
                     },
                     actions = {
-                        IconButton(onClick = {         }) {
+                        IconButton(onClick = { }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_settings_icon),
                                 contentDescription = "More",
@@ -208,10 +209,17 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                         state = rememberLazyGridState(),
                         columns = GridCells.Adaptive(150.dp),
                     ) {
-                        items(viewModel.items.size) {
-                            ItemCard(text = viewModel.items[it].name, textColor = textColor, onClick = {
-                                navController.navigate(Screens.PersonDetailsScreen.route)
-                            })
+                        items(viewModel.items) {
+                            ItemCard(
+                                text = it.name,
+                                textColor = textColor,
+                                onClick = {
+                                    navController.navigate(
+                                        Screens.PersonDetailsScreen.withArgs(
+                                            it.personId
+                                        )
+                                    )
+                                })
                         }
                     }
                 }

@@ -29,7 +29,7 @@ class HomeScreenViewModel : ViewModel() {
             items = mutableListOf()
             for (document in result) {
                 val thisPerson = Person(
-                    personId = null,
+                    personId = document["person_id"].toString(),
                     name = document["name"].toString(),
                     number = document["number"].toString(),
                     email = document["email"].toString(),
