@@ -80,7 +80,9 @@ fun AddPersonScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        viewModel.addPerson(context)
+                    }) {
                         Icon(
                             imageVector = Icons.Default.Done,
                             contentDescription = "Save",

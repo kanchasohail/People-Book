@@ -13,12 +13,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,30 +26,38 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.social.people_book.R
+import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 
-@Preview(showSystemUi = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PersonDetailsScreen(isDarkMode: Boolean = true) {
+fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, personId: String) {
+
+    val viewModel = viewModel<PersonDetailsViewModel>()
+    SideEffect {
+        viewModel.loadPerson(personId)
+    }
+
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
     val appBarTextColor =
         if (isDarkMode) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
     val textColor = if (isDarkMode) Color.White else Color.Black
+
 
     Scaffold(
         topBar = {
@@ -61,7 +67,7 @@ fun PersonDetailsScreen(isDarkMode: Boolean = true) {
                 ),
                 title = {
                     Text(
-                        text = "Shimul Riley",
+                        text = viewModel.thisPerson.name,
                         color = appBarTextColor,
                         fontSize = 26.sp,
                         fontWeight = FontWeight.SemiBold
@@ -69,7 +75,7 @@ fun PersonDetailsScreen(isDarkMode: Boolean = true) {
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-
+                        navController.popBackStack()
                     }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -111,6 +117,11 @@ fun PersonDetailsScreen(isDarkMode: Boolean = true) {
             if (isDarkMode) {
                 MyDivider()
             }
+            if (viewModel.isLoading) {
+                Box(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), contentAlignment = Alignment.Center) {
+                    LoadingIndicator()
+                }
+            }
 
             //Actual Screen Content
             Column(
@@ -131,28 +142,32 @@ fun PersonDetailsScreen(isDarkMode: Boolean = true) {
                             .clip(RoundedCornerShape(18.dp))
                             .size(200.dp)
                     )
-                    MyText(text = "Shimul Riley", fontSize = 28.sp, textColor = textColor)
+                    MyText(
+                        text = viewModel.thisPerson.name,
+                        fontSize = 28.sp,
+                        textColor = textColor
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(modifier = Modifier.fillMaxWidth()) {
                     MyText(text = "Phone:", textColor = textColor)
                     Spacer(modifier = Modifier.width(5.dp))
-                    MyText(text = "+82 8398263892", textColor = textColor)
+                    MyText(text = viewModel.thisPerson.number.toString(), textColor = textColor)
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(modifier = Modifier.fillMaxWidth()) {
                     MyText(text = "Email:", textColor = textColor)
                     Spacer(modifier = Modifier.width(5.dp))
-                    MyText(text = "shimulriley@gmail.com", textColor = textColor)
+                    MyText(text = viewModel.thisPerson.email.toString(), textColor = textColor)
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(modifier = Modifier.fillMaxWidth()) {
                     MyText(text = "About:", textColor = textColor)
                     Spacer(modifier = Modifier.width(5.dp))
-                    MyText(text = "Cute, Handsome, Horny", textColor = textColor)
+                    MyText(text = viewModel.thisPerson.about.toString(), textColor = textColor)
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
