@@ -12,10 +12,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.social.people_book.R
+import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.layout.CustomSwitch
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.ThemeViewModel
@@ -62,13 +70,20 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel) {
                 bottomEnd = 10.dp
             )
         ) {
-            Image(
-                painter = painterResource(id = if (isDarkMode) R.drawable.app_icon_horizontal_dark else R.drawable.app_icon_horizontal_light),
-                contentDescription = "App Icon",
-                modifier = Modifier
-                    .height(150.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
+//            Image(
+//                painter = painterResource(id = if (isDarkMode) R.drawable.app_icon_horizontal_dark else R.drawable.app_icon_horizontal_light),
+//                contentDescription = "App Icon",
+//                modifier = Modifier
+//                    .height(150.dp)
+//                    .align(Alignment.CenterHorizontally)
+//            )
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                MyText(text = "Shimul's", fontSize = 32.sp)
+                MyText(text = "People Book", fontSize = 24.sp)
+            }
         }
 
         Column(
@@ -88,7 +103,7 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                MyText(text = "Theme", fontSize = 21.sp, textColor = textColor)
+                MyText(text = "Dark Theme", fontSize = 21.sp, textColor = textColor)
 
                 CustomSwitch(checked = isDarkMode, onCheckedChange = {
                     isDarkMode = it
@@ -97,13 +112,44 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel) {
                 }, modifier = Modifier.padding(end = 8.dp, top = 5.dp))
             }
 
-//            PremiumCard(textColor = textColor, navController = navController)
-//
-//            AboutUsCard(textColor = textColor)
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        //Todo open trash
+                    },
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                MyText(text = "Trash", fontSize = 21.sp, textColor = textColor)
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "trash",
+                    tint = textColor,
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+
+
 
             Spacer(modifier = Modifier.weight(1f))
 
-//            PrivacyPolicyText()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        navController.navigate(Screens.SettingsScreen.route)
+                    },
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                MyText(text = "Settings", fontSize = 21.sp, textColor = textColor)
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "Settings",
+                    tint = textColor,
+                    modifier = Modifier.size(30.dp)
+                )
+            }
 
         }
     }

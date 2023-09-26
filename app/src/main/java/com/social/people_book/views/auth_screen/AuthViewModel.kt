@@ -45,7 +45,6 @@ class AuthViewModel : ViewModel() {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             isLoading = false
             if (task.isSuccessful) {
-                saveUser(context)
                 navController.navigate(Screens.HomeScreen.route)
             } else {
                 Toast.makeText(
