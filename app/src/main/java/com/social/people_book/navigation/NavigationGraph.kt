@@ -17,6 +17,7 @@ import com.social.people_book.views.auth_screen.SignUpScreen
 import com.social.people_book.views.home_screen.HomeScreen
 import com.social.people_book.views.person_details_screen.PersonDetailsScreen
 import com.social.people_book.views.premium_screen.PremiumScreen
+import com.social.people_book.views.settings_screen.SettingsScreen
 import com.social.people_book.views.splash_screen.SplashScreen
 
 @Composable
@@ -26,8 +27,8 @@ fun NavigationGraph(
     themeViewModel: ThemeViewModel,
     auth: FirebaseAuth
 ) {
-    NavHost(navController = navController, startDestination = Screens.SplashScreen.route) {
-//    NavHost(navController = navController, startDestination = Screens.HomeScreen.route) {
+//    NavHost(navController = navController, startDestination = Screens.SplashScreen.route) {
+    NavHost(navController = navController, startDestination = Screens.HomeScreen.route) {
         //Splash Screen
         composable(Screens.SplashScreen.route) {
             SplashScreen(navController = navController, isDarkMode = isDarkMode, auth = auth)
@@ -80,6 +81,11 @@ fun NavigationGraph(
         //Premium Screen
         composable(Screens.PremiumScreen.route) {
             PremiumScreen(navController, isDarkMode = isDarkMode)
+        }
+
+        //Settings Screen
+        composable(Screens.SettingsScreen.route){
+            SettingsScreen(isDarkMode = isDarkMode, navController)
         }
 
     }

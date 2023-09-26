@@ -1,6 +1,7 @@
 package com.social.people_book.views.home_screen
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -22,23 +23,24 @@ class HomeScreenViewModel : ViewModel() {
 
 
     // Create a list of items to display in the grid
-    var items = mutableListOf<Person>()
+    var items = mutableStateListOf<Person>()
 
     fun loadPerson() {
-        db.collection("users").document(auth.currentUser?.uid.toString()).collection("persons").get().addOnSuccessListener { result ->
-            items = mutableListOf()
-            for (document in result) {
-                val thisPerson = Person(
-                    personId = document["person_id"].toString(),
-                    name = document["name"].toString(),
-                    number = document["number"].toString(),
-                    email = document["email"].toString(),
-                    about = null
-                )
-                items.add(thisPerson)
+        db.collection("users").document(auth.currentUser?.uid.toString()).collection("persons")
+            .get().addOnSuccessListener { result ->
+                val dbItems = mutableStateListOf<Person>()
+                for (document in result) {
+                    val thisPerson = Person(
+                        personId = document["person_id"].toString(),
+                        name = document["name"].toString(),
+                        number = document["number"].toString(),
+                        email = document["email"].toString(),
+                        about = null
+                    )
+                    dbItems.add(thisPerson)
+                }
+                items = dbItems
             }
-
-        }
     }
 
     val tags = listOf("All", "Friends", "colleagues", "Cousin", "Girlfriends", "Call Girls")
