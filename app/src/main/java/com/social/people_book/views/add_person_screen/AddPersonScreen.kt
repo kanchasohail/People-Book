@@ -61,13 +61,13 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                 ),
                 title = {
                     Row {
-                        Text(
+                        MyText(
                             text = "Tag : ",
                             color = appBarTextColor,
                             fontSize = 26.sp,
                             fontWeight = FontWeight.SemiBold
                         )
-                        Text(
+                        MyText(
                             text = "No Tag",
                             color = appBarTextColor,
                             fontSize = 25.sp,
@@ -94,7 +94,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                             },
                             modifier = Modifier.padding(8.dp)
                         ) {
-                            MyText(text = "Save", textColor = appBarTextColor)
+                            MyText(text = "Save", color = appBarTextColor)
                         }
                     } else {
                         LoadingIndicator()
@@ -135,7 +135,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Name :", fontSize = 28.sp)
+                    MyText(text = "Name :", fontSize = 20.sp, color = textColor)
                     TextField(
                         value = viewModel.name,
                         onValueChange = {
@@ -151,7 +151,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Number :", fontSize = 28.sp)
+                    MyText(text = "Number :", fontSize = 20.sp, color = textColor)
                     TextField(
                         value = viewModel.number,
                         onValueChange = {
@@ -166,7 +166,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Email :", fontSize = 28.sp)
+                    MyText(text = "Email :", fontSize = 20.sp, color = textColor)
                     TextField(
                         value = viewModel.email,
                         onValueChange = {
@@ -181,7 +181,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "About :", fontSize = 28.sp)
+                    MyText(text = "About :", fontSize = 20.sp, color = textColor)
                     TextField(
                         value = viewModel.about,
                         onValueChange = {

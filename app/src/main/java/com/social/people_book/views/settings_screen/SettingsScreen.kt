@@ -46,7 +46,7 @@ fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController= rem
                     containerColor = appBarBackGroundColor,
                 ),
                 title = {
-                    Text(
+                    MyText(
                         text = "Settings", color = appBarTextColor, fontSize = 26.sp,
                         fontWeight = FontWeight.W500
                     )

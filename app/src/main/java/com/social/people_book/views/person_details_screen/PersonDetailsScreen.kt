@@ -66,7 +66,7 @@ fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, perso
                     containerColor = appBarBackGroundColor,
                 ),
                 title = {
-                    Text(
+                    MyText(
                         text = viewModel.thisPerson.name,
                         color = appBarTextColor,
                         fontSize = 26.sp,
@@ -145,29 +145,29 @@ fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, perso
                     MyText(
                         text = viewModel.thisPerson.name,
                         fontSize = 28.sp,
-                        textColor = textColor
+                        color = textColor
                     )
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    MyText(text = "Phone:", textColor = textColor)
+                    MyText(text = "Phone:", color = textColor)
                     Spacer(modifier = Modifier.width(5.dp))
-                    MyText(text = viewModel.thisPerson.number.toString(), textColor = textColor)
+                    MyText(text = viewModel.thisPerson.number.toString(), color = textColor)
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    MyText(text = "Email:", textColor = textColor)
+                    MyText(text = "Email:", color = textColor)
                     Spacer(modifier = Modifier.width(5.dp))
-                    MyText(text = viewModel.thisPerson.email.toString(), textColor = textColor)
+                    MyText(text = viewModel.thisPerson.email.toString(), color = textColor)
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    MyText(text = "About:", textColor = textColor)
+                    MyText(text = "About:", color = textColor)
                     Spacer(modifier = Modifier.width(5.dp))
-                    MyText(text = viewModel.thisPerson.about.toString(), textColor = textColor)
+                    MyText(text = viewModel.thisPerson.about.toString(), color = textColor)
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
