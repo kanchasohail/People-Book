@@ -103,7 +103,7 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                MyText(text = "Dark Theme", fontSize = 21.sp, textColor = textColor)
+                MyText(text = "Dark Theme", fontSize = 21.sp, color = textColor)
 
                 CustomSwitch(checked = isDarkMode, onCheckedChange = {
                     isDarkMode = it
@@ -121,7 +121,7 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel) {
                     },
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                MyText(text = "Trash", fontSize = 21.sp, textColor = textColor)
+                MyText(text = "Trash", fontSize = 21.sp, color = textColor)
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "trash",
@@ -142,7 +142,7 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel) {
                     },
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                MyText(text = "Settings", fontSize = 21.sp, textColor = textColor)
+                MyText(text = "Settings", fontSize = 21.sp, color = textColor)
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Settings",

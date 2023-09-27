@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.social.people_book.R
+import com.social.people_book.ui.layout.MyText
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,7 +29,7 @@ fun DrawerHeader(
     val appBarTextColor = if(isDarkMode) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
     TopAppBar(
         title = {
-            Text(
+            MyText(
                 text = stringResource(
                     id = R.string.app_name
                 ),

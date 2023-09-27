@@ -45,7 +45,7 @@ fun AccountDetailsCard(modifier: Modifier = Modifier, textColor: Color) {
                 .fillMaxWidth()
                 .padding(top = 12.dp, bottom = 12.dp, start = 14.dp, end = 8.dp)
         ) {
-            MyText(text = "Account", fontSize = 22.sp, textColor = textColor)
+            MyText(text = "Account", fontSize = 22.sp, color = textColor)
 
             Column(
                 modifier = Modifier

@@ -113,7 +113,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                         containerColor = appBarBackGroundColor,
                     ),
                     title = {
-                        Text(
+                        MyText(
                             text = "People Book",
                             color = appBarTextColor,
                             fontSize = 26.sp,
@@ -178,7 +178,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        MyText(text = "Search by tags", textColor = textColor)
+                        MyText(text = "Search by tags", color = textColor)
                         IconButton(onClick = {
                             viewModel.isTagExpanded = !viewModel.isTagExpanded
                         }) {
@@ -244,7 +244,7 @@ fun TagsChip(
         onClick = onClick, label = {
             MyText(
                 text = chipText,
-                textColor = if (isSelected) Color.Black else textColor,
+                color = if (isSelected) Color.Black else textColor,
             )
         },
         colors = AssistChipDefaults.assistChipColors(
