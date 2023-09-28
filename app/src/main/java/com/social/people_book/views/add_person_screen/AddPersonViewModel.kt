@@ -8,9 +8,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.social.people_book.navigation.Screens
 
 class AddPersonViewModel : ViewModel() {
     private val db = Firebase.firestore
@@ -24,7 +26,7 @@ class AddPersonViewModel : ViewModel() {
     var isLoading by mutableStateOf(false)
 
 
-    fun addPerson(context: Context) {
+    fun addPerson(context: Context, navController: NavController) {
         isLoading = true
 
         // Add a new document with a generated ID
@@ -40,10 +42,13 @@ class AddPersonViewModel : ViewModel() {
                 "name" to name,
                 "number" to number,
                 "email" to email,
-                "detail" to about
+                "about" to about
             )
         ).addOnSuccessListener {
             isLoading = false
+            if(navController.currentDestination?.route == Screens.AddPersonScreen.route){
+                navController.popBackStack()
+            }
             Toast.makeText(context, "Person added successfully!", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener { e ->
             isLoading = false

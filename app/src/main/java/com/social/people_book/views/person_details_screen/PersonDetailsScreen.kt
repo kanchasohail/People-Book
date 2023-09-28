@@ -20,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,13 +41,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.social.people_book.R
+import com.social.people_book.ui.common_views.ShowAlert
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.theme.redColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, personId: String) {
+    val context = LocalContext.current
 
     val viewModel = viewModel<PersonDetailsViewModel>()
     SideEffect {
@@ -86,22 +91,26 @@ fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, perso
                     }
                 },
                 actions = {
-                    Row {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete",
-                                tint = appBarTextColor,
-                                modifier = Modifier.size(26.dp)
-                            )
-                        }
-
-                        IconButton(onClick = { /*TODO*/ }) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        OutlinedButton(onClick = { /*TODO*/ }) {
+                            MyText(text = "Edit", fontSize = 20.sp ,color = appBarTextColor)
+                            Spacer(modifier = Modifier.width(8.dp))
                             Icon(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Edit",
                                 tint = appBarTextColor,
-                                modifier = Modifier.size(26.dp)
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                        
+                        IconButton(onClick = {
+                            viewModel.showDialogState = true
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                tint = redColor,
+                                modifier = Modifier.size(30.dp)
                             )
                         }
                     }
@@ -117,8 +126,17 @@ fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, perso
             if (isDarkMode) {
                 MyDivider()
             }
+
+            ShowAlert(msg = "Are you sure to delete this person?",
+                showDialog = viewModel.showDialogState,
+                onDismiss = { viewModel.showDialogState = false },
+                onConfirm = {viewModel.deletePerson(personId, context, navController)})
+
+
             if (viewModel.isLoading) {
-                Box(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp), contentAlignment = Alignment.Center) {
                     LoadingIndicator()
                 }
             }
@@ -169,11 +187,6 @@ fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, perso
                     Spacer(modifier = Modifier.width(5.dp))
                     MyText(text = viewModel.thisPerson.about.toString(), color = textColor)
                 }
-
-                Spacer(modifier = Modifier.height(10.dp))
-                TextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
-
-
             }
         }
     }
