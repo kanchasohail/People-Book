@@ -60,7 +60,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     containerColor = appBarBackGroundColor,
                 ),
                 title = {
-                    Row {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         MyText(
                             text = "Tag : ",
                             color = appBarTextColor,
@@ -87,17 +87,19 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     }
                 },
                 actions = {
-                    if (!viewModel.isLoading) {
-                        OutlinedButton(
-                            onClick = {
-                                viewModel.addPerson(context)
-                            },
-                            modifier = Modifier.padding(8.dp)
-                        ) {
+                    OutlinedButton(
+                        onClick = {
+                            if (!viewModel.isLoading) {
+                                viewModel.addPerson(context, navController)
+                            }
+                        },
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        if (!viewModel.isLoading) {
                             MyText(text = "Save", color = appBarTextColor)
+                        } else {
+                            LoadingIndicator()
                         }
-                    } else {
-                        LoadingIndicator()
                     }
                 }
             )

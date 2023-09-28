@@ -51,6 +51,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.social.people_book.R
 import com.social.people_book.navigation.Screens
+import com.social.people_book.ui.common_views.ShowAlert
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.ThemeViewModel
@@ -76,6 +77,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
 
     SideEffect {
         viewModel.loadPerson()
+        viewModel.loadUserName()
     }
 
     // To close the drawer on backPress
@@ -101,7 +103,8 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
 
                 DrawerContent(
                     navController = navController,
-                    viewModel = themeViewModel
+                    viewModel = themeViewModel,
+                    userName = viewModel.userName
                 )
             }
         }) {
@@ -147,9 +150,12 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                 )
             },
             floatingActionButton = {
-                ExtendedFloatingActionButton(onClick = {
-                    navController.navigate(Screens.AddPersonScreen.route)
-                }) {
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        navController.navigate(Screens.AddPersonScreen.route)
+                    },
+                    modifier = Modifier.padding(bottom = 16.dp)
+                ) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
                     Spacer(modifier = Modifier.width(8.dp))
                     MyText(text = "Add")

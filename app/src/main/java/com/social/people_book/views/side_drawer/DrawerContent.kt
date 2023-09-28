@@ -44,7 +44,7 @@ import com.social.people_book.ui.theme.ThemeViewModel
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun DrawerContent(navController: NavController, viewModel: ThemeViewModel) {
+fun DrawerContent(navController: NavController, viewModel: ThemeViewModel, userName:String) {
 
     val isSystemSettingDarkTheme by mutableStateOf(isSystemInDarkTheme())
     var isDarkMode by remember {
@@ -81,7 +81,7 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel) {
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                MyText(text = "Shimul's", fontSize = 32.sp)
+                MyText(text = "$userName's", fontSize = 32.sp)
                 MyText(text = "People Book", fontSize = 24.sp)
             }
         }
