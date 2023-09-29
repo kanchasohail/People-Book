@@ -7,6 +7,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.social.people_book.ui.layout.MyText
 
 @Composable
 fun ShowAlert(
@@ -18,19 +19,19 @@ fun ShowAlert(
     if (showDialog) {
         AlertDialog(
             title = {
-                Text("Confirm deletion")
+                MyText("Confirm deletion")
             },
-            text = { Text(text = msg, fontSize = 20.sp) },
+            text = { MyText(text = msg, fontSize = 20.sp) },
 
             onDismissRequest = onDismiss,
             confirmButton = {
                 TextButton(onClick = onConfirm) {
-                    Text("Yes", fontSize = 18.sp)
+                    MyText("Yes", fontSize = 18.sp)
                 }
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    Text("No", fontSize = 18.sp)
+                    MyText("No", fontSize = 18.sp)
                 }
             },
             shape = RoundedCornerShape(8.dp)
