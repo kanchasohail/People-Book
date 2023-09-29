@@ -21,6 +21,7 @@ class AuthViewModel : ViewModel() {
     var name by mutableStateOf("")
 
     var isLoading by mutableStateOf(false)
+    var isShowPassword by mutableStateOf(true)
 
 
     fun signUp(navController: NavController, context: Context) {

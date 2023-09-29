@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -29,18 +31,25 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.social.people_book.R
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
+import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.theme.RubikFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,14 +98,16 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 // Name field
+                MyText(text = "Name", modifier = Modifier.padding(start = 8.dp))
                 OutlinedTextField(
                     value = viewModel.name,
                     onValueChange = { viewModel.name = it },
-                    label = { Text("Name") },
+                    placeholder = {
+                        MyText(text = "Enter your name", color = Color.Gray)
+                    },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Next
                     ),
@@ -111,13 +122,17 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                 )
 
                 // Email field
+                MyText(text = "Email", modifier = Modifier.padding(start = 8.dp))
                 OutlinedTextField(
                     value = viewModel.email,
                     onValueChange = { viewModel.email = it },
-                    label = { Text("Email") },
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next
+                        imeAction = ImeAction.Next,
+                        keyboardType = KeyboardType.Email
                     ),
+                    placeholder = {
+                        MyText(text = "example@email.com", color = Color.Gray)
+                    },
                     keyboardActions = KeyboardActions(
                         onNext = {
                             passwordFocusRequester.requestFocus()
@@ -131,15 +146,34 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Password field
+
+                MyText(text = "Password", modifier = Modifier.padding(start = 8.dp))
+
                 OutlinedTextField(
                     value = viewModel.password,
                     onValueChange = { viewModel.password = it },
-                    label = { Text("Password") },
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Password
                     ),
                     keyboardActions = KeyboardActions(
                         onDone = { /* Handle the login action */ }
+                    ),
+                    placeholder = {
+                        MyText(text = "Type password", color = Color.Gray)
+                    },
+                    trailingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_eye_icon),
+                            contentDescription = "show password",
+                            tint = if (viewModel.isShowPassword) Color.Red else textColor,
+                            modifier = Modifier.clickable {
+                                viewModel.isShowPassword = !viewModel.isShowPassword
+                            })
+                    },
+                    singleLine = true,
+                    visualTransformation = if (viewModel.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(
+                        mask = '*'
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -159,43 +193,44 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                             .fillMaxWidth()
                             .height(56.dp)
                     ) {
-                        Text("SignUp")
+                        MyText("SignUp", fontSize = 18.sp)
                     }
                 } else {
                     LoadingIndicator()
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                val annotatedString = buildAnnotatedString {
-                    append("Already have an account? ")
-                    pushStringAnnotation(tag = "login", annotation = "nothing")
-//                    append("login here")
-                    withStyle(
-                        style = SpanStyle(
-                            color = Color.Blue,
-                            fontSize = 16.sp
-                        )
-                    ) {
-                        append("login here")
-                    }
-                    pop()
-                }
-                ClickableText(
-                    text = annotatedString,
-                    onClick = { offset ->
-                        annotatedString.getStringAnnotations(
-                            tag = "login",
-                            start = offset,
-                            end = offset
-                        ).firstOrNull()?.let {
-                            navController.popBackStack()
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    val annotatedString = buildAnnotatedString {
+                        append("Already have an account? ")
+                        pushStringAnnotation(tag = "login", annotation = "nothing")
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Blue,
+                                fontFamily = RubikFontFamily
+                            )
+                        ) {
+                            append("login here")
                         }
-                    },
-                    style = TextStyle(
-                        fontSize = 19.sp,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        pop()
+                    }
+                    ClickableText(
+                        text = annotatedString,
+                        onClick = { offset ->
+                            annotatedString.getStringAnnotations(
+                                tag = "login",
+                                start = offset,
+                                end = offset
+                            ).firstOrNull()?.let {
+                                navController.popBackStack()
+                            }
+                        },
+                        style = TextStyle(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontFamily = RubikFontFamily
+                        )
                     )
-                )
+                }
             }
         }
     }

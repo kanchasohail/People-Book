@@ -2,7 +2,9 @@ package com.social.people_book.views.auth_screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,8 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -27,10 +33,15 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.social.people_book.R
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
@@ -80,17 +91,20 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 // Email field
+                MyText(text = "Email", modifier = Modifier.padding(start = 8.dp))
                 OutlinedTextField(
                     value = viewModel.email,
                     onValueChange = { viewModel.email = it },
-                    label = { Text("Email") },
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = androidx.compose.ui.text.input.ImeAction.Next
+                        imeAction = androidx.compose.ui.text.input.ImeAction.Next,
+                        keyboardType = KeyboardType.Email
                     ),
+                    placeholder = {
+                        MyText(text = "example@email.com", color = Color.Gray)
+                    },
                     keyboardActions = KeyboardActions(
                         onNext = {
                             passwordFocusRequester.requestFocus()
@@ -104,21 +118,48 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Password field
+
+                MyText(text = "Password", modifier = Modifier.padding(start = 8.dp))
+
                 OutlinedTextField(
                     value = viewModel.password,
                     onValueChange = { viewModel.password = it },
-                    label = { Text("Password") },
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = androidx.compose.ui.text.input.ImeAction.Done
+                        imeAction = androidx.compose.ui.text.input.ImeAction.Done,
+                        keyboardType = KeyboardType.Password
                     ),
                     keyboardActions = KeyboardActions(
                         onDone = { /* Handle the login action */ }
+                    ),
+                    placeholder = {
+                        MyText(text = "Type password", color = Color.Gray)
+                    },
+                    trailingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_eye_icon),
+                            contentDescription = "show password",
+                            tint = if (viewModel.isShowPassword) Color.Red else textColor,
+                            modifier = Modifier.clickable {
+                                viewModel.isShowPassword = !viewModel.isShowPassword
+                            })
+                    },
+                    singleLine = true,
+                    visualTransformation = if (viewModel.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(
+                        mask = '*'
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
                         .focusRequester(passwordFocusRequester)
                 )
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    MyText(text = "Forgot password?", color = Color.Blue)
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -132,16 +173,21 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                             .fillMaxWidth()
                             .height(56.dp)
                     ) {
-                        Text("Login")
+                        MyText("Login", fontSize = 18.sp)
                     }
                 } else {
                     LoadingIndicator()
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                MyText(text = "Create a new account", modifier = Modifier.clickable {
-                    navController.navigate(Screens.SignUpScreen.route)
-                })
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    MyText(text = "Create a new account", modifier = Modifier.clickable {
+                        navController.navigate(Screens.SignUpScreen.route)
+                    })
+                }
             }
         }
     }
