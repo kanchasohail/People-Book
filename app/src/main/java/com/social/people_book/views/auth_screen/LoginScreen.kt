@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.social.people_book.R
 import com.social.people_book.navigation.Screens
+import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
@@ -152,12 +153,8 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                         .padding(8.dp)
                         .focusRequester(passwordFocusRequester)
                 )
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
+
+                CenterBox(modifier = Modifier.padding(horizontal = 8.dp)) {
                     MyText(text = "Forgot password?", color = Color.Blue)
                 }
 
@@ -176,14 +173,13 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                         MyText("Login", fontSize = 18.sp)
                     }
                 } else {
-                    LoadingIndicator()
+                    CenterBox {
+                        LoadingIndicator()
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
+                CenterBox {
                     MyText(text = "Create a new account", modifier = Modifier.clickable {
                         navController.navigate(Screens.SignUpScreen.route)
                     })

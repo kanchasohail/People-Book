@@ -22,8 +22,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -41,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.social.people_book.R
-import com.social.people_book.ui.common_views.ShowAlert
+import com.social.people_book.ui.common_views.ConfirmDeletionDialog
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
@@ -93,7 +91,7 @@ fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, perso
                 actions = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         OutlinedButton(onClick = { /*TODO*/ }) {
-                            MyText(text = "Edit", fontSize = 20.sp ,color = appBarTextColor)
+                            MyText(text = "Edit", fontSize = 20.sp, color = appBarTextColor)
                             Spacer(modifier = Modifier.width(8.dp))
                             Icon(
                                 imageVector = Icons.Default.Edit,
@@ -102,7 +100,7 @@ fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, perso
                                 modifier = Modifier.size(20.dp)
                             )
                         }
-                        
+
                         IconButton(onClick = {
                             viewModel.showDialogState = true
                         }) {
@@ -127,16 +125,18 @@ fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, perso
                 MyDivider()
             }
 
-            ShowAlert(msg = "Are you sure to delete this person?",
+            ConfirmDeletionDialog(
                 showDialog = viewModel.showDialogState,
                 onDismiss = { viewModel.showDialogState = false },
-                onConfirm = {viewModel.deletePerson(personId, context, navController)})
+                onConfirm = { viewModel.deletePerson(personId, context, navController) })
 
 
             if (viewModel.isLoading) {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp), contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp), contentAlignment = Alignment.Center
+                ) {
                     LoadingIndicator()
                 }
             }
