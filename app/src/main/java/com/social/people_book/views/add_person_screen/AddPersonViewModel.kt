@@ -27,6 +27,14 @@ class AddPersonViewModel : ViewModel() {
 
 
     fun addPerson(context: Context, navController: NavController) {
+        if (name == "" && number == "" && email == "" && about == "") {
+            Toast.makeText(
+                context,
+                "Please enter something to save this person!",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
         isLoading = true
 
         // Add a new document with a generated ID
@@ -46,7 +54,7 @@ class AddPersonViewModel : ViewModel() {
             )
         ).addOnSuccessListener {
             isLoading = false
-            if(navController.currentDestination?.route == Screens.AddPersonScreen.route){
+            if (navController.currentDestination?.route == Screens.AddPersonScreen.route) {
                 navController.popBackStack()
             }
             Toast.makeText(context, "Person added successfully!", Toast.LENGTH_SHORT).show()
