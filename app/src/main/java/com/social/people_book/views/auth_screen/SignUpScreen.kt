@@ -22,11 +22,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -47,20 +49,19 @@ import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.RubikFontFamily
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkMode: Boolean) {
 
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val passwordFocusRequester = remember { FocusRequester() }
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
     val appBarTextColor =
         if (isDarkMode) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
     val textColor = if (isDarkMode) Color.White else Color.Black
-
-    val passwordFocusRequester = remember { FocusRequester() }
-
 
     Scaffold(
         topBar = {
@@ -121,7 +122,18 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                 MyText(text = "Email", modifier = Modifier.padding(start = 8.dp))
                 OutlinedTextField(
                     value = viewModel.email,
-                    onValueChange = { viewModel.email = it },
+                    onValueChange = {
+                        viewModel.email = it
+                        viewModel.isValidEmail(it)
+                    },
+                    supportingText = {
+                        if (!viewModel.isEmailValid) {
+                            MyText(
+                                text = "Please enter a valid email",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Next,
                         keyboardType = KeyboardType.Email
@@ -147,14 +159,26 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
 
                 OutlinedTextField(
                     value = viewModel.password,
-                    onValueChange = { viewModel.password = it },
+                    onValueChange = { viewModel.password = it
+                                    viewModel.isValidPassword(it)},
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Done,
                         keyboardType = KeyboardType.Password
                     ),
                     keyboardActions = KeyboardActions(
-                        onDone = { /* Handle the login action */ }
+                        onDone = {
+                            keyboardController?.hide()
+                            passwordFocusRequester.freeFocus()
+                        }
                     ),
+                    supportingText = {
+                        if (!viewModel.isPasswordValid) {
+                            MyText(
+                                text = "Please enter at least 8 characters",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    },
                     placeholder = {
                         MyText(text = "Type password", color = Color.Gray)
                     },

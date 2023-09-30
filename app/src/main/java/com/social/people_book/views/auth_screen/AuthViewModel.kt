@@ -22,7 +22,19 @@ class AuthViewModel : ViewModel() {
 
     var isLoading by mutableStateOf(false)
     var isShowPassword by mutableStateOf(true)
+    var isEmailValid by mutableStateOf(true)
+    var isPasswordValid by mutableStateOf(true)
 
+    fun isValidEmail(email: String): Boolean {
+        val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
+        isEmailValid = email.matches(emailRegex) && email.isNotEmpty()
+        return isEmailValid
+    }
+
+    fun isValidPassword(password: String): Boolean {
+        isPasswordValid = password.length > 7
+        return isPasswordValid
+    }
 
     fun signUp(navController: NavController, context: Context) {
         isLoading = true

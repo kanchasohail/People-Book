@@ -12,6 +12,7 @@ import com.social.people_book.ui.theme.ThemeViewModel
 import com.social.people_book.util.sharedViewModel
 import com.social.people_book.views.add_person_screen.AddPersonScreen
 import com.social.people_book.views.auth_screen.AuthViewModel
+import com.social.people_book.views.auth_screen.ForgotPasswordScreen
 import com.social.people_book.views.auth_screen.LoginScreen
 import com.social.people_book.views.auth_screen.SignUpScreen
 import com.social.people_book.views.home_screen.HomeScreen
@@ -58,6 +59,11 @@ fun NavigationGraph(
                 val viewModel = entry.sharedViewModel<AuthViewModel>(navController)
                 SignUpScreen(navController, viewModel, isDarkMode)
             }
+            //Forgot Password Screen
+            composable(Screens.ForgotPasswordScreen.route) { entry ->
+                val viewModel = entry.sharedViewModel<AuthViewModel>(navController)
+                ForgotPasswordScreen(isDarkMode, viewModel, navController)
+            }
         }
 
         //Add Person Screen
@@ -84,7 +90,7 @@ fun NavigationGraph(
         }
 
         //Settings Screen
-        composable(Screens.SettingsScreen.route){
+        composable(Screens.SettingsScreen.route) {
             SettingsScreen(isDarkMode = isDarkMode, navController)
         }
 
