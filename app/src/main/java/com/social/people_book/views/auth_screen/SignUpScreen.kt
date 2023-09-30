@@ -1,10 +1,7 @@
 package com.social.people_book.views.auth_screen
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +22,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -45,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.social.people_book.R
-import com.social.people_book.navigation.Screens
+import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
@@ -196,11 +192,13 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                         MyText("SignUp", fontSize = 18.sp)
                     }
                 } else {
-                    LoadingIndicator()
+                    CenterBox {
+                        LoadingIndicator()
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                CenterBox {
                     val annotatedString = buildAnnotatedString {
                         append("Already have an account? ")
                         pushStringAnnotation(tag = "login", annotation = "nothing")
