@@ -18,10 +18,23 @@ class PersonDetailsViewModel : ViewModel() {
     private val auth = Firebase.auth
 
     var thisPerson by mutableStateOf(Person("", "", "", "", ""))
+    var name by mutableStateOf("")
+    var number by mutableStateOf("")
+    var email by mutableStateOf("")
+    var about by mutableStateOf("")
+
 
     var isLoading by mutableStateOf(false)
     var showDialogState by mutableStateOf(false)
 
+
+    fun loadForEditing() {
+        name = thisPerson.name
+        number = thisPerson.number.toString()
+        email = thisPerson.email.toString()
+        about = thisPerson.about.toString()
+
+    }
 
     fun loadPerson(personId: String) {
         isLoading = true
@@ -52,6 +65,27 @@ class PersonDetailsViewModel : ViewModel() {
                 Toast.makeText(context, "Person Deleted Successfully", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
                 Toast.makeText(context, "Failed to delete person.", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    fun updatePerson(context: Context, navController: NavController) {
+        isLoading = true
+        db.collection("users").document(auth.currentUser?.uid.toString()).collection("persons")
+            .document(thisPerson.personId).update(
+                mapOf(
+                    "person_id" to thisPerson.personId,
+                    "name" to name,
+                    "number" to number,
+                    "email" to email,
+                    "about" to about
+                )
+            ).addOnSuccessListener {
+                isLoading = false
+                Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
+                navController.popBackStack()
+            }.addOnFailureListener {
+                isLoading = false
+                Toast.makeText(context, "Failed to Update!", Toast.LENGTH_SHORT).show()
             }
     }
 

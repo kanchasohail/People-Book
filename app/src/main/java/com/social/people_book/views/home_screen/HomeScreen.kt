@@ -218,11 +218,18 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                                 text = it.name,
                                 textColor = textColor,
                                 onClick = {
+//                                    navController.navigate(
+//                                        Screens.PersonDetailsScreen.withArgs(
+//                                            it.personId
+//                                        )
+//                                    )
+
                                     navController.navigate(
-                                        Screens.PersonDetailsScreen.withArgs(
+                                        Screens.PersonDetailsGroup.withArgs(
                                             it.personId
                                         )
                                     )
+
                                 })
                         }
                     }

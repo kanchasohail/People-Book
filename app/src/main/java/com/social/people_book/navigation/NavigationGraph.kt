@@ -16,7 +16,9 @@ import com.social.people_book.views.auth_screen.ForgotPasswordScreen
 import com.social.people_book.views.auth_screen.LoginScreen
 import com.social.people_book.views.auth_screen.SignUpScreen
 import com.social.people_book.views.home_screen.HomeScreen
+import com.social.people_book.views.person_details_screen.PersonDetailsEditingScreen
 import com.social.people_book.views.person_details_screen.PersonDetailsScreen
+import com.social.people_book.views.person_details_screen.PersonDetailsViewModel
 import com.social.people_book.views.premium_screen.PremiumScreen
 import com.social.people_book.views.settings_screen.SettingsScreen
 import com.social.people_book.views.splash_screen.SplashScreen
@@ -71,18 +73,33 @@ fun NavigationGraph(
             AddPersonScreen(navController, isDarkMode)
         }
 
-        //Person Details Screen
-        composable(Screens.PersonDetailsScreen.route + "/{person_id}", arguments = listOf(
-            navArgument("person_id") {
-                type = NavType.StringType
+        //Persons Details Navigation Group
+        navigation(
+            route = Screens.PersonDetailsGroup.route + "/{person_id}",
+            startDestination = Screens.PersonDetailsScreen.route
+        ) {
+            //Person Details Screen
+            composable(Screens.PersonDetailsScreen.route, arguments = listOf(
+                navArgument("person_id") {
+                    type = NavType.StringType
+                }
+            )) { entry ->
+                val viewModel = entry.sharedViewModel<PersonDetailsViewModel>(navController)
+                PersonDetailsScreen(
+                    navController = navController,
+                    isDarkMode = isDarkMode,
+                    personId = entry.arguments?.getString("person_id").toString(),
+                    viewModel = viewModel
+                )
             }
-        )) { entry ->
-            PersonDetailsScreen(
-                navController = navController,
-                isDarkMode = isDarkMode,
-                personId = entry.arguments?.getString("person_id").toString()
-            )
+
+            //Person Details Editing Screen
+            composable(Screens.PersonDetailsEditingScreen.route) { entry ->
+                val viewModel = entry.sharedViewModel<PersonDetailsViewModel>(navController)
+                PersonDetailsEditingScreen(navController, isDarkMode, viewModel)
+            }
         }
+
 
         //Premium Screen
         composable(Screens.PremiumScreen.route) {
