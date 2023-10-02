@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.social.people_book.R
+import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmDeletionDialog
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
@@ -47,10 +48,14 @@ import com.social.people_book.ui.theme.redColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, personId: String) {
+fun PersonDetailsScreen(
+    navController: NavController,
+    isDarkMode: Boolean,
+    personId: String,
+    viewModel: PersonDetailsViewModel
+) {
     val context = LocalContext.current
 
-    val viewModel = viewModel<PersonDetailsViewModel>()
     SideEffect {
         viewModel.loadPerson(personId)
     }
@@ -90,7 +95,9 @@ fun PersonDetailsScreen(navController: NavController, isDarkMode: Boolean, perso
                 },
                 actions = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        OutlinedButton(onClick = { /*TODO*/ }) {
+                        OutlinedButton(onClick = {
+                            navController.navigate(Screens.PersonDetailsEditingScreen.route)
+                        }) {
                             MyText(text = "Edit", fontSize = 20.sp, color = appBarTextColor)
                             Spacer(modifier = Modifier.width(8.dp))
                             Icon(
