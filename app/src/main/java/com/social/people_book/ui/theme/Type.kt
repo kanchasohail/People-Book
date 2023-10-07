@@ -9,10 +9,8 @@ import androidx.compose.ui.unit.sp
 import com.social.people_book.R
 
 
-val RubikFontFamily = FontFamily(
-    Font(R.font.rubik_regular),
-    Font(R.font.rubik_semi_bold),
-    Font(R.font.ruibik_bold)
+val RobotoFontFamily = FontFamily(
+    Font(R.font.roboto_regular),
 )
 
 // Set of Material typography styles to start with

@@ -47,7 +47,7 @@ import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.ui.theme.RubikFontFamily
+import com.social.people_book.ui.theme.RobotoFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -229,7 +229,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                         withStyle(
                             style = SpanStyle(
                                 color = Color.Blue,
-                                fontFamily = RubikFontFamily
+                                fontFamily = RobotoFontFamily
                             )
                         ) {
                             append("login here")
@@ -249,7 +249,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                         },
                         style = TextStyle(
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontFamily = RubikFontFamily
+                            fontFamily = RobotoFontFamily
                         )
                     )
                 }

@@ -196,7 +196,10 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                     }
 
                     if (viewModel.isTagExpanded) {
-                        FlowRow {
+                        FlowRow(
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            verticalArrangement = Arrangement.spacedBy((-8).dp),
+                        ) {
                             viewModel.tags.forEach { tagItem ->
                                 TagsChip(
                                     chipText = tagItem,

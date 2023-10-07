@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
-import com.social.people_book.ui.theme.RubikFontFamily
+import com.social.people_book.ui.theme.RobotoFontFamily
 
 @Composable
 fun MyText(
@@ -26,7 +26,7 @@ fun MyText(
     fontSize: TextUnit = TextUnit.Unspecified,
     fontStyle: FontStyle? = null,
     fontWeight: FontWeight? = null,
-    fontFamily: FontFamily? = RubikFontFamily,
+    fontFamily: FontFamily? = RobotoFontFamily,
     letterSpacing: TextUnit = TextUnit.Unspecified,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,

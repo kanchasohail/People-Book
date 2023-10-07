@@ -104,7 +104,7 @@ fun PersonDetailsScreen(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Edit",
                                 tint = appBarTextColor,
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(18.dp)
                             )
                         }
 
@@ -115,7 +115,7 @@ fun PersonDetailsScreen(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = "Delete",
                                 tint = redColor,
-                                modifier = Modifier.size(30.dp)
+                                modifier = Modifier.size(28.dp)
                             )
                         }
                     }
@@ -159,13 +159,13 @@ fun PersonDetailsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(
+                    Icon(
                         painter = painterResource(id = R.drawable.ic_blank_profile),
-                        contentDescription = "Profile",
-                        contentScale = ContentScale.Crop,
+                        contentDescription = "person photo",
+                        tint = textColor,
                         modifier = Modifier
                             .clip(RoundedCornerShape(18.dp))
-                            .size(200.dp)
+                            .size(160.dp)
                     )
                     MyText(
                         text = viewModel.thisPerson.name,
