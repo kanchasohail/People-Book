@@ -89,7 +89,7 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel, userN
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(vertical = 8.dp, horizontal = 16.dp),
         ) {
             Row(
                 modifier = Modifier
@@ -109,7 +109,7 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel, userN
                     isDarkMode = it
                     viewModel.isDarkMode = it
                     viewModel.setThemeMode(isDarkMode)
-                }, modifier = Modifier.padding(end = 8.dp, top = 5.dp))
+                }, modifier = Modifier.padding(end = 8.dp, top = 5.dp).padding(4.dp))
             }
 
             Spacer(modifier = Modifier.height(10.dp))

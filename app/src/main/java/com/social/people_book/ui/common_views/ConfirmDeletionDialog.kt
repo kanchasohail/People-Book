@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -20,7 +19,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.ui.theme.RubikFontFamily
+import com.social.people_book.ui.theme.RobotoFontFamily
 
 @Composable
 fun ConfirmDeletionDialog(
@@ -39,14 +38,14 @@ fun ConfirmDeletionDialog(
                         append("This person will be moved to Trash and will be deleted automatically after ")
                         withStyle(
                             style = SpanStyle(
-                                fontFamily = RubikFontFamily,
+                                fontFamily = RobotoFontFamily,
                                 fontSize = 16.sp, fontWeight = FontWeight.SemiBold
                             )
                         ) {
                             append("30 Days")
                         }
                     }, style = TextStyle(
-                        fontFamily = RubikFontFamily,
+                        fontFamily = RobotoFontFamily,
                         fontSize = 16.sp
                     )
                 )

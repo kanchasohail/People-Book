@@ -169,7 +169,7 @@ fun PersonDetailsEditingScreen(
                         },
                         label = { Text(text = "Number") },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Phone
                         ),
                         modifier = Modifier.padding(8.dp)
                     )

@@ -57,6 +57,18 @@ fun AccountDetailsCard(modifier: Modifier = Modifier, textColor: Color) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    MyText(text = "Name: ")
+                    MyText(text = "Shimul Riley")
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit email")
+                    }
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     MyText(text = "Email: ")
                     MyText(text = "example@email.com")
                     IconButton(onClick = { /*TODO*/ }) {

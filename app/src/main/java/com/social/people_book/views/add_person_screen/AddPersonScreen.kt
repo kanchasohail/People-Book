@@ -125,13 +125,13 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     .padding(horizontal = 12.dp, vertical = 8.dp),
             ) {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Image(
+                    Icon(
                         painter = painterResource(id = R.drawable.ic_blank_profile),
                         contentDescription = "Profile",
-                        contentScale = ContentScale.Crop,
+                       tint = textColor,
                         modifier = Modifier
                             .clip(RoundedCornerShape(18.dp))
-                            .size(200.dp)
+                            .size(160.dp)
                     )
                 }
                 Row(
@@ -139,7 +139,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Name :", fontSize = 20.sp, color = textColor)
+                    MyText(text = "Name :", fontSize = 18.sp, color = textColor)
                     TextField(
                         value = viewModel.name,
                         onValueChange = {
@@ -155,7 +155,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Number :", fontSize = 20.sp, color = textColor)
+                    MyText(text = "Number :", fontSize = 18.sp, color = textColor)
                     TextField(
                         value = viewModel.number,
                         onValueChange = {
@@ -163,7 +163,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                         },
                         label = { Text(text = "Number") },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Phone
                         ),
                         modifier = Modifier.padding(8.dp)
                     )
@@ -173,7 +173,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Email :", fontSize = 20.sp, color = textColor)
+                    MyText(text = "Email :", fontSize = 18.sp, color = textColor)
                     TextField(
                         value = viewModel.email,
                         onValueChange = {
@@ -191,7 +191,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "About :", fontSize = 20.sp, color = textColor)
+                    MyText(text = "About :", fontSize = 18.sp, color = textColor)
                     TextField(
                         value = viewModel.about,
                         onValueChange = {
