@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.R
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmDeletionDialog
@@ -159,14 +160,29 @@ fun PersonDetailsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_blank_profile),
-                        contentDescription = "person photo",
-                        tint = textColor,
+                    Box(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(18.dp))
-                            .size(160.dp)
-                    )
+                            .height(160.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (viewModel.downloadedImage == null) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_blank_profile),
+                                contentDescription = "Profile",
+                                tint = textColor,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(18.dp))
+                            )
+                        } else {
+                            Image(
+                                painter = rememberAsyncImagePainter(
+                                    viewModel.downloadedImage
+                                ), contentDescription = "person Image"
+                            )
+                        }
+                    }
                     MyText(
                         text = viewModel.thisPerson.name,
                         fontSize = 28.sp,

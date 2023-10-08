@@ -76,10 +76,14 @@ dependencies {
 
     implementation("com.google.firebase:firebase-firestore-ktx:24.8.1")
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.7.3")
 
     //view Model
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+
+    //For displaying uri image
+    implementation("io.coil-kt:coil-compose:2.4.0")
 }

@@ -2,6 +2,7 @@ package com.social.people_book.views.add_person_screen
 
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
@@ -12,16 +13,20 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.social.people_book.navigation.Screens
 
 class AddPersonViewModel : ViewModel() {
     private val db = Firebase.firestore
     private val auth = Firebase.auth
+    private val storage = Firebase.storage
 
     var name by mutableStateOf("")
     var number by mutableStateOf("")
     var email by mutableStateOf("")
     var about by mutableStateOf("")
+
+    var selectedImage by mutableStateOf<Uri?>(null)
 
     var isLoading by mutableStateOf(false)
 
@@ -35,6 +40,7 @@ class AddPersonViewModel : ViewModel() {
             ).show()
             return
         }
+
         isLoading = true
 
         // Add a new document with a generated ID
@@ -55,6 +61,7 @@ class AddPersonViewModel : ViewModel() {
         ).addOnSuccessListener {
             isLoading = false
             if (navController.currentDestination?.route == Screens.AddPersonScreen.route) {
+                saveImage(thisDocument.id)
                 navController.popBackStack()
             }
             Toast.makeText(context, "Person added successfully!", Toast.LENGTH_SHORT).show()
@@ -65,6 +72,21 @@ class AddPersonViewModel : ViewModel() {
         }
 
 
+    }
+
+    private fun saveImage(documentId: String) {
+        val imageRef =
+            storage.reference.child("images/${auth.currentUser?.uid.toString()}/$documentId/profile.jpg")
+
+        if (selectedImage != null) {
+            imageRef.putFile(selectedImage!!).addOnSuccessListener {
+                Log.d("Person Image", "Saving successful")
+            }.addOnFailureListener { e ->
+                Log.d("Person Image", "Saving Failed")
+                Log.d("Person Image", e.message.toString())
+
+            }
+        }
     }
 
 }

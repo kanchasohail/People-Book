@@ -1,5 +1,7 @@
 package com.social.people_book.views.person_details_screen
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,13 +39,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.R
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.views.add_person_screen.AddPersonViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,6 +58,14 @@ fun PersonDetailsEditingScreen(
     viewModel: PersonDetailsViewModel
 ) {
     val context = LocalContext.current
+    val galleryLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            viewModel.selectedImage = uri
+            viewModel.viewModelScope.launch {
+//                viewModel.saveProfileImage(context)
+            }
+        }
+
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
     val appBarTextColor =
@@ -130,15 +144,50 @@ fun PersonDetailsEditingScreen(
                     .fillMaxSize()
                     .padding(horizontal = 12.dp, vertical = 8.dp),
             ) {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_blank_profile),
-                        contentDescription = "Profile",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(18.dp))
-                            .size(200.dp)
-                    )
+                Box(
+                    modifier = Modifier
+                        .height(160.dp)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (viewModel.downloadedImage == null && viewModel.selectedImage == null) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_blank_profile),
+                            contentDescription = "Profile",
+                            tint = textColor,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(18.dp))
+                        )
+                    } else {
+                        if (viewModel.selectedImage == null) {
+                            Image(
+                                painter = rememberAsyncImagePainter(
+                                    viewModel.downloadedImage
+                                ), contentDescription = "person Image"
+                            )
+                        } else {
+                            Image(
+                                painter = rememberAsyncImagePainter(
+                                    viewModel.selectedImage
+                                ), contentDescription = "person Image"
+                            )
+                        }
+                    }
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        IconButton(onClick = {
+                            galleryLauncher.launch("image/*")
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_camera),
+                                contentDescription = "addImage",
+                                modifier = Modifier.size(28.dp)
+                            )
+                        }
+                    }
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
