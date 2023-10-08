@@ -197,7 +197,6 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
 
                     if (viewModel.isTagExpanded) {
                         FlowRow(
-                            horizontalArrangement = Arrangement.SpaceAround,
                             verticalArrangement = Arrangement.spacedBy((-8).dp),
                         ) {
                             viewModel.tags.forEach { tagItem ->

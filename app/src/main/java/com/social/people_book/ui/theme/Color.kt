@@ -19,3 +19,4 @@ val darkBackgroundColor = Color(0xFF0d1217)
 val lightPrimaryColor = Color(0xFF0d1217)
 
 val whiteTextColor = Color(0xFFededed)
+val textFieldBackGroundColor = Color(0xFF1c1c1c)
