@@ -21,9 +21,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,14 +39,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.R
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.views.add_person_screen.AddPersonViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,13 +83,13 @@ fun PersonDetailsEditingScreen(
                         MyText(
                             text = "Tag : ",
                             color = appBarTextColor,
-                            fontSize = 26.sp,
+                            fontSize = 22.sp,
                             fontWeight = FontWeight.SemiBold
                         )
                         MyText(
                             text = "No Tag",
                             color = appBarTextColor,
-                            fontSize = 25.sp,
+                            fontSize = 21.sp,
                         )
                     }
                 },
@@ -118,7 +115,7 @@ fun PersonDetailsEditingScreen(
                         modifier = Modifier.padding(8.dp)
                     ) {
                         if (!viewModel.isLoading) {
-                            MyText(text = "Save", color = appBarTextColor)
+                            MyText(text = "Save", color = appBarTextColor, fontSize = 16.sp)
                         } else {
                             LoadingIndicator()
                         }
@@ -191,11 +188,11 @@ fun PersonDetailsEditingScreen(
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Name :", fontSize = 20.sp, color = textColor)
-                    TextField(
+                    MyText(text = "Name :", fontSize = 17.sp, color = textColor)
+                    OutlinedTextField(
                         value = viewModel.name,
                         onValueChange = {
                             viewModel.name = it
@@ -207,11 +204,11 @@ fun PersonDetailsEditingScreen(
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Number :", fontSize = 20.sp, color = textColor)
-                    TextField(
+                    MyText(text = "Number :", fontSize = 17.sp, color = textColor)
+                    OutlinedTextField(
                         value = viewModel.number,
                         onValueChange = {
                             viewModel.number = it
@@ -225,11 +222,11 @@ fun PersonDetailsEditingScreen(
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Email :", fontSize = 20.sp, color = textColor)
-                    TextField(
+                    MyText(text = "Email :", fontSize = 17.sp, color = textColor)
+                    OutlinedTextField(
                         value = viewModel.email,
                         onValueChange = {
                             viewModel.email = it
@@ -243,11 +240,11 @@ fun PersonDetailsEditingScreen(
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "About :", fontSize = 20.sp, color = textColor)
-                    TextField(
+                    MyText(text = "About :", fontSize = 17.sp, color = textColor)
+                    OutlinedTextField(
                         value = viewModel.about,
                         onValueChange = {
                             viewModel.about = it

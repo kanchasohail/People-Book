@@ -21,7 +21,7 @@ class AuthViewModel : ViewModel() {
     var name by mutableStateOf("")
 
     var isLoading by mutableStateOf(false)
-    var isShowPassword by mutableStateOf(true)
+    var isShowPassword by mutableStateOf(false)
     var isEmailValid by mutableStateOf(true)
     var isPasswordValid by mutableStateOf(true)
 
@@ -44,11 +44,8 @@ class AuthViewModel : ViewModel() {
                 saveUser(context)
                 navController.navigate(Screens.HomeScreen.route)
             } else {
-                Toast.makeText(
-                    context,
-                    "Authentication failed.",
-                    Toast.LENGTH_SHORT,
-                ).show()
+                Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
@@ -60,11 +57,8 @@ class AuthViewModel : ViewModel() {
             if (task.isSuccessful) {
                 navController.navigate(Screens.HomeScreen.route)
             } else {
-                Toast.makeText(
-                    context,
-                    "Authentication failed.",
-                    Toast.LENGTH_SHORT,
-                ).show()
+                Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

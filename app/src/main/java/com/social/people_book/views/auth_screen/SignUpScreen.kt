@@ -3,6 +3,7 @@ package com.social.people_book.views.auth_screen
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -119,89 +120,107 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                 )
 
                 // Email field
-                MyText(text = "Email", modifier = Modifier.padding(start = 8.dp))
-                OutlinedTextField(
-                    value = viewModel.email,
-                    onValueChange = {
-                        viewModel.email = it
-                        viewModel.isValidEmail(it)
-                    },
-                    supportingText = {
+                Column(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .padding(bottom = 16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        MyText(text = "Email")
                         if (!viewModel.isEmailValid) {
                             MyText(
                                 text = "Please enter a valid email",
-                                color = MaterialTheme.colorScheme.error
+                                color = MaterialTheme.colorScheme.error,
+                                fontSize = 14.sp
                             )
                         }
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next,
-                        keyboardType = KeyboardType.Email
-                    ),
-                    placeholder = {
-                        MyText(text = "example@email.com", color = Color.Gray)
-                    },
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            passwordFocusRequester.requestFocus()
-                        }
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = viewModel.email,
+                        onValueChange = {
+                            viewModel.email = it
+                            viewModel.isValidEmail(it)
+                        },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Email
+                        ),
+                        placeholder = {
+                            MyText(text = "example@email.com", color = Color.Gray)
+                        },
+                        keyboardActions = KeyboardActions(
+                            onNext = {
+                                passwordFocusRequester.requestFocus()
+                            }
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
                 // Password field
-
-                MyText(text = "Password", modifier = Modifier.padding(start = 8.dp))
-
-                OutlinedTextField(
-                    value = viewModel.password,
-                    onValueChange = { viewModel.password = it
-                                    viewModel.isValidPassword(it)},
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done,
-                        keyboardType = KeyboardType.Password
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            keyboardController?.hide()
-                            passwordFocusRequester.freeFocus()
-                        }
-                    ),
-                    supportingText = {
+                Column(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .padding(bottom = 16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        MyText(text = "Password")
                         if (!viewModel.isPasswordValid) {
                             MyText(
                                 text = "Please enter at least 8 characters",
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
-                    },
-                    placeholder = {
-                        MyText(text = "Type password", color = Color.Gray)
-                    },
-                    trailingIcon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_eye_icon),
-                            contentDescription = "show password",
-                            tint = if (viewModel.isShowPassword) Color.Red else textColor,
-                            modifier = Modifier.clickable {
-                                viewModel.isShowPassword = !viewModel.isShowPassword
-                            })
-                    },
-                    singleLine = true,
-                    visualTransformation = if (viewModel.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(
-                        mask = '*'
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .focusRequester(passwordFocusRequester)
-                )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = viewModel.password,
+                        onValueChange = { viewModel.password = it
+                            viewModel.isValidPassword(it)},
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.Password
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                keyboardController?.hide()
+                                passwordFocusRequester.freeFocus()
+                            }
+                        ),
+                        placeholder = {
+                            MyText(text = "Type password", color = Color.Gray)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_eye_icon),
+                                contentDescription = "show password",
+                                tint = if (viewModel.isShowPassword) Color.Red else textColor,
+                                modifier = Modifier.clickable {
+                                    viewModel.isShowPassword = !viewModel.isShowPassword
+                                })
+                        },
+                        singleLine = true,
+                        visualTransformation = if (viewModel.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(
+                            mask = '*'
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .focusRequester(passwordFocusRequester)
+                    )
+                }
 
                 // Login button
                 if (!viewModel.isLoading) {
@@ -211,7 +230,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp)
+                            .height(45.dp)
                     ) {
                         MyText("SignUp", fontSize = 18.sp)
                     }
@@ -228,7 +247,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                         pushStringAnnotation(tag = "login", annotation = "nothing")
                         withStyle(
                             style = SpanStyle(
-                                color = Color.Blue,
+                                color = MaterialTheme.colorScheme.inverseSurface,
                                 fontFamily = RobotoFontFamily
                             )
                         ) {

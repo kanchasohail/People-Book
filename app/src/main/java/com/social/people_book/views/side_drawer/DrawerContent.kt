@@ -44,7 +44,7 @@ import com.social.people_book.ui.theme.ThemeViewModel
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun DrawerContent(navController: NavController, viewModel: ThemeViewModel, userName:String) {
+fun DrawerContent(navController: NavController, viewModel: ThemeViewModel, userName: String) {
 
     val isSystemSettingDarkTheme by mutableStateOf(isSystemInDarkTheme())
     var isDarkMode by remember {
@@ -57,28 +57,18 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel, userN
 
     Column(modifier = Modifier.fillMaxSize()) {
         Card(
-            modifier = Modifier.fillMaxWidth(),
-            elevation = CardDefaults.cardElevation(
+            modifier = Modifier.fillMaxWidth(), elevation = CardDefaults.cardElevation(
                 6.dp
             ), colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.background
-            ),
-            shape = RoundedCornerShape(
-                topStart = 0.dp,
-                topEnd = 0.dp,
-                bottomStart = 10.dp,
-                bottomEnd = 10.dp
+            ), shape = RoundedCornerShape(
+                topStart = 0.dp, topEnd = 0.dp, bottomStart = 10.dp, bottomEnd = 10.dp
             )
         ) {
-//            Image(
-//                painter = painterResource(id = if (isDarkMode) R.drawable.app_icon_horizontal_dark else R.drawable.app_icon_horizontal_light),
-//                contentDescription = "App Icon",
-//                modifier = Modifier
-//                    .height(150.dp)
-//                    .align(Alignment.CenterHorizontally)
-//            )
             Column(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 MyText(text = "$userName's", fontSize = 32.sp)
@@ -89,27 +79,34 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel, userN
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 16.dp),
         ) {
+            Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
                     .clickable {
                         isDarkMode = !isDarkMode
                         viewModel.isDarkMode = isDarkMode
                         viewModel.setThemeMode(isDarkMode)
-                    },
+                    }
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                MyText(text = "Dark Theme", fontSize = 21.sp, color = textColor)
+                MyText(text = "Dark Theme", fontSize = 18.sp, color = textColor)
 
-                CustomSwitch(checked = isDarkMode, onCheckedChange = {
-                    isDarkMode = it
-                    viewModel.isDarkMode = it
-                    viewModel.setThemeMode(isDarkMode)
-                }, modifier = Modifier.padding(end = 8.dp, top = 5.dp).padding(4.dp))
+                CustomSwitch(
+                    height = 11.dp,
+                    width = 22.dp,
+                    gapBetweenThumbAndTrackEdge = 1.6.dp,
+                    checked = isDarkMode,
+                    onCheckedChange = {
+                        isDarkMode = it
+                        viewModel.isDarkMode = it
+                        viewModel.setThemeMode(isDarkMode)
+                    },
+                    modifier = Modifier.padding(top = 5.dp)
+                )
             }
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -118,15 +115,15 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel, userN
                     .fillMaxWidth()
                     .clickable {
                         //Todo open trash
-                    },
-                horizontalArrangement = Arrangement.SpaceBetween
+                    }
+                    .padding(horizontal = 16.dp, vertical = 8.dp), horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                MyText(text = "Trash", fontSize = 21.sp, color = textColor)
+                MyText(text = "Trash", fontSize = 18.sp, color = textColor)
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "trash",
                     tint = textColor,
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(28.dp)
                 )
             }
 
@@ -139,17 +136,19 @@ fun DrawerContent(navController: NavController, viewModel: ThemeViewModel, userN
                     .fillMaxWidth()
                     .clickable {
                         navController.navigate(Screens.SettingsScreen.route)
-                    },
-                horizontalArrangement = Arrangement.SpaceBetween
+                    }
+                    .padding(horizontal = 16.dp, vertical = 8.dp), horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                MyText(text = "Settings", fontSize = 21.sp, color = textColor)
+                MyText(text = "Settings", fontSize = 18.sp, color = textColor)
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Settings",
                     tint = textColor,
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(28.dp)
                 )
             }
+
+            Spacer(modifier = Modifier.height(18.dp))
 
         }
     }
