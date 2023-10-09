@@ -57,26 +57,16 @@ fun ItemCard(modifier: Modifier = Modifier, text: String, textColor: Color, onCl
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .border(
-                            shape = CircleShape,
-                            width = 2.dp,
-                            color = textColor
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_blank_profile),
                         tint = textColor,
-                        modifier = Modifier.size(30.dp),
+                        modifier = Modifier.size(40.dp),
                         contentDescription = "user_profile"
                     )
-                }
-                MyText(text = "Tag", color = textColor, fontSize = 20.sp)
+
+                MyText(text = "Tag", color = textColor, fontSize = 17.sp)
             }
-            MyText(text = text, color = textColor, fontSize = 24.sp)
+            MyText(text = text, color = textColor, fontSize = 18.sp)
         }
     }
 }

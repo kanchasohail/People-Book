@@ -2,6 +2,7 @@ package com.social.people_book.views.auth_screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -86,37 +87,49 @@ fun ForgotPasswordScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 // Email field
-                MyText(text = "Email", modifier = Modifier.padding(start = 8.dp))
-                OutlinedTextField(
-                    value = viewModel.email,
-                    onValueChange = {
-                        viewModel.email = it
-                        viewModel.isValidEmail(it)
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next,
-                        keyboardType = KeyboardType.Email
-                    ),
-                    supportingText = {
+                Column(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .padding(bottom = 16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        MyText(text = "Email")
                         if (!viewModel.isEmailValid) {
                             MyText(
                                 text = "Please enter a valid email",
-                                color = MaterialTheme.colorScheme.error
+                                color = MaterialTheme.colorScheme.error,
+                                fontSize = 14.sp
                             )
                         }
-                    },
-                    placeholder = {
-                        MyText(text = "example@email.com", color = Color.Gray)
-                    },
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            passwordFocusRequester.requestFocus()
-                        }
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                )
+
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = viewModel.email,
+                        onValueChange = {
+                            viewModel.email = it
+                            viewModel.isValidEmail(it)
+                        },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = androidx.compose.ui.text.input.ImeAction.Next,
+                            keyboardType = KeyboardType.Email
+                        ),
+                        placeholder = {
+                            MyText(text = "example@email.com", color = Color.Gray)
+                        },
+                        keyboardActions = KeyboardActions(
+                            onNext = {
+                                passwordFocusRequester.requestFocus()
+                            }
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -128,7 +141,7 @@ fun ForgotPasswordScreen(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp)
+                            .height(45.dp)
                     ) {
                         MyText("Reset Password", fontSize = 18.sp)
                     }

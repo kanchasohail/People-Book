@@ -74,7 +74,7 @@ class PersonDetailsViewModel : ViewModel() {
             downloadedImage = it
             Log.d("Person Image", "Downloading Successful")
 
-        }.addOnFailureListener {e ->
+        }.addOnFailureListener { e ->
             Log.d("Person Image", "Downloading Failed")
             Log.d("Person Image", e.message.toString())
         }
@@ -85,11 +85,26 @@ class PersonDetailsViewModel : ViewModel() {
         showDialogState = false
         db.collection("users").document(auth.currentUser?.uid.toString()).collection("persons")
             .document(personId).delete().addOnSuccessListener {
+                deletePersonImage(personId)
                 navController.popBackStack()
                 Toast.makeText(context, "Person Deleted Successfully", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
                 Toast.makeText(context, "Failed to delete person.", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun deletePersonImage(documentId: String) {
+        val imageRef =
+            storage.reference.child("images/${auth.currentUser?.uid.toString()}/$documentId/profile.jpg")
+
+        imageRef.delete().addOnSuccessListener {
+            Log.d("Person Image", "Deleting successful")
+        }.addOnFailureListener { e ->
+            Log.d("Person Image", "Deleting Failed")
+            Log.d("Person Image", e.message.toString())
+
+        }
+
     }
 
     fun updatePerson(context: Context, navController: NavController) {

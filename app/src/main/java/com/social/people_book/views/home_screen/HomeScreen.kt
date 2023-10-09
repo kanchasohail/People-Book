@@ -141,7 +141,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                                 painter = painterResource(id = R.drawable.ic_settings_icon),
                                 contentDescription = "More",
                                 tint = appBarTextColor,
-                                modifier = Modifier.size(26.dp)
+                                modifier = Modifier.size(24.dp)
                             )
                         }
                     }

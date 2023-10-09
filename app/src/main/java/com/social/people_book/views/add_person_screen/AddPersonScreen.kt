@@ -3,7 +3,6 @@ package com.social.people_book.views.add_person_screen
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,16 +15,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -33,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -80,13 +77,13 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                         MyText(
                             text = "Tag : ",
                             color = appBarTextColor,
-                            fontSize = 26.sp,
+                            fontSize = 22.sp,
                             fontWeight = FontWeight.SemiBold
                         )
                         MyText(
                             text = "No Tag",
                             color = appBarTextColor,
-                            fontSize = 25.sp,
+                            fontSize = 21.sp,
                         )
                     }
                 },
@@ -112,7 +109,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                         modifier = Modifier.padding(8.dp)
                     ) {
                         if (!viewModel.isLoading) {
-                            MyText(text = "Save", color = appBarTextColor)
+                            MyText(text = "Save", color = appBarTextColor, fontSize = 16.sp)
                         } else {
                             LoadingIndicator()
                         }
@@ -178,11 +175,11 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Name :", fontSize = 18.sp, color = textColor)
-                    TextField(
+                    MyText(text = "Name :", fontSize = 17.sp, color = textColor)
+                    OutlinedTextField(
                         value = viewModel.name,
                         onValueChange = {
                             viewModel.name = it
@@ -194,11 +191,11 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Number :", fontSize = 18.sp, color = textColor)
-                    TextField(
+                    MyText(text = "Number :", fontSize = 17.sp, color = textColor)
+                    OutlinedTextField(
                         value = viewModel.number,
                         onValueChange = {
                             viewModel.number = it
@@ -212,11 +209,11 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "Email :", fontSize = 18.sp, color = textColor)
-                    TextField(
+                    MyText(text = "Email :", fontSize = 17.sp, color = textColor)
+                    OutlinedTextField(
                         value = viewModel.email,
                         onValueChange = {
                             viewModel.email = it
@@ -230,11 +227,11 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MyText(text = "About :", fontSize = 18.sp, color = textColor)
-                    TextField(
+                    MyText(text = "About :", fontSize = 17.sp, color = textColor)
+                    OutlinedTextField(
                         value = viewModel.about,
                         onValueChange = {
                             viewModel.about = it

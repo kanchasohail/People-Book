@@ -98,45 +98,53 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                 verticalArrangement = Arrangement.Center
             ) {
                 // Email field
-                MyText(text = "Email", modifier = Modifier.padding(start = 8.dp))
-                OutlinedTextField(
-                    value = viewModel.email,
-                    onValueChange = {
-                        viewModel.email = it
-                        viewModel.isValidEmail(it)
-                    },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = androidx.compose.ui.text.input.ImeAction.Next,
-                        keyboardType = KeyboardType.Email
-                    ),
-                    placeholder = {
-                        MyText(text = "example@email.com", color = Color.Gray)
-                    },
-                    supportingText = {
+                Column(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .padding(bottom = 16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        MyText(text = "Email")
                         if (!viewModel.isEmailValid) {
                             MyText(
                                 text = "Please enter a valid email",
-                                color = MaterialTheme.colorScheme.error
+                                color = MaterialTheme.colorScheme.error,
+                                fontSize = 14.sp
                             )
                         }
-                    },
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            passwordFocusRequester.requestFocus()
-                        }
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = viewModel.email,
+                        onValueChange = {
+                            viewModel.email = it
+                            viewModel.isValidEmail(it)
+                        },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = androidx.compose.ui.text.input.ImeAction.Next,
+                            keyboardType = KeyboardType.Email
+                        ),
+                        placeholder = {
+                            MyText(text = "example@email.com", color = Color.Gray)
+                        },
+                        keyboardActions = KeyboardActions(
+                            onNext = {
+                                passwordFocusRequester.requestFocus()
+                            }
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
 
                 // Password field
-
                 MyText(text = "Password", modifier = Modifier.padding(start = 8.dp))
-
                 OutlinedTextField(
                     value = viewModel.password,
                     onValueChange = { viewModel.password = it },
@@ -180,7 +188,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                 ) {
                     MyText(
                         text = "Forgot password?",
-                        color = Color.Blue,
+                        color = MaterialTheme.colorScheme.inverseSurface,
                         modifier = Modifier.clickable {
                             navController.navigate(Screens.ForgotPasswordScreen.route)
                         }
@@ -197,7 +205,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp)
+                            .height(45.dp)
                     ) {
                         MyText("Login", fontSize = 18.sp)
                     }
