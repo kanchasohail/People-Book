@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.social.people_book.navigation.Screens
+import com.social.people_book.ui.common_views.ConfirmLogoutDialog
 import com.social.people_book.ui.common_views.ConfirmResetPasswordDialog
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
@@ -96,6 +97,13 @@ fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController) {
                 onConfirm = { viewModel.sendPasswordResetEmail(context) },
                 email = viewModel.email
             )
+
+            ConfirmLogoutDialog(
+                showDialog = viewModel.logoutDialogState,
+                onDismiss = { viewModel.logoutDialogState = false },
+                onConfirm = {
+                    viewModel.logOut(navController)
+                })
 
             //Actual Screen content
             Column(Modifier.fillMaxSize()) {
@@ -181,7 +189,7 @@ fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController) {
                                         contentDescription = "Delete account"
                                     )
                                 }
-                                OutlinedButton(onClick = { viewModel.logOut(navController) }) {
+                                OutlinedButton(onClick = { viewModel.logoutDialogState = true }) {
                                     MyText(text = "Log Out")
                                     Spacer(modifier = Modifier.width(3.dp))
                                     Icon(
