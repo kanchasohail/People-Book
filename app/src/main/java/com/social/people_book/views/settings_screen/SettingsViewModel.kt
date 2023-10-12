@@ -18,6 +18,7 @@ class SettingsViewModel : ViewModel() {
 
     var isLoading by mutableStateOf(false)
     var showDialogState by mutableStateOf(false)
+    var logoutDialogState by mutableStateOf(false)
 
 
     var name by mutableStateOf("your name")
@@ -54,6 +55,7 @@ class SettingsViewModel : ViewModel() {
     fun logOut(navController: NavController){
         isLoading = true
         auth.signOut()
+        navController.popBackStack(Screens.HomeScreen.route , inclusive = true)
         navController.navigate(Screens.AuthScreen.route)
     }
 
