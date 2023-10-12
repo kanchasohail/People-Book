@@ -34,8 +34,8 @@ fun DrawerHeader(
                     id = R.string.app_name
                 ),
                 color = appBarTextColor,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.SemiBold
+                fontSize = 26.sp,
+                fontWeight = FontWeight.W500
             )
         },
         navigationIcon = {

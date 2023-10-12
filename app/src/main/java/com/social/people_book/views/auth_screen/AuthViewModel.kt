@@ -27,7 +27,7 @@ class AuthViewModel : ViewModel() {
 
     fun isValidEmail(email: String): Boolean {
         val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
-        isEmailValid = email.matches(emailRegex) && email.isNotEmpty()
+        isEmailValid = email.matches(emailRegex) || email.isEmpty()
         return isEmailValid
     }
 
@@ -69,8 +69,7 @@ class AuthViewModel : ViewModel() {
         userDoc.set(
             mapOf(
                 "username" to name,
-                "email" to email,
-                "password" to password
+                "email" to email
             )
         ).addOnSuccessListener {
             Toast.makeText(
@@ -78,6 +77,19 @@ class AuthViewModel : ViewModel() {
                 "Saving User successful",
                 Toast.LENGTH_SHORT,
             ).show()
+        }
+    }
+
+    fun sendPasswordResetEmail(context: Context) {
+        isLoading = true
+        auth.sendPasswordResetEmail(email).addOnSuccessListener {
+            isLoading = false
+            Toast.makeText(context, "Password reset link sent to your email", Toast.LENGTH_LONG)
+                .show()
+        }.addOnFailureListener {
+            isLoading = false
+            Toast.makeText(context, "Something went wrong please try again", Toast.LENGTH_LONG)
+                .show()
         }
     }
 }

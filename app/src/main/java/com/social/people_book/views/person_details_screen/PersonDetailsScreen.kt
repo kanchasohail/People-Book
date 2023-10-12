@@ -78,7 +78,7 @@ fun PersonDetailsScreen(
                     MyText(
                         text = viewModel.thisPerson.name,
                         color = appBarTextColor,
-                        fontSize = 26.sp,
+                        fontSize = 22.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 },
@@ -99,7 +99,7 @@ fun PersonDetailsScreen(
                         OutlinedButton(onClick = {
                             navController.navigate(Screens.PersonDetailsEditingScreen.route)
                         }) {
-                            MyText(text = "Edit", fontSize = 20.sp, color = appBarTextColor)
+                            MyText(text = "Edit", fontSize =17.sp, color = appBarTextColor)
                             Spacer(modifier = Modifier.width(8.dp))
                             Icon(
                                 imageVector = Icons.Default.Edit,
@@ -185,29 +185,35 @@ fun PersonDetailsScreen(
                     }
                     MyText(
                         text = viewModel.thisPerson.name,
-                        fontSize = 28.sp,
+                        fontSize = 24.sp,
                         color = textColor
                     )
                 }
 
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .padding(top = 10.dp)) {
                     MyText(text = "Phone:", color = textColor)
-                    Spacer(modifier = Modifier.width(5.dp))
+                    Spacer(modifier = Modifier.width(10.dp))
                     MyText(text = viewModel.thisPerson.number.toString(), color = textColor)
                 }
 
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .padding(top = 10.dp)) {
                     MyText(text = "Email:", color = textColor)
-                    Spacer(modifier = Modifier.width(5.dp))
+                    Spacer(modifier = Modifier.width(10.dp))
                     MyText(text = viewModel.thisPerson.email.toString(), color = textColor)
                 }
 
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .padding(top = 10.dp)) {
                     MyText(text = "About:", color = textColor)
-                    Spacer(modifier = Modifier.width(5.dp))
+                    Spacer(modifier = Modifier.width(10.dp))
                     MyText(text = viewModel.thisPerson.about.toString(), color = textColor)
                 }
             }

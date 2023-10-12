@@ -178,13 +178,13 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                         if (!viewModel.isPasswordValid) {
                             MyText(
                                 text = "Please enter at least 8 characters",
-                                color = MaterialTheme.colorScheme.error
+                                color = MaterialTheme.colorScheme.error,
+                                fontSize = 14.sp
                             )
                         }
 
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-
                     OutlinedTextField(
                         value = viewModel.password,
                         onValueChange = { viewModel.password = it
@@ -217,7 +217,6 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
                             .focusRequester(passwordFocusRequester)
                     )
                 }
