@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmLogoutDialog
 import com.social.people_book.ui.common_views.ConfirmResetPasswordDialog
 import com.social.people_book.ui.layout.MyDivider

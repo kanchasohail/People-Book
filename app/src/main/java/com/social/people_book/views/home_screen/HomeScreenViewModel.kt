@@ -3,7 +3,6 @@ package com.social.people_book.views.home_screen
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.ktx.auth
@@ -17,24 +16,29 @@ class HomeScreenViewModel : ViewModel() {
     private val auth = Firebase.auth
 
 
+    var searchBarText  by mutableStateOf("")
+
     var selectedTagItem by mutableStateOf("All")
 
-
+    var isLoading by mutableStateOf(false)
     var isTagExpanded by mutableStateOf(true)
 
-    private val userDocumentAddress = db.collection("users").document(auth.currentUser?.uid.toString())
+    private val userDocumentAddress =
+        db.collection("users").document(auth.currentUser?.uid.toString())
 
     var userName = ""
 
-    fun loadUserName(){
-        userDocumentAddress.get().addOnSuccessListener {result ->
+    fun loadUserName() {
+        userDocumentAddress.get().addOnSuccessListener { result ->
             userName = result["username"].toString()
         }
     }
+
     // Create a list of items to display in the grid
     var items = mutableStateListOf<Person>()
 
     fun loadPerson() {
+        isLoading = true
         userDocumentAddress.collection("persons")
             .get().addOnSuccessListener { result ->
                 val dbItems = mutableStateListOf<Person>()
@@ -49,6 +53,7 @@ class HomeScreenViewModel : ViewModel() {
                     dbItems.add(thisPerson)
                 }
                 items = dbItems
+                isLoading = false
             }
     }
 
