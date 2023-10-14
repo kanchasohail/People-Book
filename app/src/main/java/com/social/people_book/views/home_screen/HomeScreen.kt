@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -43,13 +44,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.social.people_book.R
 import com.social.people_book.navigation.Screens
+import com.social.people_book.ui.common_views.CenterBox
+import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.ThemeViewModel
@@ -114,11 +115,9 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                         containerColor = appBarBackGroundColor,
                     ),
                     title = {
-                        MyText(
-                            text = "People Book",
-                            color = appBarTextColor,
-                            fontSize = 26.sp,
-                            fontWeight = FontWeight.W500
+                        SearchBar(
+                            text = viewModel.searchBarText,
+                            onTextChanged = { viewModel.searchBarText = it }
                         )
                     },
                     navigationIcon = {
@@ -167,6 +166,13 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
             ) {
                 if (isDarkMode) {
                     MyDivider()
+                }
+
+                if (viewModel.isLoading) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CenterBox {
+                        LoadingIndicator()
+                    }
                 }
 
                 //Actual Home Screen Content
