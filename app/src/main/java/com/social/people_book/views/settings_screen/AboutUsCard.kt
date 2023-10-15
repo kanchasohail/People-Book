@@ -3,7 +3,9 @@ package com.social.people_book.views.settings_screen
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Card
@@ -100,6 +102,7 @@ fun AboutUsCard(modifier: Modifier = Modifier , textColor: Color) {
                         textAlign = TextAlign.Center
                     ),
                 )
+                Spacer(modifier = Modifier.height(4.dp))
             }
         }
     }

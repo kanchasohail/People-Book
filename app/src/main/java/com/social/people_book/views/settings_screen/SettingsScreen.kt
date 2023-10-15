@@ -126,7 +126,7 @@ fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 12.dp, top = 8.dp)
+                                .padding(start = 8.dp, top = 8.dp)
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -178,14 +178,15 @@ fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(end = 12.dp),
-                                horizontalArrangement = Arrangement.SpaceAround
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 OutlinedButton(onClick = { /*TODO*/ }) {
                                     MyText(text = "Delete Account")
                                     Spacer(modifier = Modifier.width(3.dp))
                                     Icon(
                                         imageVector = Icons.Default.Delete,
-                                        contentDescription = "Delete account"
+                                        contentDescription = "Delete account",
+                                        modifier = Modifier.size(24.dp)
                                     )
                                 }
                                 OutlinedButton(onClick = { viewModel.logoutDialogState = true }) {
@@ -193,7 +194,8 @@ fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController) {
                                     Spacer(modifier = Modifier.width(3.dp))
                                     Icon(
                                         imageVector = Icons.Default.ExitToApp,
-                                        contentDescription = "Log Out"
+                                        contentDescription = "Log Out",
+                                        modifier = Modifier.size(24.dp)
                                     )
                                 }
                             }
