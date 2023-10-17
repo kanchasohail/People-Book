@@ -33,7 +33,7 @@ fun ConfirmResetPasswordDialog(
     if (showDialog) {
         AlertDialog(
             title = {
-                MyText("Reset Password")
+                MyText("Reset Password" , fontSize = 22.sp)
             },
             text = {
                 Text(
@@ -69,13 +69,13 @@ fun ConfirmResetPasswordDialog(
                     )
                 ) {
                     Icon(imageVector = Icons.Default.Refresh, contentDescription = "reset")
-                    MyText("Reset", fontSize = 18.sp)
+                    MyText("Reset", fontSize = 17.sp)
                 }
 
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    MyText("Cancel", fontSize = 18.sp)
+                    MyText("Cancel", fontSize = 17.sp)
                 }
             },
             shape = RoundedCornerShape(8.dp)

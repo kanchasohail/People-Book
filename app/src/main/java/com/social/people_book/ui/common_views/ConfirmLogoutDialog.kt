@@ -28,7 +28,7 @@ fun ConfirmLogoutDialog(
     if (showDialog) {
         AlertDialog(
             title = {
-                MyText("Log Out")
+                MyText("Log Out" , fontSize = 22.sp)
             },
             text = {
                 Text(
@@ -50,13 +50,13 @@ fun ConfirmLogoutDialog(
                     )
                 ) {
                     Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "logout")
-                    MyText("Logout", fontSize = 18.sp)
+                    MyText("Logout", fontSize = 17.sp)
                 }
 
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    MyText("Cancel", fontSize = 18.sp)
+                    MyText("Cancel", fontSize = 17.sp)
                 }
             },
             shape = RoundedCornerShape(8.dp)

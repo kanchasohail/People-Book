@@ -30,7 +30,7 @@ fun ConfirmDeletionDialog(
     if (showDialog) {
         AlertDialog(
             title = {
-                MyText("Move to Trash")
+                MyText("Move to Trash" , fontSize = 22.sp)
             },
             text = {
                 Text(
@@ -66,7 +66,7 @@ fun ConfirmDeletionDialog(
                     )
                 ) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")
-                    MyText("Yes", fontSize = 18.sp)
+                    MyText("Yes", fontSize = 17.sp)
                 }
 
             },
@@ -75,7 +75,7 @@ fun ConfirmDeletionDialog(
 //                    onDismiss()
 //                })
                 TextButton(onClick = onDismiss) {
-                    MyText("No", fontSize = 18.sp)
+                    MyText("No", fontSize = 17.sp)
                 }
             },
             shape = RoundedCornerShape(8.dp)

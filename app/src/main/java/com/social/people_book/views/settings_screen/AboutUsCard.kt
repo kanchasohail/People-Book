@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,7 +27,7 @@ import com.social.people_book.ui.theme.RobotoFontFamily
 
 
 @Composable
-fun AboutUsCard(modifier: Modifier = Modifier , textColor: Color) {
+fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
     val context = LocalContext.current
 
     Card(
@@ -54,39 +53,34 @@ fun AboutUsCard(modifier: Modifier = Modifier , textColor: Color) {
                     .padding(start = 12.dp, top = 8.dp, end = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val annotatedString = buildAnnotatedString {
-                    pushStringAnnotation(tag = "policy", annotation = "https://shimul-riley.github.io/The-Ordinary-Android-Dev/#privacy")
-                    append("Privacy Policy\n")
-                    pop()
 
+                val annotatedString = buildAnnotatedString {
+                    append("We are committed to protect all the information you put in our app. This is our business interest to serve our customers and make sure no one can see any information you are giving.\nVisit our ")
+                    pushStringAnnotation(
+                        tag = "policy",
+                        annotation = "https://shimul-riley.github.io/The-Ordinary-Android-Dev/#privacy"
+                    )
                     withStyle(
                         style = SpanStyle(
-                            color = Color.Gray,
                             fontSize = 16.sp,
-                            fontFamily = RobotoFontFamily,
+                            color = MaterialTheme.colorScheme.inversePrimary,
+                            fontFamily = RobotoFontFamily
                         )
                     ) {
-                        append(" &\n")
+                        append("Privacy Policy ")
                     }
-
-                    pushStringAnnotation(tag = "terms", annotation = "https://shimul-riley.github.io/The-Ordinary-Android-Dev/#terms")
-                    append("Terms and Conditions")
                     pop()
+                    append("page to learn more.")
                 }
 
                 ClickableText(
                     text = annotatedString,
                     onClick = { offset ->
-                        annotatedString.getStringAnnotations(tag = "policy", start = offset, end = offset)
-                            .firstOrNull()?.let {
-                                val urlIntent = Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(it.item)
-                                )
-                                context.startActivity(urlIntent)
-                            }
-
-                        annotatedString.getStringAnnotations(tag = "terms", start = offset, end = offset)
+                        annotatedString.getStringAnnotations(
+                            tag = "policy",
+                            start = offset,
+                            end = offset
+                        )
                             .firstOrNull()?.let {
                                 val urlIntent = Intent(
                                     Intent.ACTION_VIEW,
@@ -98,8 +92,7 @@ fun AboutUsCard(modifier: Modifier = Modifier , textColor: Color) {
                     style = TextStyle(
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.primary,
-                        fontFamily = RobotoFontFamily,
-                        textAlign = TextAlign.Center
+                        fontFamily = RobotoFontFamily
                     ),
                 )
                 Spacer(modifier = Modifier.height(4.dp))
