@@ -121,27 +121,27 @@ fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController) {
                             .fillMaxWidth()
                             .padding(top = 12.dp, bottom = 12.dp, start = 14.dp, end = 8.dp)
                     ) {
-                        MyText(text = "Account", fontSize = 22.sp, color = textColor)
+                        MyText(text = "Account Settings", fontSize = 22.sp, color = textColor)
 
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 8.dp, top = 8.dp)
                         ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                MyText(text = "Name: ")
-                                MyText(text = viewModel.name)
-                                IconButton(onClick = { /*TODO*/ }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Edit,
-                                        contentDescription = "Edit email"
-                                    )
-                                }
-                            }
+//                            Row(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                horizontalArrangement = Arrangement.SpaceBetween,
+//                                verticalAlignment = Alignment.CenterVertically
+//                            ) {
+//                                MyText(text = "Name: ")
+//                                MyText(text = viewModel.name)
+//                                IconButton(onClick = { /*TODO*/ }) {
+//                                    Icon(
+//                                        imageVector = Icons.Default.Edit,
+//                                        contentDescription = "Edit email"
+//                                    )
+//                                }
+//                            }
 
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
