@@ -63,7 +63,7 @@ fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
                     withStyle(
                         style = SpanStyle(
                             fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.inversePrimary,
+                            color = MaterialTheme.colorScheme.primary,
                             fontFamily = RobotoFontFamily
                         )
                     ) {
@@ -91,7 +91,7 @@ fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
                     },
                     style = TextStyle(
                         fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = textColor,
                         fontFamily = RobotoFontFamily
                     ),
                 )
