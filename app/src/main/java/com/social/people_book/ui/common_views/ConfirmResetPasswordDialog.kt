@@ -1,9 +1,7 @@
 package com.social.people_book.ui.common_views
 
-import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
@@ -38,7 +36,7 @@ fun ConfirmResetPasswordDialog(
             text = {
                 Text(
                     text = buildAnnotatedString {
-                        append("This will send a reset-password link to this email - ")
+                        append("This will send a reset password link to ")
                         withStyle(
                             style = SpanStyle(
                                 fontFamily = RobotoFontFamily,
@@ -47,6 +45,7 @@ fun ConfirmResetPasswordDialog(
                         ) {
                             append(email)
                         }
+                        append("Please make sure to check the Spam folder In case you can't find it in your inbox")
                     }, style = TextStyle(
                         fontFamily = RobotoFontFamily,
                         fontSize = 16.sp
@@ -56,11 +55,6 @@ fun ConfirmResetPasswordDialog(
 
             onDismissRequest = onDismiss,
             confirmButton = {
-//                Row(verticalAlignment = Alignment.CenterVertically) {
-//                    Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")
-//                    MyText("Yes", fontSize = 18.sp)
-//                }
-
                 OutlinedButton(
                     onClick = onConfirm,
                     colors = ButtonDefaults.buttonColors(
