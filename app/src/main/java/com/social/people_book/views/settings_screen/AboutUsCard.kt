@@ -37,7 +37,7 @@ fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.background
         ), elevation = CardDefaults.cardElevation(
-            8.dp
+            4.dp
         )
     ) {
         Column(

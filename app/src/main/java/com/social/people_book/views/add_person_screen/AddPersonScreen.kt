@@ -181,6 +181,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     MyText(text = "Name :", fontSize = 17.sp, color = textColor)
                     OutlinedTextField(
                         value = viewModel.name,
+                        singleLine = true,
                         onValueChange = {
                             viewModel.name = it
                         },
@@ -197,6 +198,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     MyText(text = "Number :", fontSize = 17.sp, color = textColor)
                     OutlinedTextField(
                         value = viewModel.number,
+                        singleLine = true,
                         onValueChange = {
                             viewModel.number = it
                         },
@@ -215,6 +217,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     MyText(text = "Email :", fontSize = 17.sp, color = textColor)
                     OutlinedTextField(
                         value = viewModel.email,
+                        singleLine = true,
                         onValueChange = {
                             viewModel.email = it
                         },

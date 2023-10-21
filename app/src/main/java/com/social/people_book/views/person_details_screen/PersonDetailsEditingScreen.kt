@@ -194,6 +194,7 @@ fun PersonDetailsEditingScreen(
                     MyText(text = "Name :", fontSize = 17.sp, color = textColor)
                     OutlinedTextField(
                         value = viewModel.name,
+                        singleLine = true,
                         onValueChange = {
                             viewModel.name = it
                         },
@@ -210,6 +211,7 @@ fun PersonDetailsEditingScreen(
                     MyText(text = "Number :", fontSize = 17.sp, color = textColor)
                     OutlinedTextField(
                         value = viewModel.number,
+                        singleLine = true,
                         onValueChange = {
                             viewModel.number = it
                         },
@@ -228,6 +230,7 @@ fun PersonDetailsEditingScreen(
                     MyText(text = "Email :", fontSize = 17.sp, color = textColor)
                     OutlinedTextField(
                         value = viewModel.email,
+                        singleLine = true,
                         onValueChange = {
                             viewModel.email = it
                         },
