@@ -25,6 +25,7 @@ fun ItemCard(modifier: Modifier = Modifier, text: String, textColor: Color, onCl
 
     Column(
         modifier = modifier
+            .padding(8.dp)
             .size(150.dp)
             .border(.7.dp, textColor, shape = RoundedCornerShape(8.dp))
             .clickable {

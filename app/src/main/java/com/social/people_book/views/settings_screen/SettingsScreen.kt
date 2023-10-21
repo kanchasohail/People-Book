@@ -42,7 +42,6 @@ import com.social.people_book.ui.layout.MyText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
 fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController) {
     val context = LocalContext.current
     val appBarBackGroundColor =
@@ -113,7 +112,7 @@ fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController) {
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.background
                     ), elevation = CardDefaults.cardElevation(
-                        8.dp
+                        4.dp
                     )
                 ) {
                     Column(
