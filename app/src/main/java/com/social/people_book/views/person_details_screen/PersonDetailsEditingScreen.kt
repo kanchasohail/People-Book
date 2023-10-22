@@ -42,6 +42,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.R
+import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
@@ -94,16 +95,9 @@ fun PersonDetailsEditingScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            tint = appBarTextColor,
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
+                    BackButtonArrow(iconColor = appBarTextColor) {
+                    navController.popBackStack()
+                }
                 },
                 actions = {
                     OutlinedButton(

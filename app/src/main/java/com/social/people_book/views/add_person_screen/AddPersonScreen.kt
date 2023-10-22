@@ -42,6 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.R
+import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
@@ -88,15 +89,8 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
+                    BackButtonArrow(iconColor = appBarTextColor) {
                         navController.popBackStack()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            tint = appBarTextColor,
-                            modifier = Modifier.size(32.dp)
-                        )
                     }
                 },
                 actions = {
