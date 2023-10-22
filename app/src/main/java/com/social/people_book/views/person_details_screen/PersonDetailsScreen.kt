@@ -42,6 +42,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.R
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmDeletionDialog
+import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
@@ -83,16 +84,9 @@ fun PersonDetailsScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            tint = appBarTextColor,
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
+                    BackButtonArrow(iconColor = appBarTextColor) {
+                    navController.popBackStack()
+                }
                 },
                 actions = {
                     Row(verticalAlignment = Alignment.CenterVertically) {

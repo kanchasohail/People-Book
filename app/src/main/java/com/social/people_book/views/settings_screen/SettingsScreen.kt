@@ -37,6 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.social.people_book.ui.common_views.ConfirmLogoutDialog
 import com.social.people_book.ui.common_views.ConfirmResetPasswordDialog
+import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 
@@ -69,14 +70,9 @@ fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController) {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "back",
-                            tint = appBarTextColor,
-                            modifier = Modifier.size(35.dp)
-                        )
-                    }
+                    BackButtonArrow(iconColor = appBarTextColor) {
+                    navController.popBackStack()
+                }
                 })
         }
     ) { paddingValues ->
