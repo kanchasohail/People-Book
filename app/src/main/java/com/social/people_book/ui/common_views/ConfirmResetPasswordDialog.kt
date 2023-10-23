@@ -45,7 +45,7 @@ fun ConfirmResetPasswordDialog(
                         ) {
                             append(email)
                         }
-                        append("Please make sure to check the Spam folder In case you can't find it in your inbox")
+                        append("\n\nPlease make sure to check the Spam folder itatn case you can't find it in your inbox.")
                     }, style = TextStyle(
                         fontFamily = RobotoFontFamily,
                         fontSize = 16.sp
