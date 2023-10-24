@@ -3,7 +3,6 @@ package com.social.people_book.views.add_person_screen
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -128,6 +125,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 12.dp, vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
                     modifier = Modifier
@@ -167,76 +165,54 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                     }
 
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MyText(text = "Name :", fontSize = 17.sp, color = textColor)
-                    OutlinedTextField(
-                        value = viewModel.name,
-                        singleLine = true,
-                        onValueChange = {
-                            viewModel.name = it
-                        },
-                        label = { Text(text = "Name") },
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MyText(text = "Number :", fontSize = 17.sp, color = textColor)
-                    OutlinedTextField(
-                        value = viewModel.number,
-                        singleLine = true,
-                        onValueChange = {
-                            viewModel.number = it
-                        },
-                        label = { Text(text = "Number") },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Phone
-                        ),
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MyText(text = "Email :", fontSize = 17.sp, color = textColor)
-                    OutlinedTextField(
-                        value = viewModel.email,
-                        singleLine = true,
-                        onValueChange = {
-                            viewModel.email = it
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email
-                        ),
-                        label = { Text(text = "Email") },
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MyText(text = "About :", fontSize = 17.sp, color = textColor)
-                    OutlinedTextField(
-                        value = viewModel.about,
-                        onValueChange = {
-                            viewModel.about = it
-                        },
-                        label = { Text(text = "About") },
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
+                OutlinedTextField(
+                    value = viewModel.name,
+                    singleLine = true,
+                    onValueChange = {
+                        viewModel.name = it
+                    },
+                    label = { Text(text = "Name") },
+                    modifier = Modifier.padding(8.dp)
+                )
+
+
+
+                OutlinedTextField(
+                    value = viewModel.number,
+                    singleLine = true,
+                    onValueChange = {
+                        viewModel.number = it
+                    },
+                    label = { Text(text = "Number") },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Phone
+                    ),
+                    modifier = Modifier.padding(8.dp)
+                )
+
+                OutlinedTextField(
+                    value = viewModel.email,
+                    singleLine = true,
+                    onValueChange = {
+                        viewModel.email = it
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email
+                    ),
+                    label = { Text(text = "Email") },
+                    modifier = Modifier.padding(8.dp)
+                )
+
+
+                OutlinedTextField(
+                    value = viewModel.about,
+                    onValueChange = {
+                        viewModel.about = it
+                    },
+                    label = { Text(text = "About") },
+                    modifier = Modifier.padding(8.dp)
+                )
 
             }
         }
