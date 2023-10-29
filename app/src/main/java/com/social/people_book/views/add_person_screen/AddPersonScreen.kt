@@ -1,5 +1,7 @@
 package com.social.people_book.views.add_person_screen
 
+import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -35,16 +37,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
 import com.social.people_book.R
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,13 +56,36 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
     val context = LocalContext.current
 
     val viewModel = viewModel<AddPersonViewModel>()
-    val galleryLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            viewModel.selectedImage = uri
-            viewModel.viewModelScope.launch {
-//                viewModel.saveProfileImage(context)
-            }
+
+    val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // use the cropped image
+            val uriContent = result.uriContent
+           viewModel.selectedImage = uriContent
+        } else {
+            // an error occurred cropping
+            val exception = result.error
+            Log.e("Image Cropper", "profileImageCropLauncher Exception $exception")
         }
+    }
+
+    val avatarPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+
+        val cropImageOptions = CropImageOptions(
+            cropShape = CropImageView.CropShape.RECTANGLE,
+            aspectRatioX = 1,
+            aspectRatioY = 1,
+            scaleType = CropImageView.ScaleType.CENTER,
+            cornerShape = CropImageView.CropCornerShape.RECTANGLE,
+            fixAspectRatio = true
+        )
+        val cropOptions = CropImageContractOptions(uri, cropImageOptions)
+        avatarCropLauncher.launch(cropOptions)
+
+    }
+
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
     val appBarTextColor =
@@ -155,9 +182,9 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                         contentAlignment = Alignment.BottomEnd
                     ) {
                         OutlinedButton(onClick = {
-                            galleryLauncher.launch("image/*")
+                            avatarPickerLauncher.launch("image/*")
                         }) {
-                            MyText(text = "Add" , fontSize = 18.sp)
+                            MyText(text = "Add", fontSize = 18.sp)
                             Spacer(modifier = Modifier.width(6.dp))
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_camera),
