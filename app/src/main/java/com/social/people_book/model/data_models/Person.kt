@@ -6,4 +6,16 @@ data class Person(
     val number: String?,
     val email: String?,
     val about: String?
-)
+){
+    fun doesMatchSearchQuery(query: String): Boolean {
+        val matchingCombinations = listOf(
+            name,
+            "$number",
+            "$email",
+        )
+
+        return matchingCombinations.any {
+            it.contains(query, ignoreCase = true)
+        }
+    }
+}

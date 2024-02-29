@@ -6,6 +6,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -42,13 +43,17 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.social.people_book.R
@@ -58,6 +63,7 @@ import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.ThemeViewModel
+import com.social.people_book.util.isScrollingUp
 import com.social.people_book.views.side_drawer.DrawerContent
 import com.social.people_book.views.side_drawer.DrawerHeader
 import kotlinx.coroutines.launch
@@ -75,12 +81,16 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
 
     val localCoroutineScope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val gridState = rememberLazyGridState()
 
 
     val viewModel = viewModel<HomeScreenViewModel>()
 
+    val searchBarText by viewModel.searchBarText.collectAsState()
+    val persons by viewModel.persons.collectAsState()
+    val isSearching by viewModel.isSearching.collectAsState()
+
     SideEffect {
-        viewModel.loadPerson()
         viewModel.loadUserName()
     }
 
@@ -121,8 +131,8 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                     ),
                     title = {
                         SearchBar(
-                            text = viewModel.searchBarText,
-                            onTextChanged = { viewModel.searchBarText = it }
+                            text = searchBarText,
+                            onTextChanged = viewModel::onSearchTextChange
                         )
                     },
                     navigationIcon = {
@@ -153,15 +163,11 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
             },
             floatingActionButton = {
                 ExtendedFloatingActionButton(
-                    onClick = {
-                        navController.navigate(Screens.AddPersonScreen.route)
-                    },
-                    modifier = Modifier.padding(bottom = 16.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
-                    Spacer(modifier = Modifier.width(8.dp))
-                    MyText(text = "Add")
-                }
+                    text = { MyText(text = "Add", fontSize = 16.sp) },
+                    icon = { Icon(imageVector = Icons.Default.Add, contentDescription = "Add") },
+                    onClick = { navController.navigate(Screens.AddPersonScreen.route) },
+                    expanded = gridState.isScrollingUp()
+                )
             }
         ) { paddingValues ->
             Column(
@@ -189,7 +195,8 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 8.dp).clickable {
+                            .padding(start = 8.dp)
+                            .clickable {
                                 viewModel.isTagExpanded = !viewModel.isTagExpanded
 
                             },
@@ -229,22 +236,29 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                         }
                     }
 
-                    LazyVerticalGrid(
-                        state = rememberLazyGridState(),
-                        columns = GridCells.Adaptive(150.dp),
-                    ) {
-                        items(viewModel.items) {
-                            ItemCard(
-                                text = it.name,
-                                textColor = textColor,
-                                onClick = {
-                                    navController.navigate(
-                                        Screens.PersonDetailsGroup.withArgs(
-                                            it.personId
+                    if (isSearching) {
+                        Box(modifier = Modifier.fillMaxSize(1f), contentAlignment = Alignment.Center){
+                            LoadingIndicator()
+                        }
+                    } else {
+                        LazyVerticalGrid(
+                            state = gridState,
+                            columns = GridCells.Adaptive(150.dp),
+                        ) {
+                            items(persons) {
+//                            items(viewModel.items) {
+                                ItemCard(
+                                    text = it.name,
+                                    textColor = textColor,
+                                    onClick = {
+                                        navController.navigate(
+                                            Screens.PersonDetailsGroup.withArgs(
+                                                it.personId
+                                            )
                                         )
-                                    )
 
-                                })
+                                    })
+                            }
                         }
                     }
                 }
