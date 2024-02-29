@@ -27,5 +27,4 @@
             android:theme="@style/Base.Theme.AppCompat"/>
 
     </application>
-
 </manifest>
