@@ -1,6 +1,7 @@
 package com.social.people_book.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -28,10 +29,14 @@ fun NavigationGraph(
     navController: NavHostController,
     isDarkMode: Boolean,
     themeViewModel: ThemeViewModel,
-    auth: FirebaseAuth
+    auth: FirebaseAuth,
+    modifier: Modifier = Modifier
 ) {
 //    NavHost(navController = navController, startDestination = Screens.SplashScreen.route) {
-    NavHost(navController = navController, startDestination = Screens.HomeScreen.route) {
+
+    //To check if the user is loggedIn or not
+    val startDestinationRoute = if (auth.currentUser != null) Screens.HomeScreen.route else Screens.AuthScreen.route
+    NavHost(navController = navController, startDestination = startDestinationRoute) {
         //Splash Screen
         composable(Screens.SplashScreen.route) {
             SplashScreen(navController = navController, isDarkMode = isDarkMode, auth = auth)

@@ -85,7 +85,8 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues).imePadding()
+                .padding(paddingValues)
+                .imePadding()
         ) {
 
             if (isDarkMode) {
@@ -98,6 +99,13 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Center
             ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    GoogleSignUpButton {
+                     //Todo Implement google login
+                    }
+                    
+                    DividerWithText()
+                }
                 // Email field
                 Column(
                     modifier = Modifier

@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -88,33 +89,6 @@ fun PersonDetailsScreen(
                     navController.popBackStack()
                 }
                 },
-                actions = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        OutlinedButton(onClick = {
-                            navController.navigate(Screens.PersonDetailsEditingScreen.route)
-                        }) {
-                            MyText(text = "Edit", fontSize =17.sp, color = appBarTextColor)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit",
-                                tint = appBarTextColor,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-
-                        IconButton(onClick = {
-                            viewModel.showDialogState = true
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete",
-                                tint = redColor,
-                                modifier = Modifier.size(28.dp)
-                            )
-                        }
-                    }
-                }
             )
         }
     ) { paddingValues ->
@@ -209,6 +183,29 @@ fun PersonDetailsScreen(
                     MyText(text = "About:", color = textColor)
                     Spacer(modifier = Modifier.width(10.dp))
                     MyText(text = viewModel.thisPerson.about.toString(), color = textColor)
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = {
+                        viewModel.showDialogState = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete",
+                            tint = redColor,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+
+
+                    Button(modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                        navController.navigate(Screens.PersonDetailsEditingScreen.route)
+                    }) {
+                        MyText(text = "Edit", fontSize =17.sp, color = appBarTextColor)
+                    }
                 }
             }
         }
