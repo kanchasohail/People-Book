@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -85,6 +86,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .imePadding()
         ) {
 
             if (isDarkMode) {
@@ -97,6 +99,13 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Center
             ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    GoogleSignUpButton {
+                     //Todo Implement google login
+                    }
+                    
+                    DividerWithText()
+                }
                 // Email field
                 Column(
                     modifier = Modifier
