@@ -1,5 +1,6 @@
 package com.social.people_book.views.person_details_screen
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,6 +45,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.R
+import com.social.people_book.ui.common_views.ConfirmBackDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
@@ -73,6 +77,9 @@ fun PersonDetailsEditingScreen(
     SideEffect {
         viewModel.loadForEditing()
     }
+    BackHandler {
+        viewModel.showDialogState = true
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -96,25 +103,9 @@ fun PersonDetailsEditingScreen(
                 },
                 navigationIcon = {
                     BackButtonArrow(iconColor = appBarTextColor) {
-                    navController.popBackStack()
-                }
-                },
-                actions = {
-                    OutlinedButton(
-                        onClick = {
-                            if (!viewModel.isLoading) {
-                                viewModel.updatePerson(context, navController)
-                            }
-                        },
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        if (!viewModel.isLoading) {
-                            MyText(text = "Save", color = appBarTextColor, fontSize = 16.sp)
-                        } else {
-                            LoadingIndicator()
-                        }
+                        viewModel.showDialogState = true
                     }
-                }
+                },
             )
         }
     ) { paddingValues ->
@@ -128,6 +119,14 @@ fun PersonDetailsEditingScreen(
             if (isDarkMode) {
                 MyDivider()
             }
+
+            ConfirmBackDialog(
+                showDialog = viewModel.showDialogState,
+                onDismiss = { viewModel.showDialogState = false },
+                onConfirm = {
+                    viewModel.showDialogState = false
+                    navController.popBackStack()
+                })
 
             //Actual Screen Content
             Column(
@@ -249,6 +248,22 @@ fun PersonDetailsEditingScreen(
                         label = { Text(text = "About") },
                         modifier = Modifier.padding(8.dp)
                     )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    onClick = {
+                        if (!viewModel.isLoading) {
+                            viewModel.updatePerson(context, navController)
+                        }
+                    },
+                    modifier = Modifier.padding(8.dp).fillMaxWidth()
+                ) {
+                    if (!viewModel.isLoading) {
+                        MyText(text = "Save", color = appBarTextColor, fontSize = 16.sp)
+                    } else {
+                        LoadingIndicator()
+                    }
                 }
 
             }

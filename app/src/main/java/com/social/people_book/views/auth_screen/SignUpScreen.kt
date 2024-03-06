@@ -98,6 +98,14 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Center
             ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    GoogleSignUpButton {
+                        //Todo Implement google login
+                    }
+
+                    DividerWithText()
+                }
+
                 // Name field
                 MyText(text = "Name", modifier = Modifier.padding(start = 8.dp))
                 OutlinedTextField(
