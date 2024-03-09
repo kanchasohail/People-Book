@@ -1,5 +1,8 @@
 package com.social.people_book.views.person_details_screen
 
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,29 +47,79 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
+import com.social.people_book.MainViewModel
 import com.social.people_book.R
+import com.social.people_book.room_database.PersonRoom
 import com.social.people_book.ui.common_views.ConfirmBackDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, DelicateCoroutinesApi::class)
 @Composable
 fun PersonDetailsEditingScreen(
     navController: NavController,
     isDarkMode: Boolean,
-    viewModel: PersonDetailsViewModel
+    viewModel: PersonDetailsViewModel,
+    mainViewModel: MainViewModel
 ) {
     val context = LocalContext.current
-    val galleryLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            viewModel.selectedImage = uri
-            viewModel.viewModelScope.launch {
-//                viewModel.saveProfileImage(context)
-            }
+
+    fun updatePerson(){
+        viewModel.isLoading = true
+        val personRoom = PersonRoom(
+            id = viewModel.thisPerson.personId.toInt(),
+            name = viewModel.name,
+            number = viewModel.number,
+            email = viewModel.email,
+            about = viewModel.about
+        )
+        GlobalScope.launch(Dispatchers.IO){
+
+            mainViewModel.personDao.updatePerson(personRoom)
         }
+        viewModel.isLoading = false
+        Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
+        navController.popBackStack()
+    }
+
+val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // use the cropped image
+            val uriContent = result.uriContent
+           viewModel.selectedImage = uriContent
+        } else {
+            // an error occurred cropping
+            val exception = result.error
+            Log.e("Image Cropper", "profileImageCropLauncher Exception $exception")
+        }
+    }
+
+    val avatarPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+
+        val cropImageOptions = CropImageOptions(
+            cropShape = CropImageView.CropShape.RECTANGLE,
+            aspectRatioX = 1,
+            aspectRatioY = 1,
+            scaleType = CropImageView.ScaleType.CENTER,
+            cornerShape = CropImageView.CropCornerShape.RECTANGLE,
+            fixAspectRatio = true
+        )
+        val cropOptions = CropImageContractOptions(uri, cropImageOptions)
+        avatarCropLauncher.launch(cropOptions)
+
+    }
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
@@ -169,7 +222,7 @@ fun PersonDetailsEditingScreen(
                         contentAlignment = Alignment.BottomEnd
                     ) {
                         IconButton(onClick = {
-                            galleryLauncher.launch("image/*")
+                            avatarPickerLauncher.launch("image/*")
                         }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_camera),
@@ -254,7 +307,8 @@ fun PersonDetailsEditingScreen(
                 Button(
                     onClick = {
                         if (!viewModel.isLoading) {
-                            viewModel.updatePerson(context, navController)
+//                            viewModel.updatePerson(context, navController)
+                            updatePerson()
                         }
                     },
                     modifier = Modifier.padding(8.dp).fillMaxWidth()
