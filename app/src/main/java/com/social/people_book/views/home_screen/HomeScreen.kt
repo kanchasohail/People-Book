@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -51,7 +50,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -62,7 +60,7 @@ import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.ui.theme.ThemeViewModel
+import com.social.people_book.MainViewModel
 import com.social.people_book.util.isScrollingUp
 import com.social.people_book.views.side_drawer.DrawerContent
 import com.social.people_book.views.side_drawer.DrawerHeader
@@ -70,7 +68,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel: ThemeViewModel) {
+fun HomeScreen(navController: NavController, isDarkMode: Boolean, mainViewModel: MainViewModel) {
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
@@ -87,7 +85,8 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
     val viewModel = viewModel<HomeScreenViewModel>()
 
     val searchBarText by viewModel.searchBarText.collectAsState()
-    val persons by viewModel.persons.collectAsState()
+//    val persons by viewModel.persons.collectAsState()
+    val persons by mainViewModel.personDao.getAll().collectAsState(initial = emptyList())
     val isSearching by viewModel.isSearching.collectAsState()
 
     SideEffect {
@@ -117,7 +116,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
 
                 DrawerContent(
                     navController = navController,
-                    viewModel = themeViewModel,
+                    viewModel = mainViewModel,
                     userName = viewModel.userName
                 )
             }
@@ -126,7 +125,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
         Scaffold(
             topBar = {
                 TopAppBar(
-                    colors = TopAppBarDefaults.smallTopAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = appBarBackGroundColor,
                     ),
                     title = {
@@ -237,7 +236,10 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                     }
 
                     if (isSearching) {
-                        Box(modifier = Modifier.fillMaxSize(1f), contentAlignment = Alignment.Center){
+                        Box(
+                            modifier = Modifier.fillMaxSize(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
                             LoadingIndicator()
                         }
                     } else {
@@ -253,7 +255,8 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
                                     onClick = {
                                         navController.navigate(
                                             Screens.PersonDetailsGroup.withArgs(
-                                                it.personId
+//                                                it.personId
+                                                (it.id ?: 1).toString()
                                             )
                                         )
 
@@ -268,7 +271,6 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, themeViewModel
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TagsChip(
     modifier: Modifier = Modifier,

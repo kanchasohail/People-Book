@@ -1,7 +1,6 @@
 package com.social.people_book.views.side_drawer
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -20,9 +19,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,20 +28,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.social.people_book.R
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.layout.CustomSwitch
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.ui.theme.ThemeViewModel
+import com.social.people_book.MainViewModel
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun DrawerContent(navController: NavController, viewModel: ThemeViewModel, userName: String) {
+fun DrawerContent(navController: NavController, viewModel: MainViewModel, userName: String) {
 
     val isSystemSettingDarkTheme by mutableStateOf(isSystemInDarkTheme())
     var isDarkMode by remember {

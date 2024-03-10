@@ -52,7 +52,9 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
+import com.social.people_book.MainViewModel
 import com.social.people_book.R
+import com.social.people_book.room_database.PersonRoom
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
@@ -61,7 +63,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
+fun AddPersonScreen(navController: NavController, isDarkMode: Boolean, mainViewModel: MainViewModel) {
     val context = LocalContext.current
 
     val viewModel = viewModel<AddPersonViewModel>()
@@ -114,7 +116,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = appBarBackGroundColor,
                 ),
                 title = {
@@ -142,6 +144,14 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                         onClick = {
                             if (!viewModel.isLoading) {
                                 viewModel.addPerson(context, navController)
+                                val personRoom = PersonRoom(
+                                    id = null,
+                                    name = viewModel.name,
+                                    number = viewModel.number,
+                                    email = viewModel.email,
+                                    about = viewModel.about
+                                )
+                                mainViewModel.addPerson(personRoom)
                             }
                         },
                         modifier = Modifier.padding(8.dp)

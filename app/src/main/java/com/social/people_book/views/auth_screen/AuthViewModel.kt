@@ -25,6 +25,7 @@ class AuthViewModel : ViewModel() {
     var isEmailValid by mutableStateOf(true)
     var isPasswordValid by mutableStateOf(true)
 
+
     fun isValidEmail(email: String): Boolean {
         val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
         isEmailValid = email.matches(emailRegex) || email.isEmpty()

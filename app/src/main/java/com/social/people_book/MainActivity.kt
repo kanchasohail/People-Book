@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,30 +31,36 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.social.people_book.model.other.BottomNavigationItemModel
 import com.social.people_book.navigation.NavigationGraph
 import com.social.people_book.navigation.Screens
+import com.social.people_book.room_database.PersonDatabase
 import com.social.people_book.ui.theme.PeopleBookTheme
-import com.social.people_book.ui.theme.ThemeViewModel
 
 class MainActivity : ComponentActivity() {
 
+    companion object {
+        lateinit var db: PersonDatabase
+    }
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Initialize Firebase Auth
         auth = Firebase.auth
+        db = Room.databaseBuilder(applicationContext, PersonDatabase::class.java, "people_book.db").build()
         val context: Context = this
 
         setContent {
-            val viewModel = viewModel<ThemeViewModel>(
+            val viewModel = viewModel<MainViewModel>(
                 factory = object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return ThemeViewModel(context = context) as T
+                        return MainViewModel(context = context) as T
                     }
                 }
             )
@@ -86,10 +93,9 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                     Scaffold(bottomBar = {
-                        if (navController.currentBackStackEntryAsState().value?.destination?.route !in listOf(
-                                Screens.AuthScreen.route,
-                                Screens.LoginScreen.route,
-                                Screens.SignUpScreen.route
+                        if (navController.currentBackStackEntryAsState().value?.destination?.route in listOf(
+                                Screens.HomeScreen.route,
+                                Screens.SettingsScreen.route,
                             )
                         ) {
                             NavigationBar(modifier = Modifier.height(50.dp)) {
@@ -116,13 +122,14 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }) { paddingValues ->
-                        NavigationGraph(
-                            navController = navController,
-                            isDarkMode = isDarkMode,
-                            themeViewModel = viewModel,
-                            auth = auth,
-                            modifier = Modifier.padding(paddingValues)
-                        )
+                        Box(modifier = Modifier.padding(paddingValues)){
+                            NavigationGraph(
+                                navController = navController,
+                                isDarkMode = isDarkMode,
+                                mainViewModel = viewModel,
+                                auth = auth,
+                            )
+                        }
                     }
                 }
             }
