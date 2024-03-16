@@ -17,7 +17,7 @@ interface PersonDao {
     fun getPersonById(id: Int): PersonRoom
 
     @Update
-    fun updatePerson(personRoom: PersonRoom)
+    suspend fun updatePerson(personRoom: PersonRoom)
 
     @Insert
     suspend fun addPerson(personRoom: PersonRoom): Long
