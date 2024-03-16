@@ -1,9 +1,10 @@
 package com.social.people_book.views.auth_screen
 
 import android.app.Activity
-import android.content.Intent
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -46,16 +47,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.tasks.Task
-import com.social.people_book.MainActivity
 import com.social.people_book.R
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.util.google_sign_in.GoogleSignInHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,13 +69,39 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
     val textColor = if (isDarkMode) Color.White else Color.Black
 
 
+    // Instance of GoogleSignInClient and BeginSignInRequest
+    val client = remember { GoogleSignInHelper.getGoogleSignInClient(context) }
+    val request = remember { GoogleSignInHelper.getGoogleSignInRequest() }
+
+    // Result Launcher to handle Sign In
+    val signInResultLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        Log.d("Activity Received", "Activity launched **********")
+        if(result.resultCode != Activity.RESULT_OK){
+            Log.d("Result code", "Result Code is not OK")
+        } else if(result.data == null){
+            Log.d("Result Data", "Result Data is null")
+        }
+        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+            Log.d("Result Check" , "Result Check passed")
+            val credential = client.getSignInCredentialFromIntent(result.data)
+            val idToken = credential.googleIdToken
+
+            if (idToken != null) {
+               viewModel.loginWithGoogle(idToken, context, navController)
+            } else {
+                Toast.makeText(context, "Failed to SingUp", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
 
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = appBarBackGroundColor,
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = appBarBackGroundColor
                 ),
                 title = {
                     Text(
@@ -120,7 +144,18 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                 Column(modifier = Modifier.fillMaxWidth()) {
                     if (!viewModel.isLoading) {
                         GoogleSignUpButton {
-                          //Todo
+                            viewModel.isLoading = true
+                            client.beginSignIn(request).addOnCompleteListener { task ->
+                                viewModel.isLoading = false
+                                if (task.isSuccessful) {
+                                    Log.d("Task" ,"Task successful")
+                                    val intentSender = task.result.pendingIntent.intentSender
+                                    val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
+                                    signInResultLauncher.launch(intentSenderRequest)
+                                } else {
+                                    Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
                     } else {
                         CenterBox {

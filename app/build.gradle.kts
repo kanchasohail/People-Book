@@ -72,11 +72,12 @@ dependencies {
 
     //Firebase
     // Import the BoM for the Firebase platform
-    implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
+    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
 
     implementation("com.google.firebase:firebase-firestore-ktx:24.10.3")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
 
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")

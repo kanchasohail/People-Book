@@ -2,11 +2,18 @@ package com.social.people_book.views.auth_screen
 
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -37,6 +44,43 @@ class AuthViewModel : ViewModel() {
         return isPasswordValid
     }
 
+
+    fun loginWithGoogle(idToken:String, context: Context, navController: NavController){
+        isLoading = true
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if(task.isSuccessful) {
+                   saveUser(context)
+                   navController.navigate(Screens.HomeScreen.route)
+                }
+            }
+        isLoading = false
+    }
+
+    fun signUpWithGoogle(
+        navController: NavController,
+        context: Context,
+        client: SignInClient,
+        request: BeginSignInRequest,
+        signInResultLauncher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>
+    ) {
+        isLoading = true
+
+        client.beginSignIn(request).addOnCompleteListener { task ->
+            isLoading = false
+            if (task.isSuccessful) {
+                val intentSender = task.result.pendingIntent.intentSender
+                val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
+                signInResultLauncher.launch(intentSenderRequest)
+            } else {
+                Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+        isLoading = false
+    }
+
     fun signUp(navController: NavController, context: Context) {
         isLoading = true
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
@@ -65,7 +109,7 @@ class AuthViewModel : ViewModel() {
     }
 
 
-    private fun saveUser(context: Context) {
+     fun saveUser(context: Context) {
         val userDoc = db.collection("users").document(auth.currentUser?.uid.toString())
         userDoc.set(
             mapOf(
