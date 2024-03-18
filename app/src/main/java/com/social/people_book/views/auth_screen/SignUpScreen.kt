@@ -1,5 +1,10 @@
 package com.social.people_book.views.auth_screen
 
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,7 +28,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -49,8 +53,9 @@ import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.RobotoFontFamily
+import com.social.people_book.util.google_sign_in.GoogleSignInHelper
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkMode: Boolean) {
 
@@ -64,10 +69,31 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
         if (isDarkMode) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
     val textColor = if (isDarkMode) Color.White else Color.Black
 
+    // Instance of GoogleSignInClient and BeginSignInRequest
+    val client = remember { GoogleSignInHelper.getGoogleSignInClient(context) }
+    val request = remember { GoogleSignInHelper.getGoogleSignUpRequest() }
+
+    // Result Launcher to handle Login
+    val signInResultLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+
+        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+            val credential = client.getSignInCredentialFromIntent(result.data)
+            val idToken = credential.googleIdToken
+
+            if (idToken != null) {
+                viewModel.singUpWithGoogle(idToken, context, navController)
+            } else {
+                Toast.makeText(context, "Failed to SingUp", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = appBarBackGroundColor,
                 ),
                 title = {
@@ -99,8 +125,24 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                 verticalArrangement = Arrangement.Center
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    GoogleSignUpButton {
-                        //Todo Implement google login
+                    if (!viewModel.isLoading) {
+                        GoogleSignUpButton(text = "Signup") {
+                            viewModel.isLoading = true
+                            client.beginSignIn(request).addOnCompleteListener { task ->
+                                viewModel.isLoading = false
+                                if (task.isSuccessful) {
+                                    val intentSender = task.result.pendingIntent.intentSender
+                                    val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
+                                    signInResultLauncher.launch(intentSenderRequest)
+                                } else {
+                                    Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    } else {
+                        CenterBox {
+                            LoadingIndicator()
+                        }
                     }
 
                     DividerWithText()
@@ -195,8 +237,10 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(
                         value = viewModel.password,
-                        onValueChange = { viewModel.password = it
-                            viewModel.isValidPassword(it)},
+                        onValueChange = {
+                            viewModel.password = it
+                            viewModel.isValidPassword(it)
+                        },
                         keyboardOptions = KeyboardOptions.Default.copy(
                             imeAction = ImeAction.Done,
                             keyboardType = KeyboardType.Password

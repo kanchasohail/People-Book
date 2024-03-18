@@ -1,7 +1,6 @@
 package com.social.people_book.views.auth_screen
 
 import android.app.Activity
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
@@ -71,27 +70,21 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
 
     // Instance of GoogleSignInClient and BeginSignInRequest
     val client = remember { GoogleSignInHelper.getGoogleSignInClient(context) }
-    val request = remember { GoogleSignInHelper.getGoogleSignInRequest() }
+    val request = remember { GoogleSignInHelper.getGoogleLoginRequest() }
 
-    // Result Launcher to handle Sign In
+    // Result Launcher to handle Login
     val signInResultLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
-        Log.d("Activity Received", "Activity launched **********")
-        if(result.resultCode != Activity.RESULT_OK){
-            Log.d("Result code", "Result Code is not OK")
-        } else if(result.data == null){
-            Log.d("Result Data", "Result Data is null")
-        }
+
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-            Log.d("Result Check" , "Result Check passed")
             val credential = client.getSignInCredentialFromIntent(result.data)
             val idToken = credential.googleIdToken
 
             if (idToken != null) {
-               viewModel.loginWithGoogle(idToken, context, navController)
+               viewModel.loginWithGoogle(idToken, navController)
             } else {
-                Toast.makeText(context, "Failed to SingUp", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to Login", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -143,12 +136,11 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     if (!viewModel.isLoading) {
-                        GoogleSignUpButton {
+                        GoogleSignUpButton (text = "Login"){
                             viewModel.isLoading = true
                             client.beginSignIn(request).addOnCompleteListener { task ->
                                 viewModel.isLoading = false
                                 if (task.isSuccessful) {
-                                    Log.d("Task" ,"Task successful")
                                     val intentSender = task.result.pendingIntent.intentSender
                                     val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
                                     signInResultLauncher.launch(intentSenderRequest)

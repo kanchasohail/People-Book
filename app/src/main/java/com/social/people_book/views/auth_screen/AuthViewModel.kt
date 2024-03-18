@@ -45,41 +45,31 @@ class AuthViewModel : ViewModel() {
     }
 
 
-    fun loginWithGoogle(idToken:String, context: Context, navController: NavController){
+    fun loginWithGoogle(idToken: String, navController: NavController) {
         isLoading = true
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
-                if(task.isSuccessful) {
-                   saveUser(context)
-                   navController.navigate(Screens.HomeScreen.route)
+                if (task.isSuccessful) {
+                    navController.navigate(Screens.HomeScreen.route)
                 }
             }
         isLoading = false
     }
 
-    fun signUpWithGoogle(
-        navController: NavController,
-        context: Context,
-        client: SignInClient,
-        request: BeginSignInRequest,
-        signInResultLauncher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>
-    ) {
+    fun singUpWithGoogle(idToken: String, context: Context, navController: NavController) {
         isLoading = true
-
-        client.beginSignIn(request).addOnCompleteListener { task ->
-            isLoading = false
-            if (task.isSuccessful) {
-                val intentSender = task.result.pendingIntent.intentSender
-                val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
-                signInResultLauncher.launch(intentSenderRequest)
-            } else {
-                Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT)
-                    .show()
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    saveUser(context)
+                    navController.navigate(Screens.HomeScreen.route)
+                }
             }
-        }
         isLoading = false
     }
+
 
     fun signUp(navController: NavController, context: Context) {
         isLoading = true
@@ -109,7 +99,7 @@ class AuthViewModel : ViewModel() {
     }
 
 
-     fun saveUser(context: Context) {
+    fun saveUser(context: Context) {
         val userDoc = db.collection("users").document(auth.currentUser?.uid.toString())
         userDoc.set(
             mapOf(

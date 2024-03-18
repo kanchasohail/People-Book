@@ -50,7 +50,7 @@ fun DrawerHeader(
                 )
             }
         },
-       colors = TopAppBarDefaults.smallTopAppBarColors(
+       colors = TopAppBarDefaults.topAppBarColors(
            containerColor = if(isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
        ),
     )

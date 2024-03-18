@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "371748172937",
-    "project_id": "people-book-e6b8d",
-    "storage_bucket": "people-book-e6b8d.appspot.com"
+    "project_number": "859454857235",
+    "project_id": "people-book-b2f67",
+    "storage_bucket": "people-book-b2f67.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:371748172937:android:fc786f70d70dc1f5ac8258",
+        "mobilesdk_app_id": "1:859454857235:android:b43e3f32a93c5ddd2ddfe6",
         "android_client_info": {
           "package_name": "com.social.people_book"
         }
       },
       "oauth_client": [
         {
-          "client_id": "371748172937-u1cu1kf36rqsl7i9ss11t9m5fck2r1i8.apps.googleusercontent.com",
+          "client_id": "859454857235-qk8m00bb5boff60bmkuoqoe5k12ffild.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.social.people_book",
+            "certificate_hash": "9473c2ba8dcb6a4f0e00e378fca4c42efd85dd7f"
+          }
+        },
+        {
+          "client_id": "859454857235-n31rskqftrgmh8q15nmkptf4fdcekprq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBBCOj45__Mub4h4q6VCALzR78z4de7Q7o"
+          "current_key": "AIzaSyBoT1adtcihwuK1pugOgpl1285DXfXKnqo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "371748172937-u1cu1kf36rqsl7i9ss11t9m5fck2r1i8.apps.googleusercontent.com",
+              "client_id": "859454857235-n31rskqftrgmh8q15nmkptf4fdcekprq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

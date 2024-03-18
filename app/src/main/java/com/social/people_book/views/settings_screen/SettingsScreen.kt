@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
@@ -59,7 +60,7 @@ fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = appBarBackGroundColor,
                 ),
                 title = {
@@ -187,7 +188,7 @@ fun SettingsScreen(isDarkMode: Boolean = true, navController: NavController) {
                                     MyText(text = "Log Out")
                                     Spacer(modifier = Modifier.width(3.dp))
                                     Icon(
-                                        imageVector = Icons.Default.ExitToApp,
+                                        imageVector = Icons.AutoMirrored.Filled.ExitToApp,
                                         contentDescription = "Log Out",
                                         modifier = Modifier.size(24.dp)
                                     )

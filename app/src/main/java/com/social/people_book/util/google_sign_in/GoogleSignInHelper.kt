@@ -7,12 +7,21 @@ import com.google.android.gms.auth.api.identity.Identity
 object GoogleSignInHelper {
     fun getGoogleSignInClient(context: Context) = Identity.getSignInClient(context)
 
-    fun getGoogleSignInRequest() = BeginSignInRequest.builder()
+    fun getGoogleLoginRequest() = BeginSignInRequest.builder()
         .setGoogleIdTokenRequestOptions(
             BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                 .setSupported(true)
-//                .setServerClientId(BuildConfig.GOOGLE_SERVER_CLIENT_ID) // Can be obtained in Google Cloud
-                .setServerClientId("261881744960-l7bnjhh9acc33uafj18un0u47l2gdgqr.apps.googleusercontent.com") // Can be obtained in Google Cloud
+                .setServerClientId("859454857235-n31rskqftrgmh8q15nmkptf4fdcekprq.apps.googleusercontent.com") // Can be obtained in Google Cloud
+                .setFilterByAuthorizedAccounts(true)
+                .build()
+//        ).setAutoSelectEnabled(true).build()
+    ).build()
+
+    fun getGoogleSignUpRequest() = BeginSignInRequest.builder()
+        .setGoogleIdTokenRequestOptions(
+            BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                .setSupported(true)
+                .setServerClientId("859454857235-n31rskqftrgmh8q15nmkptf4fdcekprq.apps.googleusercontent.com") // Can be obtained in Google Cloud
                 .setFilterByAuthorizedAccounts(false)
                 .build()
         ).build()
