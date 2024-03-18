@@ -103,7 +103,7 @@ fun PersonDetailsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = appBarBackGroundColor,
                 ),
                 title = {
