@@ -255,13 +255,22 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                             MyText(text = "Type password", color = Color.Gray)
                         },
                         trailingIcon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_eye_icon),
-                                contentDescription = "show password",
-                                tint = if (viewModel.isShowPassword) Color.Red else textColor,
-                                modifier = Modifier.clickable {
-                                    viewModel.isShowPassword = !viewModel.isShowPassword
-                                })
+
+                            MyText(
+                                text = if (viewModel.isShowPassword) "Hide" else "Show",
+                                modifier = Modifier
+                                    .padding(end = 8.dp)
+                                    .clickable {
+                                        viewModel.isShowPassword = !viewModel.isShowPassword
+                                    })
+
+//                            Icon(
+//                                painter = painterResource(id = R.drawable.ic_eye_icon),
+//                                contentDescription = "show password",
+//                                tint = if (viewModel.isShowPassword) Color.Red else textColor,
+//                                modifier = Modifier.clickable {
+//                                    viewModel.isShowPassword = !viewModel.isShowPassword
+//                                })
                         },
                         singleLine = true,
                         visualTransformation = if (viewModel.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(
