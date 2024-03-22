@@ -82,7 +82,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
             val idToken = credential.googleIdToken
 
             if (idToken != null) {
-               viewModel.loginWithGoogle(idToken, navController)
+                viewModel.loginWithGoogle(idToken, navController)
             } else {
                 Toast.makeText(context, "Failed to Login", Toast.LENGTH_SHORT).show()
             }
@@ -136,16 +136,21 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     if (!viewModel.isLoading) {
-                        GoogleSignUpButton (text = "Login"){
+                        GoogleSignUpButton(text = "Login") {
                             viewModel.isLoading = true
                             client.beginSignIn(request).addOnCompleteListener { task ->
                                 viewModel.isLoading = false
                                 if (task.isSuccessful) {
                                     val intentSender = task.result.pendingIntent.intentSender
-                                    val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
+                                    val intentSenderRequest =
+                                        IntentSenderRequest.Builder(intentSender).build()
                                     signInResultLauncher.launch(intentSenderRequest)
                                 } else {
-                                    Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        task.exception?.message.toString(),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
                         }
@@ -222,13 +227,20 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                         MyText(text = "Type password", color = Color.Gray)
                     },
                     trailingIcon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_eye_icon),
-                            contentDescription = "show password",
-                            tint = if (viewModel.isShowPassword) Color.Red else textColor,
-                            modifier = Modifier.clickable {
-                                viewModel.isShowPassword = !viewModel.isShowPassword
-                            })
+                        MyText(
+                            text = if (viewModel.isShowPassword) "Hide" else "Show",
+                            modifier = Modifier
+                                .padding(end = 8.dp)
+                                .clickable {
+                                    viewModel.isShowPassword = !viewModel.isShowPassword
+                                })
+//                        Icon(
+//                            painter = painterResource(id = R.drawable.ic_eye_icon),
+//                            contentDescription = "show password",
+//                            tint = if (viewModel.isShowPassword) Color.Red else textColor,
+//                            modifier = Modifier.clickable {
+//                                viewModel.isShowPassword = !viewModel.isShowPassword
+//                            })
                     },
                     singleLine = true,
                     visualTransformation = if (viewModel.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(
