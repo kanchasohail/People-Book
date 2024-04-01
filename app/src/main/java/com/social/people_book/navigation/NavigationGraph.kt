@@ -112,7 +112,7 @@ fun NavigationGraph(
 
         //Settings Screen
         composable(Screens.SettingsScreen.route) {
-            SettingsScreen(isDarkMode = isDarkMode, navController)
+            SettingsScreen(mainViewModel, navController)
         }
 
     }
