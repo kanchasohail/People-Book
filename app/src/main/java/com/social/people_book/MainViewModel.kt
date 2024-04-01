@@ -2,13 +2,10 @@ package com.social.people_book
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import com.social.people_book.room_database.PersonRoom
+import com.social.people_book.model.room_database.PersonRoom
 import kotlinx.coroutines.launch
 
 class MainViewModel(context: Context) : ViewModel() {
@@ -20,24 +17,21 @@ class MainViewModel(context: Context) : ViewModel() {
 
     val personDao = MainActivity.db.personDao()
 
-    private val darkModeSetting: Boolean? = isThemeDarkMode()
+    private val _darkModeSetting =
+        when (prefs.getString(isDarkThemeKey, null)) {
+            "true" -> true
+            "false" -> false
+            else -> null
+        }
 
-    var isDarkMode by mutableStateOf(
-        darkModeSetting
-    )
+    var isDarkMode = mutableStateOf(_darkModeSetting)
+
 
 
     fun setThemeMode(isDarkMode: Boolean) {
         val stringValue = if (isDarkMode) "true" else "false"
         prefs.edit().putString(isDarkThemeKey, stringValue).apply()
-    }
-
-    private fun isThemeDarkMode(): Boolean? {
-        return when (prefs.getString(isDarkThemeKey, null)) {
-            "true" -> true
-            "false" -> false
-            else -> null
-        }
+        this.isDarkMode.value = isDarkMode
     }
 
     fun addPerson(personRoom: PersonRoom){

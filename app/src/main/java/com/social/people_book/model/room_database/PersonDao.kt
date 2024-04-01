@@ -1,4 +1,4 @@
-package com.social.people_book.room_database
+package com.social.people_book.model.room_database
 
 import androidx.room.Dao
 import androidx.room.Delete

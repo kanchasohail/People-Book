@@ -18,11 +18,9 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -38,7 +36,7 @@ import com.google.firebase.ktx.Firebase
 import com.social.people_book.model.other.BottomNavigationItemModel
 import com.social.people_book.navigation.NavigationGraph
 import com.social.people_book.navigation.Screens
-import com.social.people_book.room_database.PersonDatabase
+import com.social.people_book.model.room_database.PersonDatabase
 import com.social.people_book.ui.theme.PeopleBookTheme
 
 class MainActivity : ComponentActivity() {
@@ -46,13 +44,15 @@ class MainActivity : ComponentActivity() {
     companion object {
         lateinit var db: PersonDatabase
     }
+
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Initialize Firebase Auth
         auth = Firebase.auth
-        db = Room.databaseBuilder(applicationContext, PersonDatabase::class.java, "people_book.db").build()
+        db = Room.databaseBuilder(applicationContext, PersonDatabase::class.java, "people_book.db")
+            .build()
         val context: Context = this
 
         setContent {
@@ -61,22 +61,16 @@ class MainActivity : ComponentActivity() {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return MainViewModel(context = context) as T
                     }
+                })
+
+            val isSystemDark = isSystemInDarkTheme()
+            val darkMode by remember {
+                derivedStateOf {
+                    viewModel.isDarkMode.value ?: isSystemDark
                 }
-            )
-
-            //Theme mode state
-            val isSystemDarkTheme = isSystemInDarkTheme()
-            var isDarkMode by remember {
-                mutableStateOf(
-                    viewModel.isDarkMode ?: isSystemDarkTheme
-                )
             }
 
-            LaunchedEffect(key1 = viewModel.isDarkMode) {
-                isDarkMode = viewModel.isDarkMode ?: isSystemDarkTheme
-            }
-
-            PeopleBookTheme(darkTheme = isDarkMode) {
+            PeopleBookTheme(viewModel) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -121,10 +115,10 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }) { paddingValues ->
-                        Box(modifier = Modifier.padding(paddingValues)){
+                        Box(modifier = Modifier.padding(paddingValues)) {
                             NavigationGraph(
                                 navController = navController,
-                                isDarkMode = isDarkMode,
+                                isDarkMode = darkMode,
                                 mainViewModel = viewModel,
                                 auth = auth,
                             )
