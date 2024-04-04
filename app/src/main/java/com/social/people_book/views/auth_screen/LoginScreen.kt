@@ -126,13 +126,13 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                 verticalArrangement = Arrangement.Center
             ) {
 
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Image(
-                        painter = painterResource(id = R.drawable.auth_screen_logo),
-                        contentDescription = "image",
-                        contentScale = ContentScale.FillWidth
-                    )
-                }
+//                Box(modifier = Modifier.fillMaxWidth()) {
+//                    Image(
+//                        painter = painterResource(id = R.drawable.auth_screen_logo),
+//                        contentDescription = "image",
+//                        contentScale = ContentScale.FillWidth
+//                    )
+//                }
 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     if (!viewModel.isLoading) {
