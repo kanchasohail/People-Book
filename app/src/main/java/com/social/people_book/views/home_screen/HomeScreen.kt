@@ -1,5 +1,6 @@
 package com.social.people_book.views.home_screen
 
+import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -52,6 +53,7 @@ import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.util.image_converters.getBytesFromBitmap
 import com.social.people_book.util.isScrollingUp
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -190,6 +192,7 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, mainViewModel:
                             ItemCard(
                                 text = it.name,
                                 textColor = textColor,
+                                image = it.image?.let { it1 -> getBytesFromBitmap(it1, Bitmap.CompressFormat.JPEG, 50) },
                                 onClick = {
                                     navController.navigate(
                                         Screens.PersonDetailsGroup.withArgs(

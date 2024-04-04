@@ -1,5 +1,6 @@
 package com.social.people_book.views.person_details_screen
 
+import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -47,6 +48,7 @@ import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.redColor
+import com.social.people_book.util.image_converters.getBytesFromBitmap
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -69,9 +71,11 @@ fun PersonDetailsScreen(
             name = roomPerson.name,
             number = roomPerson.number,
             email = roomPerson.email,
-            about = roomPerson.about
+            about = roomPerson.about,
         )
         viewModel.thisPerson = thisPerson
+        viewModel.downloadedImage =
+            roomPerson.image?.let { getBytesFromBitmap(it, Bitmap.CompressFormat.JPEG, 100) }
     }
 
    fun deletePerson() {
