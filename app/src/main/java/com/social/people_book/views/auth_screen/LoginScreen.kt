@@ -5,27 +5,26 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -35,18 +34,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.social.people_book.R
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
@@ -54,7 +51,7 @@ import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.util.google_sign_in.GoogleSignInHelper
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: NavController) {
     val context = LocalContext.current
@@ -94,16 +91,9 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = appBarBackGroundColor
+                    containerColor = Color.Transparent
                 ),
-                title = {
-                    Text(
-                        text = "Welcome Back",
-                        color = appBarTextColor,
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.W500
-                    )
-                },
+                title = {},
             )
         },
     ) { paddingValues ->
@@ -112,12 +102,13 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .imePadding()
         ) {
 
             if (isDarkMode) {
                 MyDivider()
             }
+
+            MyText(text = "Welcome Back!", fontSize = 38.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
 
             Column(
                 modifier = Modifier
@@ -125,15 +116,6 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Center
             ) {
-
-//                Box(modifier = Modifier.fillMaxWidth()) {
-//                    Image(
-//                        painter = painterResource(id = R.drawable.auth_screen_logo),
-//                        contentDescription = "image",
-//                        contentScale = ContentScale.FillWidth
-//                    )
-//                }
-
                 Column(modifier = Modifier.fillMaxWidth()) {
                     if (!viewModel.isLoading) {
                         GoogleSignUpButton(text = "Login") {
@@ -289,8 +271,10 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
 
                 Spacer(modifier = Modifier.height(16.dp))
                 CenterBox {
-                    MyText(text = "Create a new account", modifier = Modifier.clickable {
-                        navController.navigate(Screens.SignUpScreen.route)
+                    MyText(text = "Create a new account",
+                        fontSize = 16.sp,
+                        modifier = Modifier.clickable {
+                            navController.popBackStack()
                     })
                 }
             }

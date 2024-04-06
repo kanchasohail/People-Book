@@ -52,17 +52,17 @@ fun NavigationGraph(
         //Auth Screen Navigation Group
         navigation(
             route = Screens.AuthScreen.route,
-            startDestination = Screens.LoginScreen.route
+            startDestination = Screens.SignUpScreen.route
         ) {
-            //Login Screen
-            composable(Screens.LoginScreen.route) { entry ->
-                val viewModel = entry.sharedViewModel<AuthViewModel>(navController)
-                LoginScreen(isDarkMode, viewModel, navController)
-            }
             //SignUp Screen
             composable(Screens.SignUpScreen.route) { entry ->
                 val viewModel = entry.sharedViewModel<AuthViewModel>(navController)
                 SignUpScreen(navController, viewModel, isDarkMode)
+            }
+            //Login Screen
+            composable(Screens.LoginScreen.route) { entry ->
+                val viewModel = entry.sharedViewModel<AuthViewModel>(navController)
+                LoginScreen(isDarkMode, viewModel, navController)
             }
             //Forgot Password Screen
             composable(Screens.ForgotPasswordScreen.route) { entry ->

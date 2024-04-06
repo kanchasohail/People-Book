@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,15 +28,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -45,7 +40,6 @@ import androidx.navigation.NavController
 import com.social.people_book.MainViewModel
 import com.social.people_book.ui.common_views.ConfirmLogoutDialog
 import com.social.people_book.ui.common_views.ConfirmResetPasswordDialog
-import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.CustomSwitch
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
@@ -74,14 +68,9 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavController) {
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = appBarBackGroundColor,
+                    containerColor = Color.Transparent,
                 ),
-                title = {
-                    MyText(
-                        text = "Settings", color = appBarTextColor, fontSize = 26.sp,
-                        fontWeight = FontWeight.W500
-                    )
-                },
+                title = {},
             )
         }
     ) { paddingValues ->
@@ -93,6 +82,10 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavController) {
             if (isDarkMode) {
                 MyDivider()
             }
+
+
+            MyText(text = "Settings", fontSize = 38.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            Spacer(modifier = Modifier.height(30.dp))
 
             ConfirmResetPasswordDialog(
                 showDialog = viewModel.showDialogState,
@@ -225,8 +218,8 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavController) {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(end = 12.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween
+//                                    .padding(end = 12.dp),
+                                ,horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 OutlinedButton(onClick = { /*TODO*/ }) {
                                     MyText(text = "Delete Account")

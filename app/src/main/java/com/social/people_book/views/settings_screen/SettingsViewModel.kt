@@ -20,8 +20,6 @@ class SettingsViewModel : ViewModel() {
     var showDialogState by mutableStateOf(false)
     var logoutDialogState by mutableStateOf(false)
 
-
-    var name by mutableStateOf("your name")
     var email by mutableStateOf("example@email.com")
 
 
@@ -30,7 +28,6 @@ class SettingsViewModel : ViewModel() {
         db.collection("users").document(auth.currentUser?.uid.toString()).get()
             .addOnSuccessListener { result ->
                 isLoading = false
-                name = result["username"].toString()
                 email = result["email"].toString()
 
             }.addOnFailureListener {

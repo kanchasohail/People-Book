@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Settings
@@ -91,7 +92,7 @@ class MainActivity : ComponentActivity() {
                                 Screens.SettingsScreen.route,
                             )
                         ) {
-                            NavigationBar(modifier = Modifier.height(50.dp)) {
+                            NavigationBar(modifier = Modifier.height(60.dp)) {
                                 items.forEach { item ->
                                     NavigationBarItem(
                                         selected = navBackStackEntry?.destination?.route == item.route,
@@ -108,7 +109,8 @@ class MainActivity : ComponentActivity() {
                                         icon = {
                                             Icon(
                                                 imageVector = item.icon,
-                                                contentDescription = item.routeName
+                                                contentDescription = item.routeName,
+                                                modifier = Modifier.size(28.dp)
                                             )
                                         })
                                 }
