@@ -41,10 +41,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
@@ -91,16 +93,9 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = appBarBackGroundColor,
+                    containerColor = Color.Transparent,
                 ),
-                title = {
-                    Text(
-                        text = "Sign Up",
-                        color = appBarTextColor,
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.W500
-                    )
-                },
+                title = {},
             )
         },
     ) { paddingValues ->
@@ -114,6 +109,9 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
             if (isDarkMode) {
                 MyDivider()
             }
+
+
+            MyText(text = "Create an Account!", fontSize = 38.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
 
             Column(
                 modifier = Modifier
@@ -144,27 +142,6 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
 
                     DividerWithText()
                 }
-
-                // Name field
-                MyText(text = "Name", modifier = Modifier.padding(start = 8.dp))
-                OutlinedTextField(
-                    value = viewModel.name,
-                    onValueChange = { viewModel.name = it },
-                    placeholder = {
-                        MyText(text = "Enter your name", color = Color.Gray)
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            passwordFocusRequester.requestFocus()
-                        }
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                )
 
                 // Email field
                 Column(
@@ -305,10 +282,11 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                         withStyle(
                             style = SpanStyle(
                                 color = MaterialTheme.colorScheme.inverseSurface,
-                                fontFamily = RobotoFontFamily
+                                fontFamily = RobotoFontFamily,
+                                fontSize = 16.sp
                             )
                         ) {
-                            append("login here")
+                            append("Login Instead")
                         }
                         pop()
                     }
@@ -320,12 +298,13 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                                 start = offset,
                                 end = offset
                             ).firstOrNull()?.let {
-                                navController.popBackStack()
+                               navController.navigate(Screens.LoginScreen.route)
                             }
                         },
                         style = TextStyle(
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontFamily = RobotoFontFamily
+                            fontFamily = RobotoFontFamily,
+                            fontSize = 16.sp
                         )
                     )
                 }

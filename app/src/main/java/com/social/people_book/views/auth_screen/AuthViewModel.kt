@@ -19,7 +19,6 @@ class AuthViewModel : ViewModel() {
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
-    var name by mutableStateOf("")
 
     var isLoading by mutableStateOf(false)
     var isShowPassword by mutableStateOf(false)
@@ -97,7 +96,6 @@ class AuthViewModel : ViewModel() {
         val userDoc = db.collection("users").document(auth.currentUser?.uid.toString())
         userDoc.set(
             mapOf(
-                "username" to name,
                 "email" to email
             )
         ).addOnSuccessListener {
