@@ -1,9 +1,11 @@
 package com.social.people_book.views.add_person_screen
 
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
@@ -52,16 +54,24 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
+import com.social.people_book.MainViewModel
 import com.social.people_book.R
+import com.social.people_book.model.room_database.PersonRoom
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.util.image_converters.getBitmapFromUri
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
+fun AddPersonScreen(
+    navController: NavController,
+    isDarkMode: Boolean,
+    mainViewModel: MainViewModel
+) {
     val context = LocalContext.current
 
     val viewModel = viewModel<AddPersonViewModel>()
@@ -76,17 +86,18 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
         }
     }
 
-    val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
-        if (result.isSuccessful) {
-            // use the cropped image
-            val uriContent = result.uriContent
-           viewModel.selectedImage = uriContent
-        } else {
-            // an error occurred cropping
-            val exception = result.error
-            Log.e("Image Cropper", "profileImageCropLauncher Exception $exception")
+    val avatarCropLauncher =
+        rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
+            if (result.isSuccessful) {
+                // use the cropped image
+                val uriContent = result.uriContent
+                viewModel.selectedImage = uriContent
+            } else {
+                // an error occurred cropping
+                val exception = result.error
+                Log.e("Image Cropper", "profileImageCropLauncher Exception $exception")
+            }
         }
-    }
 
     val avatarPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -114,7 +125,7 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = appBarBackGroundColor,
                 ),
                 title = {
@@ -142,6 +153,15 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
                         onClick = {
                             if (!viewModel.isLoading) {
                                 viewModel.addPerson(context, navController)
+                                val personRoom = PersonRoom(
+                                    id = null,
+                                    name = viewModel.name,
+                                    number = viewModel.number,
+                                    email = viewModel.email,
+                                    about = viewModel.about,
+                                    image = viewModel.selectedImage?.let { getBitmapFromUri(it, context) }
+                                )
+                                mainViewModel.addPerson(personRoom)
                             }
                         },
                         modifier = Modifier.padding(8.dp)
@@ -171,7 +191,8 @@ fun AddPersonScreen(navController: NavController, isDarkMode: Boolean) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 12.dp, vertical = 8.dp).verticalScroll(scrollState),
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                    .verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(

@@ -5,9 +5,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Settings
@@ -18,11 +20,9 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -31,16 +31,21 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.social.people_book.model.other.BottomNavigationItemModel
 import com.social.people_book.navigation.NavigationGraph
 import com.social.people_book.navigation.Screens
+import com.social.people_book.model.room_database.PersonDatabase
 import com.social.people_book.ui.theme.PeopleBookTheme
-import com.social.people_book.ui.theme.ThemeViewModel
 
 class MainActivity : ComponentActivity() {
+
+    companion object {
+        lateinit var db: PersonDatabase
+    }
 
     private lateinit var auth: FirebaseAuth
 
@@ -49,30 +54,26 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // Initialize Firebase Auth
         auth = Firebase.auth
+        db = Room.databaseBuilder(applicationContext, PersonDatabase::class.java, "people_book.db")
+            .build()
         val context: Context = this
 
         setContent {
-            val viewModel = viewModel<ThemeViewModel>(
+            val viewModel = viewModel<MainViewModel>(
                 factory = object : ViewModelProvider.Factory {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return ThemeViewModel(context = context) as T
+                        return MainViewModel(context = context) as T
                     }
+                })
+
+            val isSystemDark = isSystemInDarkTheme()
+            val darkMode by remember {
+                derivedStateOf {
+                    viewModel.isDarkMode.value ?: isSystemDark
                 }
-            )
-
-            //Theme mode state
-            val isSystemDarkTheme = isSystemInDarkTheme()
-            var isDarkMode by remember {
-                mutableStateOf(
-                    viewModel.isDarkMode ?: isSystemDarkTheme
-                )
             }
 
-            LaunchedEffect(key1 = viewModel.isDarkMode) {
-                isDarkMode = viewModel.isDarkMode ?: isSystemDarkTheme
-            }
-
-            PeopleBookTheme(darkTheme = isDarkMode) {
+            PeopleBookTheme(viewModel) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -88,13 +89,12 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                     Scaffold(bottomBar = {
-                        if (navController.currentBackStackEntryAsState().value?.destination?.route !in listOf(
-                                Screens.AuthScreen.route,
-                                Screens.LoginScreen.route,
-                                Screens.SignUpScreen.route
+                        if (navController.currentBackStackEntryAsState().value?.destination?.route in listOf(
+                                Screens.HomeScreen.route,
+                                Screens.SettingsScreen.route,
                             )
                         ) {
-                            NavigationBar(modifier = Modifier.height(50.dp)) {
+                            NavigationBar(modifier = Modifier.height(60.dp)) {
                                 items.forEach { item ->
                                     NavigationBarItem(
                                         selected = navBackStackEntry?.destination?.route == item.route,
@@ -111,20 +111,22 @@ class MainActivity : ComponentActivity() {
                                         icon = {
                                             Icon(
                                                 imageVector = item.icon,
-                                                contentDescription = item.routeName
+                                                contentDescription = item.routeName,
+                                                modifier = Modifier.size(28.dp)
                                             )
                                         })
                                 }
                             }
                         }
                     }) { paddingValues ->
-                        NavigationGraph(
-                            navController = navController,
-                            isDarkMode = isDarkMode,
-                            themeViewModel = viewModel,
-                            auth = auth,
-                            modifier = Modifier.padding(paddingValues)
-                        )
+                        Box(modifier = Modifier.padding(paddingValues)) {
+                            NavigationGraph(
+                                navController = navController,
+                                isDarkMode = darkMode,
+                                mainViewModel = viewModel,
+                                auth = auth,
+                            )
+                        }
                     }
                 }
             }

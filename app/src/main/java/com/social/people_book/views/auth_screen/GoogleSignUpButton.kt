@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +22,7 @@ import com.social.people_book.R
 import com.social.people_book.ui.layout.MyText
 
 @Composable
-fun GoogleSignUpButton(onClick: () -> Unit) {
+fun GoogleSignUpButton(text: String , onClick: () -> Unit) {
     Button(
         onClick = { onClick() },
         modifier = Modifier
@@ -36,7 +37,7 @@ fun GoogleSignUpButton(onClick: () -> Unit) {
                 .padding(end = 8.dp)
         )
         MyText(
-            text = "Sign up with Google",
+            text = "$text with Google",
             fontSize = 18.sp,
         )
     }
@@ -50,13 +51,13 @@ fun DividerWithText() {
             .fillMaxWidth()
             .padding(10.dp), verticalAlignment = Alignment.CenterVertically
     ) {
-        Divider(color = Color.LightGray, thickness = 1.dp , modifier = Modifier.weight(1f))
+        HorizontalDivider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color.LightGray)
         MyText(
             text = "or",
             modifier = Modifier.padding(horizontal = 10.dp),
             color = Color.Gray
         )
-        Divider(color = Color.LightGray, thickness = 1.dp, modifier = Modifier.weight(1f))
+        HorizontalDivider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color.LightGray)
     }
 }
 

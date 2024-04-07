@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -18,12 +19,12 @@ class AuthViewModel : ViewModel() {
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
-    var name by mutableStateOf("")
 
     var isLoading by mutableStateOf(false)
     var isShowPassword by mutableStateOf(false)
     var isEmailValid by mutableStateOf(true)
     var isPasswordValid by mutableStateOf(true)
+
 
     fun isValidEmail(email: String): Boolean {
         val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
@@ -35,6 +36,33 @@ class AuthViewModel : ViewModel() {
         isPasswordValid = password.length > 7
         return isPasswordValid
     }
+
+
+    fun loginWithGoogle(idToken: String, navController: NavController) {
+        isLoading = true
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    navController.navigate(Screens.HomeScreen.route)
+                }
+            }
+        isLoading = false
+    }
+
+    fun singUpWithGoogle(idToken: String, context: Context, navController: NavController) {
+        isLoading = true
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    saveUser(context)
+                    navController.navigate(Screens.HomeScreen.route)
+                }
+            }
+        isLoading = false
+    }
+
 
     fun signUp(navController: NavController, context: Context) {
         isLoading = true
@@ -64,11 +92,10 @@ class AuthViewModel : ViewModel() {
     }
 
 
-    private fun saveUser(context: Context) {
+    fun saveUser(context: Context) {
         val userDoc = db.collection("users").document(auth.currentUser?.uid.toString())
         userDoc.set(
             mapOf(
-                "username" to name,
                 "email" to email
             )
         ).addOnSuccessListener {

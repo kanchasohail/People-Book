@@ -1,7 +1,6 @@
 package com.social.people_book.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -9,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
-import com.social.people_book.ui.theme.ThemeViewModel
+import com.social.people_book.MainViewModel
 import com.social.people_book.util.sharedViewModel
 import com.social.people_book.views.add_person_screen.AddPersonScreen
 import com.social.people_book.views.auth_screen.AuthViewModel
@@ -28,9 +27,8 @@ import com.social.people_book.views.splash_screen.SplashScreen
 fun NavigationGraph(
     navController: NavHostController,
     isDarkMode: Boolean,
-    themeViewModel: ThemeViewModel,
+    mainViewModel: MainViewModel,
     auth: FirebaseAuth,
-    modifier: Modifier = Modifier
 ) {
 //    NavHost(navController = navController, startDestination = Screens.SplashScreen.route) {
 
@@ -47,24 +45,24 @@ fun NavigationGraph(
             HomeScreen(
                 navController = navController,
                 isDarkMode = isDarkMode,
-                themeViewModel = themeViewModel
+                mainViewModel = mainViewModel
             )
         }
 
         //Auth Screen Navigation Group
         navigation(
             route = Screens.AuthScreen.route,
-            startDestination = Screens.LoginScreen.route
+            startDestination = Screens.SignUpScreen.route
         ) {
-            //Login Screen
-            composable(Screens.LoginScreen.route) { entry ->
-                val viewModel = entry.sharedViewModel<AuthViewModel>(navController)
-                LoginScreen(isDarkMode, viewModel, navController)
-            }
             //SignUp Screen
             composable(Screens.SignUpScreen.route) { entry ->
                 val viewModel = entry.sharedViewModel<AuthViewModel>(navController)
                 SignUpScreen(navController, viewModel, isDarkMode)
+            }
+            //Login Screen
+            composable(Screens.LoginScreen.route) { entry ->
+                val viewModel = entry.sharedViewModel<AuthViewModel>(navController)
+                LoginScreen(isDarkMode, viewModel, navController)
             }
             //Forgot Password Screen
             composable(Screens.ForgotPasswordScreen.route) { entry ->
@@ -75,7 +73,7 @@ fun NavigationGraph(
 
         //Add Person Screen
         composable(Screens.AddPersonScreen.route) {
-            AddPersonScreen(navController, isDarkMode)
+            AddPersonScreen(navController, isDarkMode, mainViewModel)
         }
 
         //Persons Details Navigation Group
@@ -94,14 +92,15 @@ fun NavigationGraph(
                     navController = navController,
                     isDarkMode = isDarkMode,
                     personId = entry.arguments?.getString("person_id").toString(),
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    mainViewModel = mainViewModel
                 )
             }
 
             //Person Details Editing Screen
             composable(Screens.PersonDetailsEditingScreen.route) { entry ->
                 val viewModel = entry.sharedViewModel<PersonDetailsViewModel>(navController)
-                PersonDetailsEditingScreen(navController, isDarkMode, viewModel)
+                PersonDetailsEditingScreen(navController, isDarkMode, viewModel, mainViewModel)
             }
         }
 
@@ -113,7 +112,7 @@ fun NavigationGraph(
 
         //Settings Screen
         composable(Screens.SettingsScreen.route) {
-            SettingsScreen(isDarkMode = isDarkMode, navController)
+            SettingsScreen(mainViewModel, navController)
         }
 
     }
