@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.social.people_book" />
-                  <option name="mobileSdkAppId" value="1:371748172937:android:fc786f70d70dc1f5ac8258" />
-                  <option name="projectId" value="people-book-e6b8d" />
-                  <option name="projectNumber" value="371748172937" />
+                  <option name="mobileSdkAppId" value="1:859454857235:android:b43e3f32a93c5ddd2ddfe6" />
+                  <option name="projectId" value="people-book-b2f67" />
+                  <option name="projectNumber" value="859454857235" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
