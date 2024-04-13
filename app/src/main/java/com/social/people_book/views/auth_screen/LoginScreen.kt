@@ -259,9 +259,9 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(45.dp)
+                            .height(48.dp)
                     ) {
-                        MyText("Login", fontSize = 18.sp)
+                        MyText("Login", fontSize = 21.sp, fontWeight = FontWeight.W600)
                     }
                 } else {
                     CenterBox {
