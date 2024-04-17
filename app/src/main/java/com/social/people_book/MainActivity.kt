@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
@@ -80,10 +82,16 @@ class MainActivity : ComponentActivity() {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val items = listOf(
                         BottomNavigationItemModel(
-                            Icons.Rounded.Home, Screens.HomeScreen.route, "Home"
+                            Icons.Rounded.Home,
+                            Icons.Outlined.Home,
+                            Screens.HomeScreen.route,
+                            "Home"
                         ),
                         BottomNavigationItemModel(
-                            Icons.Rounded.Settings, Screens.SettingsScreen.route, "Settings"
+                            Icons.Rounded.Settings,
+                            Icons.Outlined.Settings,
+                            Screens.SettingsScreen.route,
+                            "Settings"
                         )
                     )
                     Scaffold(bottomBar = {
@@ -92,10 +100,12 @@ class MainActivity : ComponentActivity() {
                                 Screens.SettingsScreen.route,
                             )
                         ) {
-                            NavigationBar(modifier = Modifier.height(60.dp)) {
+                            NavigationBar(modifier = Modifier.height(70.dp)) {
                                 items.forEach { item ->
+                                    val isSelected =
+                                        navBackStackEntry?.destination?.route == item.route
                                     NavigationBarItem(
-                                        selected = navBackStackEntry?.destination?.route == item.route,
+                                        selected = isSelected,
                                         onClick = {
                                             navController.navigate(item.route) {
                                                 navController.popBackStack(
@@ -108,9 +118,9 @@ class MainActivity : ComponentActivity() {
                                         },
                                         icon = {
                                             Icon(
-                                                imageVector = item.icon,
+                                                imageVector = if(isSelected) item.icon else item.iconOutlined,
                                                 contentDescription = item.routeName,
-                                                modifier = Modifier.size(28.dp)
+                                                modifier = Modifier.size(30.dp)
                                             )
                                         })
                                 }

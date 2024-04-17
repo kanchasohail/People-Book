@@ -4,7 +4,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +32,7 @@ fun SearchBar(
     text: String,
     onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
-    iconTint: Color = Color.Gray,
+    iconTint: Color = Color.White.copy(.9f),
     textColor: Color = Color.White
 ) {
     BasicTextField(
@@ -54,14 +57,17 @@ fun SearchBar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(
-                        width = 1.dp,
-                        color = iconTint,
-                        shape = RoundedCornerShape(8.dp)
-                    ),
+//                    .border(
+//                        width = 1.dp,
+//                        color = iconTint,
+//                        shape = RoundedCornerShape(8.dp)
+//                    ),
+                        ,
                 contentAlignment = Alignment.CenterStart
 
             ) {
+                HorizontalDivider(modifier = Modifier.align(Alignment.TopCenter))
+
                 Row(
                     modifier = Modifier
                         .padding(4.dp)
@@ -75,10 +81,9 @@ fun SearchBar(
                         modifier = Modifier
                             .size(36.dp)
                             .padding(3.dp)
-                            .padding(bottom = 4.dp)
+                            .padding(bottom = 8.dp)
                     )
-                    if (text.isEmpty())
-                        Text(
+                    if (text.isEmpty()) Text(
                             text = "Search",
                             fontSize = 20.sp,
                             color = iconTint,
@@ -87,6 +92,8 @@ fun SearchBar(
                     // you have to invoke this function then cursor will focus and you will able to write something
                     innerTextField.invoke()
                 }
+
+                HorizontalDivider(modifier = Modifier.align(Alignment.BottomCenter))
             }
 
         },
