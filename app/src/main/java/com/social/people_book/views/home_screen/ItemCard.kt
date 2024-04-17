@@ -36,7 +36,7 @@ fun ItemCard(
     Column(
         modifier = modifier
             .padding(8.dp)
-            .size(150.dp)
+            .size(width = 150.dp, height = 250.dp)
             .border(.7.dp, textColor, shape = RoundedCornerShape(8.dp))
             .clickable {
                 onClick()
