@@ -53,7 +53,6 @@ import com.social.people_book.model.room_database.PersonRoom
 import com.social.people_book.ui.common_views.ConfirmBackDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
-import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.util.image_converters.getBitmapFromUri
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -167,10 +166,6 @@ val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageC
                     paddingValues
                 )
         ) {
-            if (isDarkMode) {
-                MyDivider()
-            }
-
             ConfirmBackDialog(
                 showDialog = viewModel.showDialogState,
                 onDismiss = { viewModel.showDialogState = false },

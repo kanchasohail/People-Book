@@ -49,7 +49,6 @@ import androidx.navigation.NavController
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
-import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.RobotoFontFamily
 import com.social.people_book.util.google_sign_in.GoogleSignInHelper
@@ -105,11 +104,6 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-
-            if (isDarkMode) {
-                MyDivider()
-            }
-
 
             MyText(text = "Create an Account!", fontSize = 38.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
 

@@ -45,7 +45,6 @@ import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmDeletionDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
-import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.redColor
 import com.social.people_book.util.image_converters.getBytesFromBitmap
@@ -131,10 +130,6 @@ fun PersonDetailsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            if (isDarkMode) {
-                MyDivider()
-            }
-
             ConfirmDeletionDialog(
                 showDialog = viewModel.showDialogState,
                 onDismiss = { viewModel.showDialogState = false },

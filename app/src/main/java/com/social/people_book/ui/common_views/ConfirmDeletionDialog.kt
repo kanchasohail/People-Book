@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -75,7 +76,7 @@ fun ConfirmDeletionDialog(
 //                    onDismiss()
 //                })
                 TextButton(onClick = onDismiss) {
-                    MyText("No", fontSize = 17.sp)
+                    MyText("No", fontSize = 17.sp, color = MaterialTheme.colorScheme.outline)
                 }
             },
             shape = RoundedCornerShape(8.dp)

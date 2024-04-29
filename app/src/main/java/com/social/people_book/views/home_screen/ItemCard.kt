@@ -3,17 +3,14 @@ package com.social.people_book.views.home_screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -41,40 +38,36 @@ fun ItemCard(
             .clickable {
                 onClick()
             }
-            .padding(8.dp),
-        verticalArrangement = Arrangement.SpaceAround,
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-//            Icon(
-//                painter = painterResource(id = R.drawable.ic_blank_profile),
-//                tint = textColor,
-//                modifier = Modifier.size(40.dp),
-//                contentDescription = "user_profile"
-//            )
-
-            if (image == null) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_blank_profile),
-                    tint = textColor,
-                    modifier = Modifier.size(40.dp),
-                    contentDescription = "user_profile"
-                )
-            } else {
-                Image(
-                    painter = rememberAsyncImagePainter(image),
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    contentDescription = "person Image"
-                )
-            }
-
-            MyText(text = "Tag", color = textColor, fontSize = 17.sp)
+        if (image == null) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_blank_profile),
+                tint = textColor,
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth()
+                    .aspectRatio(1f),
+                contentDescription = "user_profile"
+            )
+        } else {
+            Image(
+                painter = rememberAsyncImagePainter(image),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentDescription = "person Image"
+            )
         }
-        MyText(text = text, color = textColor, fontSize = 18.sp)
+
+
+        MyText(text = text, color = textColor, fontSize = 20.sp, modifier = Modifier.padding(8.dp))
+
+        MyText(
+            text = "Tag", color = textColor, fontSize = 17.sp,
+            modifier = Modifier.padding(
+                horizontal = 8.dp
+            )
+        )
     }
 }

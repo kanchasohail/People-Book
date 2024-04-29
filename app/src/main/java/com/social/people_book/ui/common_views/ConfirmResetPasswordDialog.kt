@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -69,7 +70,7 @@ fun ConfirmResetPasswordDialog(
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    MyText("Cancel", fontSize = 17.sp)
+                    MyText("Cancel", fontSize = 17.sp, color = MaterialTheme.colorScheme.outline)
                 }
             },
             shape = RoundedCornerShape(8.dp)
