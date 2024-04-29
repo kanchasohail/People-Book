@@ -59,7 +59,6 @@ import com.social.people_book.R
 import com.social.people_book.model.room_database.PersonRoom
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
-import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.util.image_converters.getBitmapFromUri
 import kotlinx.coroutines.launch
@@ -183,10 +182,6 @@ fun AddPersonScreen(
                     paddingValues
                 )
         ) {
-            if (isDarkMode) {
-                MyDivider()
-            }
-
             //Actual Screen Content
             Column(
                 modifier = Modifier

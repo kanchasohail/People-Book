@@ -25,19 +25,23 @@ private val DarkColorScheme = darkColorScheme(
     primary = darkPrimaryColor,
     surface = darkSurfaceColor,
     background = darkBackgroundColor,
-    onPrimary = lightPrimaryColor
+    onPrimary = lightPrimaryColor,
+
+    outline = whiteTextColor
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = lightPrimaryColor,
     secondary = PurpleGrey40,
-    tertiary = Pink40
+    tertiary = Pink40,
+
+    outline = androidx.compose.ui.graphics.Color.Black
 )
 
 @Composable
 fun PeopleBookTheme(
     viewModel: MainViewModel,
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val isSystemDark = isSystemInDarkTheme()

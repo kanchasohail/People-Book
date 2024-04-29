@@ -41,7 +41,6 @@ import com.social.people_book.MainViewModel
 import com.social.people_book.ui.common_views.ConfirmLogoutDialog
 import com.social.people_book.ui.common_views.ConfirmResetPasswordDialog
 import com.social.people_book.ui.layout.CustomSwitch
-import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,10 +78,6 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavController) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            if (isDarkMode) {
-                MyDivider()
-            }
-
 
             MyText(text = "Settings", fontSize = 38.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(30.dp))

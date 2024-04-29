@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
-import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,9 +93,6 @@ fun ForgotPasswordScreen(
                 .padding(paddingValues)
         ) {
 
-            if (isDarkMode) {
-                MyDivider()
-            }
 
             Column(
                 modifier = Modifier

@@ -51,7 +51,6 @@ import com.social.people_book.R
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
-import com.social.people_book.ui.layout.MyDivider
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.util.image_converters.getBytesFromBitmap
 import com.social.people_book.util.isScrollingUp
@@ -114,10 +113,6 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, mainViewModel:
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            if (isDarkMode) {
-                MyDivider()
-            }
-
             if (viewModel.isLoading) {
                 Spacer(modifier = Modifier.height(8.dp))
                 CenterBox {
