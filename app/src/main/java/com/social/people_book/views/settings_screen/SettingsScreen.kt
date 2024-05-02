@@ -79,7 +79,12 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavController) {
                 .padding(paddingValues)
         ) {
 
-            MyText(text = "Settings", fontSize = 38.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            MyText(
+                text = "Settings",
+                fontSize = 38.sp,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
             Spacer(modifier = Modifier.height(30.dp))
 
             ConfirmResetPasswordDialog(
@@ -210,32 +215,32 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavController) {
                                     )
                                 }
                             }
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-//                                    .padding(end = 12.dp),
-                                ,horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                OutlinedButton(onClick = { /*TODO*/ }) {
-                                    MyText(text = "Delete Account")
-                                    Spacer(modifier = Modifier.width(3.dp))
-                                    Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = "Delete account",
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                }
-                                OutlinedButton(onClick = { viewModel.logoutDialogState = true }) {
-                                    MyText(text = "Log Out")
-                                    Spacer(modifier = Modifier.width(3.dp))
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.ExitToApp,
-                                        contentDescription = "Log Out",
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                }
-                            }
 
+                            OutlinedButton(
+                                onClick = { /*TODO*/ },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                MyText(text = "Delete Account")
+                                Spacer(modifier = Modifier.width(3.dp))
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Delete account",
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(4.dp))
+                            OutlinedButton(
+                                onClick = { viewModel.logoutDialogState = true },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                MyText(text = "Log Out")
+                                Spacer(modifier = Modifier.width(3.dp))
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ExitToApp,
+                                    contentDescription = "Log Out",
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
                         }
                     }
                 }
