@@ -1,5 +1,7 @@
 package com.social.people_book.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -22,7 +24,9 @@ import com.social.people_book.views.person_details_screen.PersonDetailsViewModel
 import com.social.people_book.views.premium_screen.PremiumScreen
 import com.social.people_book.views.settings_screen.SettingsScreen
 import com.social.people_book.views.splash_screen.SplashScreen
+import com.social.people_book.views.trash_screen.TrashScreen
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
@@ -113,6 +117,11 @@ fun NavigationGraph(
         //Settings Screen
         composable(Screens.SettingsScreen.route) {
             SettingsScreen(mainViewModel, navController)
+        }
+
+        //Trash Screen
+        composable(Screens.TrashScreen.route){
+            TrashScreen(mainViewModel, navController)
         }
 
     }
