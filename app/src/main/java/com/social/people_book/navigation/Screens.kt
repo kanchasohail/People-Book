@@ -23,6 +23,8 @@ sealed class Screens(val route: String) {
 
     object SettingsScreen : Screens("settings_screen")
 
+    object TrashScreen : Screens("trash_screen")
+
     fun withArgs(vararg args: String): String {
         return buildString {
             append(route)

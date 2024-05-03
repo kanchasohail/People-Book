@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.social.people_book.MainViewModel
+import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmLogoutDialog
 import com.social.people_book.ui.common_views.ConfirmResetPasswordDialog
 import com.social.people_book.ui.layout.CustomSwitch
@@ -131,7 +132,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        //Todo open trash
+                       navController.navigate(Screens.TrashScreen.route)
                     }
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
