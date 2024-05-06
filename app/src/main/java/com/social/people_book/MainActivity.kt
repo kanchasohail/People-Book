@@ -1,9 +1,13 @@
 package com.social.people_book
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,6 +54,8 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var auth: FirebaseAuth
 
+    @OptIn(ExperimentalSharedTransitionApi::class)
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Initialize Firebase Auth
@@ -128,12 +134,14 @@ class MainActivity : ComponentActivity() {
                         }
                     }) { paddingValues ->
                         Box(modifier = Modifier.padding(paddingValues)) {
-                            NavigationGraph(
-                                navController = navController,
-                                isDarkMode = darkMode,
-                                mainViewModel = viewModel,
-                                auth = auth,
-                            )
+                            SharedTransitionLayout {
+                                NavigationGraph(
+                                    navController = navController,
+                                    isDarkMode = darkMode,
+                                    mainViewModel = viewModel,
+                                    auth = auth,
+                                )
+                            }
                         }
                     }
                 }

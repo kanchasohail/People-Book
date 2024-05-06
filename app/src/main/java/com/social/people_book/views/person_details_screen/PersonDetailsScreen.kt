@@ -2,6 +2,10 @@ package com.social.people_book.views.person_details_screen
 
 import android.graphics.Bitmap
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,10 +57,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class, DelicateCoroutinesApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, DelicateCoroutinesApi::class,
+    ExperimentalSharedTransitionApi::class
+)
 @Composable
-fun PersonDetailsScreen(
+fun SharedTransitionScope.PersonDetailsScreen(
     navController: NavController,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     isDarkMode: Boolean,
     personId: String,
     viewModel: PersonDetailsViewModel,
@@ -77,9 +85,9 @@ fun PersonDetailsScreen(
             roomPerson.image?.let { getBytesFromBitmap(it, Bitmap.CompressFormat.JPEG, 100) }
     }
 
-   fun deletePerson() {
+    fun deletePerson() {
 
-        GlobalScope.launch(Dispatchers.IO){
+        GlobalScope.launch(Dispatchers.IO) {
 
             val roomPerson = mainViewModel.personDao.getPersonById(personId.toInt())
             mainViewModel.personDao.deletePerson(roomPerson)
@@ -137,7 +145,8 @@ fun PersonDetailsScreen(
                 onConfirm = {
                     mainViewModel.viewModelScope.launch {
                         deletePerson()
-                    } })
+                    }
+                })
 
 
             if (viewModel.isLoading) {
@@ -175,11 +184,24 @@ fun PersonDetailsScreen(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .clip(RoundedCornerShape(18.dp))
+                                    .sharedElement(
+                                        state = rememberSharedContentState(key = "blank_profile$personId"),
+                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        boundsTransform = { _, _ ->
+                                            tween(durationMillis = 1000)
+                                        }
+                                    )
                             )
                         } else {
                             Image(
                                 painter = rememberAsyncImagePainter(
                                     viewModel.downloadedImage
+                                ), modifier = Modifier.sharedElement(
+                                    state = rememberSharedContentState(key = "user_profile$personId"),
+                                    animatedVisibilityScope = animatedVisibilityScope,
+                                    boundsTransform = { _, _ ->
+                                        tween(durationMillis = 1000)
+                                    }
                                 ), contentDescription = "person Image"
                             )
                         }

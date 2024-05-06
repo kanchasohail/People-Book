@@ -1,5 +1,9 @@
 package com.social.people_book.views.home_screen
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,10 +25,13 @@ import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.R
 import com.social.people_book.ui.layout.MyText
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun ItemCard(
+fun SharedTransitionScope.ItemCard(
     modifier: Modifier = Modifier,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     text: String,
+    personId: Int,
     textColor: Color,
     image: ByteArray?,
     onClick: () -> Unit
@@ -46,7 +53,14 @@ fun ItemCard(
                 modifier = Modifier
                     .padding(top = 8.dp)
                     .fillMaxWidth()
-                    .aspectRatio(1f),
+                    .aspectRatio(1f)
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "blank_profile$personId"),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 1000)
+                        }
+                    ),
                 contentDescription = "user_profile"
             )
         } else {
@@ -55,7 +69,14 @@ fun ItemCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f)
-                    .clip(RoundedCornerShape(8.dp)),
+                    .clip(RoundedCornerShape(8.dp))
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "user_profile$personId"),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 1000)
+                        }
+                    ),
                 contentDescription = "person Image"
             )
         }

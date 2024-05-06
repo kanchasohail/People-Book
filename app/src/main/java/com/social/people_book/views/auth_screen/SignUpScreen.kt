@@ -106,12 +106,13 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
         ) {
 
             MyText(text = "Create an Account!", fontSize = 38.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            Spacer(modifier = Modifier.height(10.dp))
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
-                verticalArrangement = Arrangement.Center
+//                verticalArrangement = Arrangement.Center
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     if (!viewModel.isLoading) {
@@ -141,7 +142,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                 Column(
                     modifier = Modifier
                         .padding(8.dp)
-                        .padding(bottom = 16.dp)
+//                        .padding(bottom = 16.dp)
                 ) {
                     Row(
                         modifier = Modifier
