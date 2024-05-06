@@ -2,6 +2,9 @@ package com.social.people_book.views.home_screen
 
 import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
@@ -55,9 +58,17 @@ import com.social.people_book.ui.layout.MyText
 import com.social.people_book.util.image_converters.getBytesFromBitmap
 import com.social.people_book.util.isScrollingUp
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
+    ExperimentalSharedTransitionApi::class
+)
 @Composable
-fun HomeScreen(navController: NavController, isDarkMode: Boolean, mainViewModel: MainViewModel) {
+fun SharedTransitionScope.HomeScreen(
+    navController: NavController,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    isDarkMode: Boolean,
+    mainViewModel: MainViewModel
+) {
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
@@ -186,12 +197,19 @@ fun HomeScreen(navController: NavController, isDarkMode: Boolean, mainViewModel:
 //                            items(viewModel.items) {
                             ItemCard(
                                 text = it.name,
+                                personId = it.id ?: 1,
+                                animatedVisibilityScope = animatedVisibilityScope,
                                 textColor = textColor,
-                                image = it.image?.let { it1 -> getBytesFromBitmap(it1, Bitmap.CompressFormat.JPEG, 50) },
+                                image = it.image?.let { it1 ->
+                                    getBytesFromBitmap(
+                                        it1,
+                                        Bitmap.CompressFormat.JPEG,
+                                        50
+                                    )
+                                },
                                 onClick = {
                                     navController.navigate(
                                         Screens.PersonDetailsGroup.withArgs(
-//                                                it.personId
                                             (it.id ?: 1).toString()
                                         )
                                     )

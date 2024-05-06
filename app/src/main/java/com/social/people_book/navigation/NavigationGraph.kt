@@ -2,6 +2,8 @@ package com.social.people_book.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -26,9 +28,10 @@ import com.social.people_book.views.settings_screen.SettingsScreen
 import com.social.people_book.views.splash_screen.SplashScreen
 import com.social.people_book.views.trash_screen.TrashScreen
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
-fun NavigationGraph(
+fun SharedTransitionScope.NavigationGraph(
     navController: NavHostController,
     isDarkMode: Boolean,
     mainViewModel: MainViewModel,
@@ -37,7 +40,8 @@ fun NavigationGraph(
 //    NavHost(navController = navController, startDestination = Screens.SplashScreen.route) {
 
     //To check if the user is loggedIn or not
-    val startDestinationRoute = if (auth.currentUser != null) Screens.HomeScreen.route else Screens.AuthScreen.route
+    val startDestinationRoute =
+        if (auth.currentUser != null) Screens.HomeScreen.route else Screens.AuthScreen.route
     NavHost(navController = navController, startDestination = startDestinationRoute) {
         //Splash Screen
         composable(Screens.SplashScreen.route) {
@@ -48,6 +52,7 @@ fun NavigationGraph(
         composable(Screens.HomeScreen.route) {
             HomeScreen(
                 navController = navController,
+                animatedVisibilityScope = this,
                 isDarkMode = isDarkMode,
                 mainViewModel = mainViewModel
             )
@@ -94,6 +99,7 @@ fun NavigationGraph(
                 val viewModel = entry.sharedViewModel<PersonDetailsViewModel>(navController)
                 PersonDetailsScreen(
                     navController = navController,
+                    animatedVisibilityScope = this,
                     isDarkMode = isDarkMode,
                     personId = entry.arguments?.getString("person_id").toString(),
                     viewModel = viewModel,
@@ -120,7 +126,7 @@ fun NavigationGraph(
         }
 
         //Trash Screen
-        composable(Screens.TrashScreen.route){
+        composable(Screens.TrashScreen.route) {
             TrashScreen(mainViewModel, navController)
         }
 

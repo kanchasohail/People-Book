@@ -32,7 +32,7 @@ class AddPersonViewModel : ViewModel() {
 
 
     fun addPerson(context: Context, navController: NavController) {
-        if (name == "" && number == "" && email == "" && about == "") {
+        if (name == "" && number == "" && email == "" && about == "" && selectedImage == null) {
             Toast.makeText(
                 context,
                 "Please enter something to save this person!",
@@ -59,6 +59,7 @@ class AddPersonViewModel : ViewModel() {
                 "about" to about
             )
         ).addOnSuccessListener {
+            clearFields()
             isLoading = false
             if (navController.currentDestination?.route == Screens.AddPersonScreen.route) {
                 saveImage(thisDocument.id)
@@ -74,6 +75,7 @@ class AddPersonViewModel : ViewModel() {
 
     }
 
+
     private fun saveImage(documentId: String) {
         val imageRef =
             storage.reference.child("images/${auth.currentUser?.uid.toString()}/$documentId/profile.jpg")
@@ -87,6 +89,15 @@ class AddPersonViewModel : ViewModel() {
 
             }
         }
+    }
+
+
+    private fun clearFields(){
+        name = ""
+        number = ""
+        email = ""
+        about = ""
+        selectedImage = null
     }
 
 }
