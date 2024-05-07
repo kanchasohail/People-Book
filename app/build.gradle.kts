@@ -93,6 +93,9 @@ dependencies {
     //Image Cropper
     implementation("com.vanniktech:android-image-cropper:4.5.0")
 
+    //Work Manager
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+
     //Room Database
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")

@@ -9,17 +9,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.social.people_book.MainActivity
+import com.social.people_book.model.room_database.PersonRoom
 import com.social.people_book.navigation.Screens
+import com.social.people_book.util.image_converters.getBitmapFromUri
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.properties.Delegates
 
 class AddPersonViewModel : ViewModel() {
     private val db = Firebase.firestore
     private val auth = Firebase.auth
     private val storage = Firebase.storage
+
+    private val personDao = MainActivity.db.personDao()
 
     var name by mutableStateOf("")
     var number by mutableStateOf("")
@@ -31,7 +40,27 @@ class AddPersonViewModel : ViewModel() {
     var isLoading by mutableStateOf(false)
 
 
-    fun addPerson(context: Context, navController: NavController) {
+    suspend fun addPerson(context: Context, navController: NavController) {
+        val roomPerson = PersonRoom(
+            id = null,
+            name = name,
+            number = number,
+            about = about,
+            email = email,
+            isDeleted = false,
+            image = selectedImage?.let { getBitmapFromUri(it, context) }
+        )
+        viewModelScope.launch {
+            val personId = personDao.addPerson(roomPerson)
+            addPersonInFirebase(context, navController, personId)
+        }
+    }
+
+    private fun addPersonInFirebase(
+        context: Context,
+        navController: NavController,
+        personId: Long
+    ) {
         if (name == "" && number == "" && email == "" && about == "" && selectedImage == null) {
             Toast.makeText(
                 context,
@@ -43,33 +72,34 @@ class AddPersonViewModel : ViewModel() {
 
         isLoading = true
 
-        // Add a new document with a generated ID
-        val thisDocument = db.collection("users")
-            .document(auth.currentUser?.uid.toString())
-            .collection("persons").document()
+        runBlocking {
+            val thisDocument = db.collection("users")
+                .document(auth.currentUser?.uid.toString())
+                .collection("persons").document(personId.toString())
 
-        // Set the data in tha document
-        thisDocument.set(
-            // Create a map of data to be saved
-            mapOf(
-                "person_id" to thisDocument.id,
-                "name" to name,
-                "number" to number,
-                "email" to email,
-                "about" to about
-            )
-        ).addOnSuccessListener {
-            clearFields()
-            isLoading = false
-            if (navController.currentDestination?.route == Screens.AddPersonScreen.route) {
+            // Set the data in tha document
+            thisDocument.set(
+                // Create a map of data to be saved
+                mapOf(
+                    "person_id" to thisDocument.id,
+                    "name" to name,
+                    "number" to number,
+                    "email" to email,
+                    "about" to about
+                )
+            ).addOnSuccessListener {
                 saveImage(thisDocument.id)
-                navController.popBackStack()
+                clearFields()
+                isLoading = false
+                if (navController.currentDestination?.route == Screens.AddPersonScreen.route) {
+                    navController.popBackStack()
+                }
+                Toast.makeText(context, "Person added successfully!", Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener { e ->
+                isLoading = false
+                Toast.makeText(context, "Failed to add Person!", Toast.LENGTH_SHORT).show()
+                Log.w(TAG, "Error adding document", e)
             }
-            Toast.makeText(context, "Person added successfully!", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener { e ->
-            isLoading = false
-            Toast.makeText(context, "Failed to add Person!", Toast.LENGTH_SHORT).show()
-            Log.w(TAG, "Error adding document", e)
         }
 
 
@@ -92,7 +122,7 @@ class AddPersonViewModel : ViewModel() {
     }
 
 
-    private fun clearFields(){
+    private fun clearFields() {
         name = ""
         number = ""
         email = ""

@@ -1,9 +1,5 @@
-package com.social.people_book.views.home_screen
+package com.social.people_book.views.trash_screen.components
 
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,16 +21,12 @@ import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.R
 import com.social.people_book.ui.layout.MyText
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.ItemCard(
+fun DeletedItemCard(
     modifier: Modifier = Modifier,
-    animatedVisibilityScope: AnimatedVisibilityScope,
     text: String,
-    personId: Long,
     textColor: Color,
     image: ByteArray?,
-    onClick: () -> Unit
 ) {
 
     Column(
@@ -42,9 +34,6 @@ fun SharedTransitionScope.ItemCard(
             .padding(8.dp)
             .size(width = 150.dp, height = 250.dp)
             .border(.7.dp, textColor, shape = RoundedCornerShape(8.dp))
-            .clickable {
-                onClick()
-            }
     ) {
         if (image == null) {
             Icon(
@@ -53,14 +42,7 @@ fun SharedTransitionScope.ItemCard(
                 modifier = Modifier
                     .padding(top = 8.dp)
                     .fillMaxWidth()
-                    .aspectRatio(1f)
-                    .sharedElement(
-                        state = rememberSharedContentState(key = "blank_profile$personId"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(durationMillis = 1000)
-                        }
-                    ),
+                    .aspectRatio(1f),
                 contentDescription = "user_profile"
             )
         } else {
@@ -69,14 +51,7 @@ fun SharedTransitionScope.ItemCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f)
-                    .clip(RoundedCornerShape(8.dp))
-                    .sharedElement(
-                        state = rememberSharedContentState(key = "user_profile$personId"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(durationMillis = 1000)
-                        }
-                    ),
+                    .clip(RoundedCornerShape(8.dp)),
                 contentDescription = "person Image"
             )
         }

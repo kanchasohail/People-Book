@@ -34,10 +34,4 @@ class MainViewModel(context: Context) : ViewModel() {
         this.isDarkMode.value = isDarkMode
     }
 
-    fun addPerson(personRoom: PersonRoom){
-        viewModelScope.launch {
-            personDao.addPerson(personRoom)
-        }
-    }
-
 }

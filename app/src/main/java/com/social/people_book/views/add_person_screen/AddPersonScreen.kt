@@ -47,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
@@ -151,16 +152,9 @@ fun AddPersonScreen(
                     OutlinedButton(
                         onClick = {
                             if (!viewModel.isLoading) {
-                                viewModel.addPerson(context, navController)
-                                val personRoom = PersonRoom(
-                                    id = null,
-                                    name = viewModel.name,
-                                    number = viewModel.number,
-                                    email = viewModel.email,
-                                    about = viewModel.about,
-                                    image = viewModel.selectedImage?.let { getBitmapFromUri(it, context) }
-                                )
-                                mainViewModel.addPerson(personRoom)
+                                viewModel.viewModelScope.launch {
+                                    viewModel.addPerson(context, navController)
+                                }
                             }
                         },
                         modifier = Modifier.padding(8.dp)

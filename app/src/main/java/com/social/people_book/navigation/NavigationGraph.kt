@@ -110,7 +110,7 @@ fun SharedTransitionScope.NavigationGraph(
             //Person Details Editing Screen
             composable(Screens.PersonDetailsEditingScreen.route) { entry ->
                 val viewModel = entry.sharedViewModel<PersonDetailsViewModel>(navController)
-                PersonDetailsEditingScreen(navController, isDarkMode, viewModel, mainViewModel)
+                PersonDetailsEditingScreen(navController, isDarkMode, viewModel)
             }
         }
 
@@ -127,7 +127,7 @@ fun SharedTransitionScope.NavigationGraph(
 
         //Trash Screen
         composable(Screens.TrashScreen.route) {
-            TrashScreen(mainViewModel, navController)
+            TrashScreen(mainViewModel, navController, isDarkMode)
         }
 
     }
