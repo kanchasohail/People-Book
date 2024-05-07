@@ -2,7 +2,6 @@ package com.social.people_book.views.person_details_screen
 
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -47,47 +46,20 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
-import com.social.people_book.MainViewModel
 import com.social.people_book.R
-import com.social.people_book.model.room_database.PersonRoom
 import com.social.people_book.ui.common_views.ConfirmBackDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.util.image_converters.getBitmapFromUri
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class, DelicateCoroutinesApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PersonDetailsEditingScreen(
     navController: NavController,
     isDarkMode: Boolean,
     viewModel: PersonDetailsViewModel,
-    mainViewModel: MainViewModel
 ) {
     val context = LocalContext.current
-
-    fun updatePerson(){
-        viewModel.isLoading = true
-        val personRoom = PersonRoom(
-            id = viewModel.thisPerson.personId.toInt(),
-            name = viewModel.name,
-            number = viewModel.number,
-            email = viewModel.email,
-            about = viewModel.about,
-            image = viewModel.selectedImage?.let { getBitmapFromUri(it, context) }
-        )
-        GlobalScope.launch(Dispatchers.IO){
-
-            mainViewModel.personDao.updatePerson(personRoom)
-        }
-        viewModel.isLoading = false
-        Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
-        navController.popBackStack()
-    }
 
 val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -300,8 +272,7 @@ val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageC
                 Button(
                     onClick = {
                         if (!viewModel.isLoading) {
-//                            viewModel.updatePerson(context, navController)
-                            updatePerson()
+                            viewModel.updatePerson(context, navController)
                         }
                     },
                     modifier = Modifier.padding(8.dp).fillMaxWidth()

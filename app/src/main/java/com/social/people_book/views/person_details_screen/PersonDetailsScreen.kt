@@ -85,17 +85,6 @@ fun SharedTransitionScope.PersonDetailsScreen(
             roomPerson.image?.let { getBytesFromBitmap(it, Bitmap.CompressFormat.JPEG, 100) }
     }
 
-    fun deletePerson() {
-
-        GlobalScope.launch(Dispatchers.IO) {
-
-            val roomPerson = mainViewModel.personDao.getPersonById(personId.toInt())
-            mainViewModel.personDao.deletePerson(roomPerson)
-        }
-        navController.popBackStack()
-
-        Toast.makeText(context, "Person Deleted Successfully", Toast.LENGTH_SHORT).show()
-    }
 
     LaunchedEffect(key1 = Unit) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -143,9 +132,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                 onDismiss = { viewModel.showDialogState = false },
 //                onConfirm = { viewModel.deletePerson(personId, context, navController) })
                 onConfirm = {
-                    mainViewModel.viewModelScope.launch {
-                        deletePerson()
-                    }
+                  viewModel.deletePerson(personId.toLong(), context, navController)
                 })
 
 

@@ -58,11 +58,11 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val context: Context = this
+
         // Initialize Firebase Auth
         auth = Firebase.auth
-        db = Room.databaseBuilder(applicationContext, PersonDatabase::class.java, "people_book.db")
-            .build()
-        val context: Context = this
+        db = PersonDatabase.getInstance(context)
 
         setContent {
             val viewModel = viewModel<MainViewModel>(
