@@ -9,22 +9,26 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.social.people_book.model.data_models.Person
+import com.social.people_book.MainActivity
+import com.social.people_book.model.room_database.Person
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class HomeScreenViewModel : ViewModel() {
 
     private val db = Firebase.firestore
     private val auth = Firebase.auth
+    private val personDao = MainActivity.db.personDao()
 
     // Search Field Logic
     private val _searchText = MutableStateFlow("")
@@ -57,27 +61,8 @@ class HomeScreenViewModel : ViewModel() {
         _searchText.value = text
     }
 
-    private val _persons = MutableStateFlow(loadPersons())
-
-    private fun loadPersons() : List<Person> {
-        isLoading = true
-        val dbItems = mutableStateListOf<Person>()
-        userDocumentAddress.collection("persons")
-            .get().addOnSuccessListener { result ->
-                for (document in result) {
-                    val thisPerson = Person(
-                        personId = document["person_id"].toString(),
-                        name = document["name"].toString(),
-                        number = document["number"].toString(),
-                        email = document["email"].toString(),
-                        about = null
-                    )
-                    dbItems.add(thisPerson)
-                }
-                isLoading = false
-            }
-        return dbItems
-    }
+    private val _persons = MutableStateFlow<List<Person>>(emptyList())
+//    val persons: StateFlow<List<Person>> = _persons
 
 
 
@@ -97,5 +82,53 @@ class HomeScreenViewModel : ViewModel() {
             SharingStarted.WhileSubscribed(5000),
             _persons.value
         )
+
+
+    init {
+        viewModelScope.launch {
+            personDao.getAll().collectLatest { personList ->
+                _persons.value = personList
+            }
+        }
+    }
+
+    private fun loadPersons() : List<Person> {
+        isLoading = true
+        val dbItems = mutableStateListOf<Person>()
+        userDocumentAddress.collection("persons")
+            .get().addOnSuccessListener { result ->
+                for (document in result) {
+                    val thisPerson = Person(
+                        id = document["person_id"].toString().toLong(),
+                        name = document["name"].toString(),
+                        number = document["number"].toString(),
+                        email = document["email"].toString(),
+                        about = null,
+                        isDeleted = document["is_deleted"].toString() == "true",
+                        image = null
+
+                    )
+                    dbItems.add(thisPerson)
+                }
+                isLoading = false
+            }
+        return dbItems
+    }
+
+
+//    private fun loadPersons(): List<Person> {
+//        isLoading = true
+//        val dbItems = mutableStateListOf<Person>()
+//        viewModelScope.launch {
+//            dbItems.addAll(personDao.getAllPersonList())
+//        }
+//
+//        isLoading = false
+//
+//        return dbItems
+//    }
+
+
+
 
 }

@@ -6,7 +6,6 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -61,17 +60,18 @@ fun PersonDetailsEditingScreen(
 ) {
     val context = LocalContext.current
 
-val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
-        if (result.isSuccessful) {
-            // use the cropped image
-            val uriContent = result.uriContent
-           viewModel.selectedImage = uriContent
-        } else {
-            // an error occurred cropping
-            val exception = result.error
-            Log.e("Image Cropper", "profileImageCropLauncher Exception $exception")
+    val avatarCropLauncher =
+        rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
+            if (result.isSuccessful) {
+                // use the cropped image
+                val uriContent = result.uriContent
+                viewModel.selectedImage = uriContent
+            } else {
+                // an error occurred cropping
+                val exception = result.error
+                Log.e("Image Cropper", "profileImageCropLauncher Exception $exception")
+            }
         }
-    }
 
     val avatarPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -151,6 +151,7 @@ val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageC
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 12.dp, vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
                     modifier = Modifier
@@ -158,7 +159,7 @@ val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageC
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (viewModel.downloadedImage == null && viewModel.selectedImage == null) {
+                    if (viewModel.thisPerson.image == null && viewModel.selectedImage == null) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_blank_profile),
                             contentDescription = "Profile",
@@ -171,7 +172,7 @@ val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageC
                         if (viewModel.selectedImage == null) {
                             Image(
                                 painter = rememberAsyncImagePainter(
-                                    viewModel.downloadedImage
+                                    viewModel.thisPerson.image
                                 ), contentDescription = "person Image"
                             )
                         } else {
@@ -197,76 +198,54 @@ val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageC
                         }
                     }
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MyText(text = "Name :", fontSize = 17.sp, color = textColor)
-                    OutlinedTextField(
-                        value = viewModel.name,
-                        singleLine = true,
-                        onValueChange = {
-                            viewModel.name = it
-                        },
-                        label = { Text(text = "Name") },
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MyText(text = "Number :", fontSize = 17.sp, color = textColor)
-                    OutlinedTextField(
-                        value = viewModel.number,
-                        singleLine = true,
-                        onValueChange = {
-                            viewModel.number = it
-                        },
-                        label = { Text(text = "Number") },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Phone
-                        ),
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MyText(text = "Email :", fontSize = 17.sp, color = textColor)
-                    OutlinedTextField(
-                        value = viewModel.email,
-                        singleLine = true,
-                        onValueChange = {
-                            viewModel.email = it
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email
-                        ),
-                        label = { Text(text = "Email") },
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MyText(text = "About :", fontSize = 17.sp, color = textColor)
-                    OutlinedTextField(
-                        value = viewModel.about,
-                        onValueChange = {
-                            viewModel.about = it
-                        },
-                        label = { Text(text = "About") },
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
+                OutlinedTextField(
+                    value = viewModel.name,
+                    singleLine = true,
+                    onValueChange = {
+                        viewModel.name = it
+                    },
+                    label = { Text(text = "Name") },
+                    modifier = Modifier.padding(8.dp)
+                )
+
+
+
+                OutlinedTextField(
+                    value = viewModel.number,
+                    singleLine = true,
+                    onValueChange = {
+                        viewModel.number = it
+                    },
+                    label = { Text(text = "Number") },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Phone
+                    ),
+                    modifier = Modifier.padding(8.dp)
+                )
+
+
+                OutlinedTextField(
+                    value = viewModel.email,
+                    singleLine = true,
+                    onValueChange = {
+                        viewModel.email = it
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email
+                    ),
+                    label = { Text(text = "Email") },
+                    modifier = Modifier.padding(8.dp)
+                )
+
+                OutlinedTextField(
+                    value = viewModel.about,
+                    onValueChange = {
+                        viewModel.about = it
+                    },
+                    label = { Text(text = "About") },
+                    modifier = Modifier.padding(8.dp)
+                )
 
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
@@ -275,7 +254,9 @@ val avatarCropLauncher = rememberLauncherForActivityResult(contract = CropImageC
                             viewModel.updatePerson(context, navController)
                         }
                     },
-                    modifier = Modifier.padding(8.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
                 ) {
                     if (!viewModel.isLoading) {
                         MyText(text = "Save", color = appBarTextColor, fontSize = 16.sp)

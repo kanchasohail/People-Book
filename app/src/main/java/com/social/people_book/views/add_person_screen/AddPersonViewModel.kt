@@ -16,12 +16,11 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
-import com.social.people_book.model.room_database.PersonRoom
+import com.social.people_book.model.room_database.Person
 import com.social.people_book.navigation.Screens
 import com.social.people_book.util.image_converters.getBitmapFromUri
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlin.properties.Delegates
 
 class AddPersonViewModel : ViewModel() {
     private val db = Firebase.firestore
@@ -41,7 +40,7 @@ class AddPersonViewModel : ViewModel() {
 
 
     suspend fun addPerson(context: Context, navController: NavController) {
-        val roomPerson = PersonRoom(
+        val roomPerson = Person(
             id = null,
             name = name,
             number = number,

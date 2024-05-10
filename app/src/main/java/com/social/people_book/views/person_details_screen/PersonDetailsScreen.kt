@@ -1,7 +1,5 @@
 package com.social.people_book.views.person_details_screen
 
-import android.graphics.Bitmap
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -39,19 +37,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.MainViewModel
 import com.social.people_book.R
-import com.social.people_book.model.data_models.Person
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmDeletionDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.redColor
-import com.social.people_book.util.image_converters.getBytesFromBitmap
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -73,16 +68,9 @@ fun SharedTransitionScope.PersonDetailsScreen(
     val context = LocalContext.current
     fun loadPerson(id: Int) {
         val roomPerson = mainViewModel.personDao.getPersonById(id)
-        val thisPerson = Person(
-            personId = roomPerson.id.toString(),
-            name = roomPerson.name,
-            number = roomPerson.number,
-            email = roomPerson.email,
-            about = roomPerson.about,
-        )
-        viewModel.thisPerson = thisPerson
-        viewModel.downloadedImage =
-            roomPerson.image?.let { getBytesFromBitmap(it, Bitmap.CompressFormat.JPEG, 100) }
+        viewModel.thisPerson = roomPerson
+//        viewModel.downloadedImage =
+//            roomPerson.image?.let { getBytesFromBitmap(it, Bitmap.CompressFormat.JPEG, 100) }
     }
 
 
@@ -132,7 +120,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                 onDismiss = { viewModel.showDialogState = false },
 //                onConfirm = { viewModel.deletePerson(personId, context, navController) })
                 onConfirm = {
-                  viewModel.deletePerson(personId.toLong(), context, navController)
+                    viewModel.deletePerson(personId.toLong(), context, navController)
                 })
 
 
@@ -163,14 +151,13 @@ fun SharedTransitionScope.PersonDetailsScreen(
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        if (viewModel.downloadedImage == null) {
+                        if (viewModel.thisPerson.image == null) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_blank_profile),
                                 contentDescription = "Profile",
                                 tint = textColor,
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .clip(RoundedCornerShape(18.dp))
                                     .sharedElement(
                                         state = rememberSharedContentState(key = "blank_profile$personId"),
                                         animatedVisibilityScope = animatedVisibilityScope,
@@ -178,25 +165,37 @@ fun SharedTransitionScope.PersonDetailsScreen(
                                             tween(durationMillis = 1000)
                                         }
                                     )
+                                    .clip(RoundedCornerShape(18.dp))
                             )
                         } else {
                             Image(
                                 painter = rememberAsyncImagePainter(
-                                    viewModel.downloadedImage
-                                ), modifier = Modifier.sharedElement(
-                                    state = rememberSharedContentState(key = "user_profile$personId"),
-                                    animatedVisibilityScope = animatedVisibilityScope,
-                                    boundsTransform = { _, _ ->
-                                        tween(durationMillis = 1000)
-                                    }
-                                ), contentDescription = "person Image"
+                                    viewModel.thisPerson.image
+                                ),
+                                modifier = Modifier
+                                    .sharedElement(
+                                        state = rememberSharedContentState(key = "user_profile$personId"),
+                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        boundsTransform = { _, _ ->
+                                            tween(durationMillis = 1000)
+                                        }
+                                    )
+                                    .clip(RoundedCornerShape(18.dp)),
+                                contentDescription = "person Image"
                             )
                         }
                     }
                     MyText(
                         text = viewModel.thisPerson.name,
                         fontSize = 24.sp,
-                        color = textColor
+                        color = textColor,
+                        modifier = Modifier.padding(8.dp).sharedElement(
+                            state = rememberSharedContentState(key = "user_name$personId"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = 1000)
+                            }
+                        )
                     )
                 }
 

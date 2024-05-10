@@ -10,7 +10,7 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import java.io.ByteArrayOutputStream
 
-@Database(entities = [PersonRoom::class], version = 1)
+@Database(entities = [Person::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class PersonDatabase : RoomDatabase() {
     abstract fun personDao(): PersonDao

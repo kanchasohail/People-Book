@@ -1,7 +1,5 @@
 package com.social.people_book.views.trash_screen
 
-import android.graphics.Bitmap
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,20 +15,14 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,20 +33,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.social.people_book.MainViewModel
-import com.social.people_book.navigation.Screens
-import com.social.people_book.ui.common_views.ConfirmDeletionDialog
 import com.social.people_book.ui.common_views.ConfirmEmptyTrashDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.util.image_converters.getBytesFromBitmap
 import com.social.people_book.views.trash_screen.components.DeletedItemCard
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class, DelicateCoroutinesApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrashScreen(
     mainViewModel: MainViewModel,
@@ -82,12 +68,10 @@ fun TrashScreen(
                     MyText(text = "Trash")
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Search,
-                            contentDescription = "Search Trash",
-                            modifier = Modifier.size(30.dp)
-                        )
+                    TextButton(onClick = {
+                        viewModel.showDialogState = true
+                    }) {
+                        MyText(text = "Empty Trash", fontSize = 18.sp)
                     }
                 }
             )
@@ -108,7 +92,7 @@ fun TrashScreen(
                 })
 
             if (viewModel.isLoading) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     LoadingIndicator()
                 }
             }
@@ -124,14 +108,10 @@ fun TrashScreen(
                         contentDescription = "Delete",
                         modifier = Modifier.size(35.dp)
                     )
-                    MyText(text = "Items are delete forever after 30 days.", fontSize = 18.sp)
+                    MyText(text = "Items are delete forever after 30 days.", fontSize = 17.sp)
                     Spacer(modifier = Modifier)
                 }
-                TextButton(onClick = {
-                    viewModel.showDialogState = true
-                }) {
-                    MyText(text = "Empty Trash", fontSize = 18.sp)
-                }
+
             }
 
             if (deletedPeople.value.isEmpty()) {
@@ -154,15 +134,8 @@ fun TrashScreen(
                 ) {
                     items(deletedPeople.value) {
                         DeletedItemCard(
-                            text = it.name,
                             textColor = textColor,
-                            image = it.image?.let { it1 ->
-                                getBytesFromBitmap(
-                                    it1,
-                                    Bitmap.CompressFormat.JPEG,
-                                    50
-                                )
-                            },
+                             person = it,
                         )
                     }
                 }

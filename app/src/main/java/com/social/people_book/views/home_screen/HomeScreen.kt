@@ -1,6 +1,5 @@
 package com.social.people_book.views.home_screen
 
-import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -55,7 +54,6 @@ import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.util.image_converters.getBytesFromBitmap
 import com.social.people_book.util.isScrollingUp
 
 @OptIn(
@@ -82,8 +80,7 @@ fun SharedTransitionScope.HomeScreen(
     val viewModel = viewModel<HomeScreenViewModel>()
 
     val searchBarText by viewModel.searchBarText.collectAsState()
-//    val persons by viewModel.persons.collectAsState()
-    val persons by mainViewModel.personDao.getAll().collectAsState(initial = emptyList())
+    val persons by viewModel.persons.collectAsState()
     val isSearching by viewModel.isSearching.collectAsState()
 
     Scaffold(
@@ -194,26 +191,16 @@ fun SharedTransitionScope.HomeScreen(
                         columns = GridCells.Adaptive(150.dp),
                     ) {
                         items(persons) {
-//                            items(viewModel.items) {
                             ItemCard(
-                                text = it.name,
-                                personId = it.id ?: 1,
                                 animatedVisibilityScope = animatedVisibilityScope,
                                 textColor = textColor,
-                                image = it.image?.let { it1 ->
-                                    getBytesFromBitmap(
-                                        it1,
-                                        Bitmap.CompressFormat.JPEG,
-                                        50
-                                    )
-                                },
+                                person = it,
                                 onClick = {
                                     navController.navigate(
                                         Screens.PersonDetailsGroup.withArgs(
                                             (it.id ?: 1).toString()
                                         )
                                     )
-
                                 })
                         }
                     }
@@ -252,21 +239,4 @@ fun TagsChip(
 //        },
         modifier = modifier.padding(4.dp)
     )
-
-
-//    Card(
-//        modifier = modifier
-//            .padding(4.dp)
-//            .clickable {
-//                onClick()
-//            }, colors = CardDefaults.cardColors(
-//            containerColor = if (isSelected) Color.White else Color.Gray,
-//        )
-//    ) {
-//        MyText(
-//            text = chipText,
-//            textColor = if (isSelected) Color.Black else textColor,
-//            modifier = Modifier.padding(vertical = 8.dp, horizontal = 12.dp)
-//        )
-//    }
 }

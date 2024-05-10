@@ -50,7 +50,7 @@ fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 12.dp, top = 8.dp, end = 12.dp),
+                    .padding(start = 8.dp, top = 8.dp, end = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
