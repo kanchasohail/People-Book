@@ -4,9 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.social.people_book.model.room_database.PersonRoom
-import kotlinx.coroutines.launch
 
 class MainViewModel(context: Context) : ViewModel() {
     private val isDarkThemeKey: String = "is_dark_theme"

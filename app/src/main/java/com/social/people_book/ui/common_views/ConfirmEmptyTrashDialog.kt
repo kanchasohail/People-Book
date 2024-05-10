@@ -12,11 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.social.people_book.ui.layout.MyText
@@ -32,21 +28,12 @@ fun ConfirmEmptyTrashDialog(
     if (showDialog) {
         AlertDialog(
             title = {
-                MyText("Empty Trash" , fontSize = 22.sp)
+                MyText("Delete Forever?", fontSize = 22.sp)
             },
             text = {
                 Text(
-                    text = buildAnnotatedString {
-                        append("All people in the trash will be deleted ")
-                        withStyle(
-                            style = SpanStyle(
-                                fontFamily = RobotoFontFamily,
-                                fontSize = 16.sp, fontWeight = FontWeight.SemiBold
-                            )
-                        ) {
-                            append("Permanently")
-                        }
-                    }, style = TextStyle(
+                    text = "All items in the trash will be deleted forever and you will not be able to restore them.",
+                    style = TextStyle(
                         fontFamily = RobotoFontFamily,
                         fontSize = 16.sp
                     )
@@ -55,11 +42,6 @@ fun ConfirmEmptyTrashDialog(
 
             onDismissRequest = onDismiss,
             confirmButton = {
-//                Row(verticalAlignment = Alignment.CenterVertically) {
-//                    Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")
-//                    MyText("Yes", fontSize = 18.sp)
-//                }
-
                 OutlinedButton(
                     onClick = onConfirm,
                     colors = ButtonDefaults.buttonColors(
@@ -73,9 +55,6 @@ fun ConfirmEmptyTrashDialog(
 
             },
             dismissButton = {
-//                MyText("No", fontSize = 18.sp, modifier = Modifier.clickable {
-//                    onDismiss()
-//                })
                 TextButton(onClick = onDismiss) {
                     MyText("Cancel", fontSize = 17.sp, color = MaterialTheme.colorScheme.outline)
                 }

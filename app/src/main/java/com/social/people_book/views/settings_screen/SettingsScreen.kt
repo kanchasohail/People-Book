@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Delete
@@ -102,52 +104,54 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavController) {
                     viewModel.logOut(navController)
                 })
 
-
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
-                        mainViewModel.setThemeMode(!isDarkMode)
-                    }
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .verticalScroll(rememberScrollState())
             ) {
-                MyText(text = "Dark Theme", fontSize = 18.sp, color = textColor)
 
-                CustomSwitch(
-                    height = 11.dp,
-                    width = 22.dp,
-                    gapBetweenThumbAndTrackEdge = 1.6.dp,
-                    checked = isDarkMode,
-                    onCheckedChange = {
-                        mainViewModel.setThemeMode(it)
-                    },
-                    modifier = Modifier.padding(top = 5.dp)
-                )
-            }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            mainViewModel.setThemeMode(!isDarkMode)
+                        }
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    MyText(text = "Dark Theme", fontSize = 18.sp, color = textColor)
 
-            Spacer(modifier = Modifier.height(10.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                       navController.navigate(Screens.TrashScreen.route)
-                    }
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                MyText(text = "Trash", fontSize = 18.sp, color = textColor)
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "trash",
-                    tint = textColor,
-                    modifier = Modifier.size(28.dp)
-                )
-            }
+                    CustomSwitch(
+                        height = 11.dp,
+                        width = 22.dp,
+                        gapBetweenThumbAndTrackEdge = 1.6.dp,
+                        checked = isDarkMode,
+                        onCheckedChange = {
+                            mainViewModel.setThemeMode(it)
+                        },
+                        modifier = Modifier.padding(top = 5.dp)
+                    )
+                }
 
-            //Actual Screen content
-            Column(Modifier.fillMaxSize()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate(Screens.TrashScreen.route)
+                        }
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    MyText(text = "Trash", fontSize = 18.sp, color = textColor)
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "trash",
+                        tint = textColor,
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
+
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -168,7 +172,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavController) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 8.dp, top = 8.dp)
+                                .padding(top = 8.dp)
                         ) {
 //                            Row(
 //                                modifier = Modifier.fillMaxWidth(),

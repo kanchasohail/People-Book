@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.R
+import com.social.people_book.model.room_database.Person
 import com.social.people_book.ui.layout.MyText
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -30,10 +31,8 @@ import com.social.people_book.ui.layout.MyText
 fun SharedTransitionScope.ItemCard(
     modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    text: String,
-    personId: Long,
+    person: Person,
     textColor: Color,
-    image: ByteArray?,
     onClick: () -> Unit
 ) {
 
@@ -46,43 +45,52 @@ fun SharedTransitionScope.ItemCard(
                 onClick()
             }
     ) {
-        if (image == null) {
+        if (person.image == null) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_blank_profile),
                 tint = textColor,
                 modifier = Modifier
-                    .padding(top = 8.dp)
                     .fillMaxWidth()
+                    .padding(8.dp)
                     .aspectRatio(1f)
                     .sharedElement(
-                        state = rememberSharedContentState(key = "blank_profile$personId"),
+                        state = rememberSharedContentState(key = "blank_profile${person.id}"),
                         animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(durationMillis = 1000)
-                        }
-                    ),
+//                        boundsTransform = { _, _ ->
+//                            tween(durationMillis = 1000)
+//                        }
+                    )
+                    .clip(RoundedCornerShape(18.dp)),
                 contentDescription = "user_profile"
             )
         } else {
             Image(
-                painter = rememberAsyncImagePainter(image),
+                painter = rememberAsyncImagePainter(person.image),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(8.dp)
                     .aspectRatio(1f)
-                    .clip(RoundedCornerShape(8.dp))
                     .sharedElement(
-                        state = rememberSharedContentState(key = "user_profile$personId"),
+                        state = rememberSharedContentState(key = "user_profile${person.id}"),
                         animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ ->
-                            tween(durationMillis = 1000)
-                        }
-                    ),
+                    )
+                    .clip(RoundedCornerShape(8.dp)),
                 contentDescription = "person Image"
             )
         }
 
 
-        MyText(text = text, color = textColor, fontSize = 20.sp, modifier = Modifier.padding(8.dp))
+        MyText(
+            text = person.name,
+            color = textColor,
+            fontSize = 20.sp,
+            modifier = Modifier
+                .padding(8.dp)
+                .sharedElement(
+                    state = rememberSharedContentState(key = "user_name${person.id}"),
+                    animatedVisibilityScope = animatedVisibilityScope,
+                )
+        )
 
         MyText(
             text = "Tag", color = textColor, fontSize = 17.sp,

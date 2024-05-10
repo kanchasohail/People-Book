@@ -6,7 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class PersonRoom(
+data class Person(
     @PrimaryKey(autoGenerate = true) val id: Long?,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "number") val number: String?,
@@ -14,4 +14,17 @@ data class PersonRoom(
     @ColumnInfo(name = "about") val about: String?,
     @ColumnInfo(name = "image") val image: Bitmap?,
     @ColumnInfo(name = "is_deleted") val isDeleted: Boolean
-)
+) {
+    fun doesMatchSearchQuery(query: String): Boolean {
+        val matchingCombinations = listOf(
+            name,
+            "$number",
+            "$email",
+        )
+
+        return matchingCombinations.any {
+            it.contains(query, ignoreCase = true)
+        }
+    }
+
+}

@@ -57,11 +57,9 @@ import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.social.people_book.MainViewModel
 import com.social.people_book.R
-import com.social.people_book.model.room_database.PersonRoom
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.util.image_converters.getBitmapFromUri
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)

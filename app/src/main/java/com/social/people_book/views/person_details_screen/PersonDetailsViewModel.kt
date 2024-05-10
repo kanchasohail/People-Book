@@ -18,12 +18,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
-import com.social.people_book.model.data_models.Person
-import com.social.people_book.model.room_database.PersonRoom
+import com.social.people_book.model.room_database.Person
 import com.social.people_book.util.image_converters.getBitmapFromUri
 import com.social.people_book.util.workers.DeleteTrashPersonWork
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -34,14 +31,14 @@ class PersonDetailsViewModel : ViewModel() {
     private val personDao = MainActivity.db.personDao()
 
 
-    var thisPerson by mutableStateOf(Person("", "", "", "", ""))
+    var thisPerson by mutableStateOf(Person(null, "", "", "", "", null, false))
     var name by mutableStateOf("")
     var number by mutableStateOf("")
     var email by mutableStateOf("")
     var about by mutableStateOf("")
 
     var selectedImage by mutableStateOf<Uri?>(null)
-    var downloadedImage by mutableStateOf<ByteArray?>(null)
+//    var downloadedImage by mutableStateOf<ByteArray?>(null)
 
 
     var isLoading by mutableStateOf(false)
@@ -56,42 +53,42 @@ class PersonDetailsViewModel : ViewModel() {
 
     }
 
-    fun loadPerson(personId: String) {
-        isLoading = true
+//    fun loadPerson(personId: String) {
+//        isLoading = true
+//
+//        db.collection("users").document(auth.currentUser?.uid.toString()).collection("persons")
+//            .document(personId).get().addOnSuccessListener { result ->
+//                val dpPerson = Person(
+//                    personId = result["person_id"].toString(),
+//                    name = result["name"].toString(),
+//                    email = result["email"].toString(),
+//                    number = result["number"].toString(),
+//                    about = result["about"].toString()
+//                )
+//                thisPerson = dpPerson
+//                loadPersonImage(result["person_id"].toString())
+//                isLoading = false
+//            }.addOnFailureListener {
+//                isLoading = false
+//                Log.d("Loading person", "Failed to load")
+//            }
+//    }
 
-        db.collection("users").document(auth.currentUser?.uid.toString()).collection("persons")
-            .document(personId).get().addOnSuccessListener { result ->
-                val dpPerson = Person(
-                    personId = result["person_id"].toString(),
-                    name = result["name"].toString(),
-                    email = result["email"].toString(),
-                    number = result["number"].toString(),
-                    about = result["about"].toString()
-                )
-                thisPerson = dpPerson
-                loadPersonImage(result["person_id"].toString())
-                isLoading = false
-            }.addOnFailureListener {
-                isLoading = false
-                Log.d("Loading person", "Failed to load")
-            }
-    }
-
-    private fun loadPersonImage(documentId: String) {
-        val imageRef =
-            storage.reference.child("images/${auth.currentUser?.uid.toString()}/$documentId/profile.jpg")
-
-        val ONE_MEGABYTE: Long = 1024 * 1024
-        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
-            // Data for "images/island.jpg" is returned, use this as needed
-            downloadedImage = it
-            Log.d("Person Image", "Downloading Successful")
-
-        }.addOnFailureListener { e ->
-            Log.d("Person Image", "Downloading Failed")
-            Log.d("Person Image", e.message.toString())
-        }
-    }
+//    private fun loadPersonImage(documentId: String) {
+//        val imageRef =
+//            storage.reference.child("images/${auth.currentUser?.uid.toString()}/$documentId/profile.jpg")
+//
+//        val ONE_MEGABYTE: Long = 1024 * 1024
+//        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
+//            // Data for "images/island.jpg" is returned, use this as needed
+//            downloadedImage = it
+//            Log.d("Person Image", "Downloading Successful")
+//
+//        }.addOnFailureListener { e ->
+//            Log.d("Person Image", "Downloading Failed")
+//            Log.d("Person Image", e.message.toString())
+//        }
+//    }
 
 
     fun deletePerson(personId: Long, context: Context, navController: NavController) {
@@ -149,9 +146,9 @@ class PersonDetailsViewModel : ViewModel() {
     fun updatePerson(context: Context, navController: NavController) {
         isLoading = true
         db.collection("users").document(auth.currentUser?.uid.toString()).collection("persons")
-            .document(thisPerson.personId).update(
+            .document(thisPerson.id.toString()).update(
                 mapOf(
-                    "person_id" to thisPerson.personId,
+                    "person_id" to thisPerson.id,
                     "name" to name,
                     "number" to number,
                     "email" to email,
@@ -159,7 +156,7 @@ class PersonDetailsViewModel : ViewModel() {
                 )
             ).addOnSuccessListener {
                 updatePersonInRoomDatabase(context)
-                updatePersonImage(thisPerson.personId)
+                updatePersonImage(thisPerson.id.toString())
                 isLoading = false
                 Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
                 navController.popBackStack()
@@ -185,8 +182,8 @@ class PersonDetailsViewModel : ViewModel() {
     }
 
     private fun updatePersonInRoomDatabase(context: Context) {
-        val personRoom = PersonRoom(
-            id = thisPerson.personId.toLong(),
+        val person = Person(
+            id = thisPerson.id,
             name = name,
             number = number,
             email = email,
@@ -195,7 +192,7 @@ class PersonDetailsViewModel : ViewModel() {
             isDeleted = false
         )
         viewModelScope.launch {
-            personDao.updatePerson(personRoom)
+            personDao.updatePerson(person)
         }
     }
 
