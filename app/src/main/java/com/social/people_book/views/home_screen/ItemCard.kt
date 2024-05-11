@@ -83,7 +83,7 @@ fun SharedTransitionScope.ItemCard(
         MyText(
             text = person.name,
             color = textColor,
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             modifier = Modifier
                 .padding(8.dp)
                 .sharedElement(

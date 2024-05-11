@@ -108,7 +108,7 @@ fun TrashScreen(
                         contentDescription = "Delete",
                         modifier = Modifier.size(35.dp)
                     )
-                    MyText(text = "Items are delete forever after 30 days.", fontSize = 17.sp)
+                    MyText(text = "Items are delete forever after 30 days.", fontSize = 16.sp)
                     Spacer(modifier = Modifier)
                 }
 

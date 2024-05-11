@@ -58,7 +58,7 @@ fun DeletedItemCard(
         }
 
 
-        MyText(text = person.name, color = textColor, fontSize = 20.sp, modifier = Modifier.padding(8.dp))
+        MyText(text = person.name, color = textColor, fontSize = 18.sp, modifier = Modifier.padding(8.dp))
 
         MyText(
             text = "Tag", color = textColor, fontSize = 17.sp,

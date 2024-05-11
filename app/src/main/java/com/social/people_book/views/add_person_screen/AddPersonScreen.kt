@@ -60,6 +60,7 @@ import com.social.people_book.R
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.util.image_converters.compressImage
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -89,7 +90,9 @@ fun AddPersonScreen(
             if (result.isSuccessful) {
                 // use the cropped image
                 val uriContent = result.uriContent
-                viewModel.selectedImage = uriContent
+                val compressedUri = uriContent?.let { compressImage(context, it) }
+//                viewModel.selectedImage = uriContent
+                viewModel.selectedImage = compressedUri
             } else {
                 // an error occurred cropping
                 val exception = result.error

@@ -50,6 +50,7 @@ import com.social.people_book.ui.common_views.ConfirmBackDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.util.image_converters.compressImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +66,8 @@ fun PersonDetailsEditingScreen(
             if (result.isSuccessful) {
                 // use the cropped image
                 val uriContent = result.uriContent
-                viewModel.selectedImage = uriContent
+//                viewModel.selectedImage = uriContent
+                viewModel.selectedImage = uriContent?.let { compressImage(context , it) }
             } else {
                 // an error occurred cropping
                 val exception = result.error
