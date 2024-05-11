@@ -7,10 +7,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -95,7 +104,36 @@ fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
                         fontFamily = RobotoFontFamily
                     ),
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedButton(
+                    onClick = { //Todo
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    MyText(text = "Privacy Policy")
+                    Spacer(modifier = Modifier.width(3.dp))
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = "Privacy Policy",
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(4.dp))
+                OutlinedButton(
+                    onClick = { //Todo
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    MyText(text = "Contact Us")
+                    Spacer(modifier = Modifier.width(3.dp))
+                    Icon(
+                        imageVector = Icons.Outlined.MailOutline,
+                        contentDescription = "Contact Us",
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
         }
     }
