@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,7 +18,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -69,6 +73,9 @@ fun SharedTransitionScope.PersonDetailsScreen(
     fun loadPerson(id: Int) {
         val roomPerson = mainViewModel.personDao.getPersonById(id)
         viewModel.thisPerson = roomPerson
+        viewModel.savedPerson = roomPerson
+        viewModel.selectedImage = null
+
 //        viewModel.downloadedImage =
 //            roomPerson.image?.let { getBytesFromBitmap(it, Bitmap.CompressFormat.JPEG, 100) }
     }
@@ -86,7 +93,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
     val appBarTextColor =
         if (isDarkMode) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
     val textColor = if (isDarkMode) Color.White else Color.Black
-
+    val iconButtonColor = MaterialTheme.colorScheme.primary
 
     Scaffold(
         topBar = {
@@ -189,13 +196,15 @@ fun SharedTransitionScope.PersonDetailsScreen(
                         text = viewModel.thisPerson.name,
                         fontSize = 24.sp,
                         color = textColor,
-                        modifier = Modifier.padding(8.dp).sharedElement(
-                            state = rememberSharedContentState(key = "user_name$personId"),
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            boundsTransform = { _, _ ->
-                                tween(durationMillis = 1000)
-                            }
-                        )
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .sharedElement(
+                                state = rememberSharedContentState(key = "user_name$personId"),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                boundsTransform = { _, _ ->
+                                    tween(durationMillis = 1000)
+                                }
+                            )
                     )
                 }
 
@@ -203,22 +212,78 @@ fun SharedTransitionScope.PersonDetailsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .padding(top = 10.dp)
+                        .padding(top = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     MyText(text = "Phone:", color = textColor)
                     Spacer(modifier = Modifier.width(10.dp))
                     MyText(text = viewModel.thisPerson.number.toString(), color = textColor)
+
+                    if (viewModel.thisPerson.number != null) {
+                        IconButton(onClick = {
+                            viewModel.copyToClipboard(
+                                context,
+                                viewModel.thisPerson.number!!,
+                                "Number"
+                            )
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_copy_icon),
+                                tint = iconButtonColor,
+                                contentDescription = "Copy"
+                            )
+                        }
+
+                        IconButton(onClick = {
+                            viewModel.makePhoneCall(context, viewModel.thisPerson.number!!)
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Call,
+                                tint = iconButtonColor,
+                                contentDescription = "Call"
+                            )
+                        }
+                    }
+
                 }
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .padding(top = 10.dp)
+                        .padding(top = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     MyText(text = "Email:", color = textColor)
                     Spacer(modifier = Modifier.width(10.dp))
                     MyText(text = viewModel.thisPerson.email.toString(), color = textColor)
+
+                    if (viewModel.thisPerson.email != null) {
+                        IconButton(onClick = {
+                            viewModel.copyToClipboard(
+                                context,
+                                viewModel.thisPerson.email!!,
+                                "Email"
+                            )
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_copy_icon),
+                                tint = iconButtonColor,
+                                contentDescription = "Copy"
+                            )
+                        }
+                        IconButton(onClick = {
+                            viewModel.openEmailComposer(context, viewModel.thisPerson.email!!, "")
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.MailOutline,
+                                tint = iconButtonColor,
+                                contentDescription = "Call"
+                            )
+                        }
+                    }
                 }
 
                 Row(
@@ -251,7 +316,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                         onClick = {
                             navController.navigate(Screens.PersonDetailsEditingScreen.route)
                         }) {
-                        MyText(text = "Edit", fontSize = 17.sp, color = appBarTextColor)
+                        MyText(text = "Edit", fontSize = 17.sp)
                     }
                 }
             }

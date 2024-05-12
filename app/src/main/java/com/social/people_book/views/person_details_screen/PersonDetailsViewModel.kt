@@ -1,12 +1,21 @@
 package com.social.people_book.views.person_details_screen
 
+import android.Manifest
+import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -30,6 +39,8 @@ class PersonDetailsViewModel : ViewModel() {
     private val storage = Firebase.storage
     private val personDao = MainActivity.db.personDao()
 
+    var savedPerson = Person(null, "", "", "", "", null, false)
+
 
     var thisPerson by mutableStateOf(Person(null, "", "", "", "", null, false))
     var name by mutableStateOf("")
@@ -50,8 +61,60 @@ class PersonDetailsViewModel : ViewModel() {
         number = thisPerson.number.toString()
         email = thisPerson.email.toString()
         about = thisPerson.about.toString()
-
     }
+
+    fun isChanged(): Boolean {
+        val p = Person(
+            id = savedPerson.id,
+            name = name,
+            number = number,
+            email = email,
+            about = about,
+            image = savedPerson.image,
+            isDeleted = savedPerson.isDeleted
+        )
+        return savedPerson != p || selectedImage != null
+    }
+
+
+    fun makePhoneCall(context: Context, number: String) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CALL_PHONE
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission already granted, make the call
+            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$number"))
+            context.startActivity(intent)
+        } else {
+            // Permission not granted, request it
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(Manifest.permission.CALL_PHONE),
+                0
+            )
+        }
+    }
+
+
+    fun openEmailComposer(context: Context, email: String, subject: String) {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:") // Only email apps should handle this
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+        }
+        context.startActivity(intent)
+    }
+
+    fun copyToClipboard(context: Context, text: String, label: String) {
+        val clipboardManager =
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText(label, text)
+        clipboardManager.setPrimaryClip(clipData)
+
+        Toast.makeText(context, "$label Copied to Clipboard", Toast.LENGTH_SHORT).show()
+    }
+
 
 //    fun loadPerson(personId: String) {
 //        isLoading = true

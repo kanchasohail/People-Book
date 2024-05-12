@@ -1,4 +1,4 @@
-package com.social.people_book.views.home_screen
+package com.social.people_book.views.home_screen.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +17,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -29,7 +31,8 @@ fun SearchBar(
     onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     iconTint: Color = Color.White.copy(.9f),
-    textColor: Color = Color.White
+    textColor: Color = Color.White,
+    focusRequester: FocusRequester
 ) {
     BasicTextField(
         value = text,
@@ -85,7 +88,7 @@ fun SearchBar(
             }
 
         },
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth().focusRequester(focusRequester)
     )
 
 }

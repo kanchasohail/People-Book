@@ -9,8 +9,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
+import androidx.navigation.navigation
 import com.google.firebase.auth.FirebaseAuth
 import com.social.people_book.MainViewModel
 import com.social.people_book.util.sharedViewModel
@@ -20,6 +20,8 @@ import com.social.people_book.views.auth_screen.ForgotPasswordScreen
 import com.social.people_book.views.auth_screen.LoginScreen
 import com.social.people_book.views.auth_screen.SignUpScreen
 import com.social.people_book.views.home_screen.HomeScreen
+import com.social.people_book.views.home_screen.HomeScreenViewModel
+import com.social.people_book.views.home_screen.SearchScreen
 import com.social.people_book.views.person_details_screen.PersonDetailsEditingScreen
 import com.social.people_book.views.person_details_screen.PersonDetailsScreen
 import com.social.people_book.views.person_details_screen.PersonDetailsViewModel
@@ -41,22 +43,40 @@ fun SharedTransitionScope.NavigationGraph(
 
     //To check if the user is loggedIn or not
     val startDestinationRoute =
-        if (auth.currentUser != null) Screens.HomeScreen.route else Screens.AuthScreen.route
+        if (auth.currentUser != null) Screens.HomeRoute.route else Screens.AuthScreen.route
     NavHost(navController = navController, startDestination = startDestinationRoute) {
         //Splash Screen
         composable(Screens.SplashScreen.route) {
             SplashScreen(navController = navController, isDarkMode = isDarkMode, auth = auth)
         }
 
-        //Home Screen
-        composable(Screens.HomeScreen.route) {
-            HomeScreen(
-                navController = navController,
-                animatedVisibilityScope = this,
-                isDarkMode = isDarkMode,
-                mainViewModel = mainViewModel
-            )
+        //Home Screen Navigation Group
+        navigation(route = Screens.HomeRoute.route, startDestination = Screens.HomeScreen.route) {
+
+            //Home Screen
+            composable(Screens.HomeScreen.route) { entry ->
+                val viewModel = entry.sharedViewModel<HomeScreenViewModel>(navController)
+                HomeScreen(
+                    navController = navController,
+                    animatedVisibilityScope = this,
+                    isDarkMode = isDarkMode,
+                    viewModel = viewModel,
+                    mainViewModel = mainViewModel
+                )
+            }
+
+            //Search Screen
+            composable(Screens.SearchScreen.route) { entry ->
+                val viewModel = entry.sharedViewModel<HomeScreenViewModel>(navController)
+                SearchScreen(
+                    navController = navController,
+                    animatedVisibilityScope = this,
+                    viewModel = viewModel,
+                    isDarkMode = isDarkMode
+                )
+            }
         }
+
 
         //Auth Screen Navigation Group
         navigation(

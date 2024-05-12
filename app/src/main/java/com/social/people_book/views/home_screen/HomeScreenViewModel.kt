@@ -46,14 +46,6 @@ class HomeScreenViewModel : ViewModel() {
     private val userDocumentAddress =
         db.collection("users").document(auth.currentUser?.uid.toString())
 
-    var userName = ""
-
-    fun loadUserName() {
-        userDocumentAddress.get().addOnSuccessListener { result ->
-            userName = result["username"].toString()
-        }
-    }
-
 
     val tags = listOf("All", "Friends", "Colleagues", "Cousin", "Co-workers", "Partners")
 
@@ -61,14 +53,13 @@ class HomeScreenViewModel : ViewModel() {
         _searchText.value = text
     }
 
-    private val _persons = MutableStateFlow<List<Person>>(emptyList())
-//    val persons: StateFlow<List<Person>> = _persons
+    val persons = MutableStateFlow<List<Person>>(emptyList())
 
 
 
     @OptIn(FlowPreview::class)
-    val persons = searchBarText.debounce(500L).onEach { _isSearching.update { true } }
-        .combine(_persons) { text, persons ->
+    val searchedPersons = searchBarText.debounce(500L).onEach { _isSearching.update { true } }
+        .combine(persons) { text, persons ->
             if (text.isBlank()) {
                 persons
             } else {
@@ -80,14 +71,14 @@ class HomeScreenViewModel : ViewModel() {
         }.onEach { _isSearching.update { false } }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
-            _persons.value
+            persons.value
         )
 
 
     init {
         viewModelScope.launch {
             personDao.getAll().collectLatest { personList ->
-                _persons.value = personList
+                persons.value = personList
             }
         }
     }
