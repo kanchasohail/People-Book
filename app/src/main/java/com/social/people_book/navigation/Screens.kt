@@ -2,7 +2,11 @@ package com.social.people_book.navigation
 
 sealed class Screens(val route: String) {
     object SplashScreen : Screens("splash_screen")
+
+    object HomeRoute : Screens("home_route") // Home Screens navigation group
     object HomeScreen : Screens("home_screen")
+
+    object SearchScreen : Screens("search_screen")
 
     object AuthScreen : Screens("auth_screen") //Auth Screens navigation group
     object LoginScreen : Screens("login_screen")

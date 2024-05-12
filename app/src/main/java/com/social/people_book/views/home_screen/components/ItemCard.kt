@@ -1,4 +1,4 @@
-package com.social.people_book.views.home_screen
+package com.social.people_book.views.home_screen.components
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi

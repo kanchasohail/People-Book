@@ -42,11 +42,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.social.people_book.MainViewModel
 import com.social.people_book.R
@@ -55,6 +55,8 @@ import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.util.isScrollingUp
+import com.social.people_book.views.home_screen.components.ItemCard
+import com.social.people_book.views.home_screen.components.SearchBar
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
@@ -65,6 +67,7 @@ fun SharedTransitionScope.HomeScreen(
     navController: NavController,
     animatedVisibilityScope: AnimatedVisibilityScope,
     isDarkMode: Boolean,
+    viewModel: HomeScreenViewModel,
     mainViewModel: MainViewModel
 ) {
 
@@ -77,7 +80,7 @@ fun SharedTransitionScope.HomeScreen(
     val gridState = rememberLazyGridState()
 
 
-    val viewModel = viewModel<HomeScreenViewModel>()
+//    val viewModel = viewModel<HomeScreenViewModel>()
 
     val searchBarText by viewModel.searchBarText.collectAsState()
     val persons by viewModel.persons.collectAsState()
@@ -92,11 +95,14 @@ fun SharedTransitionScope.HomeScreen(
                 title = {
                     SearchBar(
                         text = searchBarText,
-                        onTextChanged = viewModel::onSearchTextChange
+                        onTextChanged = viewModel::onSearchTextChange,
+                        focusRequester = FocusRequester()
                     )
                 },
                 actions = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = {
+                        navController.navigate(Screens.SearchScreen.route)
+                    }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_settings_icon),
                             contentDescription = "More",

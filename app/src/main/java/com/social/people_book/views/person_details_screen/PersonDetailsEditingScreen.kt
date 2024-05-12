@@ -67,7 +67,7 @@ fun PersonDetailsEditingScreen(
                 // use the cropped image
                 val uriContent = result.uriContent
 //                viewModel.selectedImage = uriContent
-                viewModel.selectedImage = uriContent?.let { compressImage(context , it) }
+                viewModel.selectedImage = uriContent?.let { compressImage(context, it) }
             } else {
                 // an error occurred cropping
                 val exception = result.error
@@ -102,7 +102,11 @@ fun PersonDetailsEditingScreen(
         viewModel.loadForEditing()
     }
     BackHandler {
-        viewModel.showDialogState = true
+        if (viewModel.isChanged()) {
+            viewModel.showDialogState = true
+        }else {
+            navController.popBackStack()
+        }
     }
     Scaffold(
         topBar = {
@@ -175,13 +179,16 @@ fun PersonDetailsEditingScreen(
                             Image(
                                 painter = rememberAsyncImagePainter(
                                     viewModel.thisPerson.image
-                                ), contentDescription = "person Image"
+                                ),
+                                modifier = Modifier.clip(RoundedCornerShape(18.dp)),
+                                contentDescription = "person Image"
                             )
                         } else {
                             Image(
                                 painter = rememberAsyncImagePainter(
                                     viewModel.selectedImage
-                                ), contentDescription = "person Image"
+                                ), modifier = Modifier.clip(RoundedCornerShape(18.dp)),
+                                contentDescription = "person Image"
                             )
                         }
                     }
@@ -261,7 +268,7 @@ fun PersonDetailsEditingScreen(
                         .fillMaxWidth()
                 ) {
                     if (!viewModel.isLoading) {
-                        MyText(text = "Save", color = appBarTextColor, fontSize = 16.sp)
+                        MyText(text = "Save", fontSize = 16.sp)
                     } else {
                         LoadingIndicator()
                     }
