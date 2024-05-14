@@ -1,4 +1,4 @@
-package com.social.people_book.util
+package com.social.people_book.model.util
 
 
 import androidx.compose.foundation.lazy.grid.LazyGridState

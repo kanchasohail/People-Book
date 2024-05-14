@@ -1,4 +1,4 @@
-package com.social.people_book.util.google_sign_in
+package com.social.people_book.model.util.google_sign_in
 
 import android.content.Context
 import com.google.android.gms.auth.api.identity.BeginSignInRequest

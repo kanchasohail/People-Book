@@ -1,4 +1,4 @@
-package com.social.people_book.util.workers
+package com.social.people_book.model.util.workers
 
 import android.content.Context
 import androidx.work.CoroutineWorker

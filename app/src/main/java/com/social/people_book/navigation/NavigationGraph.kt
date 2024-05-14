@@ -13,7 +13,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.google.firebase.auth.FirebaseAuth
 import com.social.people_book.MainViewModel
-import com.social.people_book.util.sharedViewModel
+import com.social.people_book.model.util.sharedViewModel
 import com.social.people_book.views.add_person_screen.AddPersonScreen
 import com.social.people_book.views.auth_screen.AuthViewModel
 import com.social.people_book.views.auth_screen.ForgotPasswordScreen

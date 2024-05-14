@@ -18,7 +18,7 @@ import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
 import com.social.people_book.model.room_database.Person
 import com.social.people_book.navigation.Screens
-import com.social.people_book.util.image_converters.getBitmapFromUri
+import com.social.people_book.model.util.image_converters.getBitmapFromUri
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 

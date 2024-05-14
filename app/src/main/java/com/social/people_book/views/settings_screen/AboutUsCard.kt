@@ -31,6 +31,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.social.people_book.R
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.RobotoFontFamily
 
@@ -38,6 +39,8 @@ import com.social.people_book.ui.theme.RobotoFontFamily
 @Composable
 fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
     val context = LocalContext.current
+
+    val privacyPolicyUrl = context.getString(R.string.privacy_policy)
 
     Card(
         modifier = modifier
@@ -107,7 +110,12 @@ fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 OutlinedButton(
-                    onClick = { //Todo
+                    onClick = {
+                        val urlIntent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(privacyPolicyUrl)
+                        )
+                        context.startActivity(urlIntent)
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {

@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +45,7 @@ fun SearchBar(
             fontSize = 20.sp,
             fontFamily = RobotoFontFamily
         ),
+        cursorBrush = SolidColor(if (text.isEmpty()) Color.Transparent else textColor),
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = androidx.compose.ui.text.input.ImeAction.Search
         ),
@@ -77,7 +79,7 @@ fun SearchBar(
                     if (text.isEmpty()) Text(
                         text = "Search",
                         fontSize = 20.sp,
-                        color = iconTint,
+                        color = iconTint.copy(.9f),
                         fontFamily = RobotoFontFamily
                     )
                     // you have to invoke this function then cursor will focus and you will able to write something
@@ -88,7 +90,9 @@ fun SearchBar(
             }
 
         },
-        modifier = modifier.fillMaxWidth().focusRequester(focusRequester)
+        modifier = modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester)
     )
 
 }

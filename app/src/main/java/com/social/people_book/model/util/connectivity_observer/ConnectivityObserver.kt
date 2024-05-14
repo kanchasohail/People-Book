@@ -1,4 +1,4 @@
-package com.social.people_book.util.connectivity_observer
+package com.social.people_book.model.util.connectivity_observer
 
 import kotlinx.coroutines.flow.Flow
 

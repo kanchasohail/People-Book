@@ -1,4 +1,4 @@
-package com.social.people_book.util
+package com.social.people_book.model.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

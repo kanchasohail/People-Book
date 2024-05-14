@@ -1,4 +1,4 @@
-package com.social.people_book.util.image_converters
+package com.social.people_book.model.util.image_converters
 
 import android.graphics.Bitmap
 import java.io.ByteArrayOutputStream
