@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
@@ -60,14 +61,14 @@ import com.social.people_book.R
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.util.image_converters.compressImage
+import com.social.people_book.model.util.image_converters.compressImage
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPersonScreen(
-    navController: NavController,
+    navController: NavHostController,
     isDarkMode: Boolean,
     mainViewModel: MainViewModel
 ) {
@@ -145,9 +146,7 @@ fun AddPersonScreen(
                     }
                 },
                 navigationIcon = {
-                    BackButtonArrow(iconColor = appBarTextColor) {
-                        navController.popBackStack()
-                    }
+                    BackButtonArrow(iconColor = appBarTextColor, navController)
                 },
                 actions = {
                     OutlinedButton(

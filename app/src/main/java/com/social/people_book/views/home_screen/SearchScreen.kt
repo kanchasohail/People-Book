@@ -29,8 +29,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.CenterBox
+import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.views.home_screen.components.ItemCard
 import com.social.people_book.views.home_screen.components.SearchBar
@@ -38,7 +40,7 @@ import com.social.people_book.views.home_screen.components.SearchBar
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SharedTransitionScope.SearchScreen(
-    navController: NavController,
+    navController: NavHostController,
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: HomeScreenViewModel,
     isDarkMode: Boolean
@@ -46,6 +48,9 @@ fun SharedTransitionScope.SearchScreen(
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
+
+    val appBarTextColor =
+        if (isDarkMode) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
     val textColor = if (isDarkMode) Color.White else Color.Black
 
     val gridState = rememberLazyGridState()
@@ -67,6 +72,9 @@ fun SharedTransitionScope.SearchScreen(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = appBarBackGroundColor,
                 ),
+                navigationIcon = {
+                    BackButtonArrow(iconColor = appBarTextColor, navController)
+                },
                 title = {
                     SearchBar(
                         text = searchBarText,

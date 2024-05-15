@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
@@ -50,12 +51,12 @@ import com.social.people_book.ui.common_views.ConfirmBackDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.util.image_converters.compressImage
+import com.social.people_book.model.util.image_converters.compressImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PersonDetailsEditingScreen(
-    navController: NavController,
+    navController: NavHostController,
     isDarkMode: Boolean,
     viewModel: PersonDetailsViewModel,
 ) {
@@ -130,9 +131,7 @@ fun PersonDetailsEditingScreen(
                     }
                 },
                 navigationIcon = {
-                    BackButtonArrow(iconColor = appBarTextColor) {
-                        viewModel.showDialogState = true
-                    }
+                    BackButtonArrow(iconColor = appBarTextColor, navController)
                 },
             )
         }

@@ -28,8 +28,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
 import com.social.people_book.model.room_database.Person
-import com.social.people_book.util.image_converters.getBitmapFromUri
-import com.social.people_book.util.workers.DeleteTrashPersonWork
+import com.social.people_book.model.util.image_converters.getBitmapFromUri
+import com.social.people_book.model.util.workers.DeleteTrashPersonWork
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 

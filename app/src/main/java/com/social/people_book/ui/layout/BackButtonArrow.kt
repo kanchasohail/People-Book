@@ -8,16 +8,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavHostController
 import com.social.people_book.R
 
 @Composable
-fun BackButtonArrow(iconColor: Color, onClick: () -> Unit) {
-    IconButton(onClick = onClick) {
+fun BackButtonArrow(iconColor: Color, navController: NavHostController) {
+    IconButton(onClick = {
+        navController.navigateBack()
+    }) {
         Icon(
             painter = painterResource(id = R.drawable.back_arrow),
             contentDescription = "Back",
             tint = iconColor,
             modifier = Modifier.size(28.dp)
         )
+    }
+}
+
+
+val NavHostController.canGoBack: Boolean get() = this.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED
+
+fun NavHostController.navigateBack() {
+    if (canGoBack) {
+        popBackStack()
     }
 }

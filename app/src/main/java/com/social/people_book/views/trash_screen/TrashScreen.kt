@@ -1,5 +1,4 @@
 package com.social.people_book.views.trash_screen
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,9 +59,7 @@ fun TrashScreen(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    BackButtonArrow(iconColor = MaterialTheme.colorScheme.outline) {
-                        navController.popBackStack()
-                    }
+                    BackButtonArrow(iconColor = MaterialTheme.colorScheme.outline, navController)
                 },
                 title = {
                     MyText(text = "Trash")

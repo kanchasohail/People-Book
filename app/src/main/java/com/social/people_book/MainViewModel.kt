@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
 class MainViewModel(context: Context) : ViewModel() {
+
     private val isDarkThemeKey: String = "is_dark_theme"
 
     private val prefs: SharedPreferences by lazy {

@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.MainViewModel
 import com.social.people_book.R
@@ -62,7 +63,7 @@ import kotlinx.coroutines.launch
 )
 @Composable
 fun SharedTransitionScope.PersonDetailsScreen(
-    navController: NavController,
+    navController: NavHostController,
     animatedVisibilityScope: AnimatedVisibilityScope,
     isDarkMode: Boolean,
     personId: String,
@@ -110,9 +111,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                     )
                 },
                 navigationIcon = {
-                    BackButtonArrow(iconColor = appBarTextColor) {
-                        navController.popBackStack()
-                    }
+                    BackButtonArrow(iconColor = appBarTextColor, navController)
                 },
             )
         }
