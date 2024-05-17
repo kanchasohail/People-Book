@@ -38,6 +38,8 @@ class AddPersonViewModel : ViewModel() {
 
     var isLoading by mutableStateOf(false)
 
+    var showDialogState by mutableStateOf(false)
+
 
     suspend fun addPerson(context: Context, navController: NavController) {
         val roomPerson = Person(
@@ -53,6 +55,10 @@ class AddPersonViewModel : ViewModel() {
             val personId = personDao.addPerson(roomPerson)
             addPersonInFirebase(context, navController, personId)
         }
+    }
+
+    fun isChanged(): Boolean {
+        return name != "" || number != "" || email != "" || about != "" || selectedImage != null
     }
 
     private fun addPersonInFirebase(

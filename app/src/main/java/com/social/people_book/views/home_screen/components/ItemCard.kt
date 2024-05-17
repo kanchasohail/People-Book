@@ -39,30 +39,31 @@ fun SharedTransitionScope.ItemCard(
     Column(
         modifier = modifier
             .padding(8.dp)
-            .size(width = 150.dp, height = 250.dp)
+//            .size(width = 150.dp, height = 250.dp)
+//            .size(width = 150.dp)
             .border(.7.dp, textColor, shape = RoundedCornerShape(8.dp))
             .clickable {
                 onClick()
             }
     ) {
         if (person.image == null) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_blank_profile),
-                tint = textColor,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .aspectRatio(1f)
-                    .sharedElement(
-                        state = rememberSharedContentState(key = "blank_profile${person.id}"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-//                        boundsTransform = { _, _ ->
-//                            tween(durationMillis = 1000)
-//                        }
-                    )
-                    .clip(RoundedCornerShape(18.dp)),
-                contentDescription = "user_profile"
-            )
+//            Icon(
+//                painter = painterResource(id = R.drawable.ic_blank_profile),
+//                tint = textColor,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(8.dp)
+//                    .aspectRatio(1f)
+//                    .sharedElement(
+//                        state = rememberSharedContentState(key = "blank_profile${person.id}"),
+//                        animatedVisibilityScope = animatedVisibilityScope,
+////                        boundsTransform = { _, _ ->
+////                            tween(durationMillis = 1000)
+////                        }
+//                    )
+//                    .clip(RoundedCornerShape(18.dp)),
+//                contentDescription = "user_profile"
+//            )
         } else {
             Image(
                 painter = rememberAsyncImagePainter(person.image),
@@ -94,9 +95,7 @@ fun SharedTransitionScope.ItemCard(
 
         MyText(
             text = "Tag", color = textColor, fontSize = 17.sp,
-            modifier = Modifier.padding(
-                horizontal = 8.dp
-            )
+            modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
         )
     }
 }

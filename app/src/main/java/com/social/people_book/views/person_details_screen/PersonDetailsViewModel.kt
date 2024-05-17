@@ -106,6 +106,11 @@ class PersonDetailsViewModel : ViewModel() {
         context.startActivity(intent)
     }
 
+    fun isValidEmail(email: String): Boolean {
+        val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
+        return email.matches(emailRegex)
+    }
+
     fun copyToClipboard(context: Context, text: String, label: String) {
         val clipboardManager =
             context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

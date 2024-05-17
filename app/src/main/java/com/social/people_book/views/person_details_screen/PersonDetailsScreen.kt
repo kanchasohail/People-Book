@@ -21,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -41,7 +40,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.MainViewModel
@@ -219,7 +217,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                     Spacer(modifier = Modifier.width(10.dp))
                     MyText(text = viewModel.thisPerson.number.toString(), color = textColor)
 
-                    if (viewModel.thisPerson.number != null) {
+                    if (viewModel.thisPerson.number != null && viewModel.thisPerson.number != "") {
                         IconButton(onClick = {
                             viewModel.copyToClipboard(
                                 context,
@@ -233,15 +231,16 @@ fun SharedTransitionScope.PersonDetailsScreen(
                                 contentDescription = "Copy"
                             )
                         }
-
-                        IconButton(onClick = {
-                            viewModel.makePhoneCall(context, viewModel.thisPerson.number!!)
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Call,
-                                tint = iconButtonColor,
-                                contentDescription = "Call"
-                            )
+                        if (viewModel.thisPerson.number!!.length > 4) {
+                            IconButton(onClick = {
+                                viewModel.makePhoneCall(context, viewModel.thisPerson.number!!)
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Call,
+                                    tint = iconButtonColor,
+                                    contentDescription = "Call"
+                                )
+                            }
                         }
                     }
 
@@ -259,7 +258,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                     Spacer(modifier = Modifier.width(10.dp))
                     MyText(text = viewModel.thisPerson.email.toString(), color = textColor)
 
-                    if (viewModel.thisPerson.email != null) {
+                    if (viewModel.thisPerson.email != null && viewModel.thisPerson.email != "") {
                         IconButton(onClick = {
                             viewModel.copyToClipboard(
                                 context,
@@ -273,14 +272,16 @@ fun SharedTransitionScope.PersonDetailsScreen(
                                 contentDescription = "Copy"
                             )
                         }
-                        IconButton(onClick = {
-                            viewModel.openEmailComposer(context, viewModel.thisPerson.email!!, "")
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.MailOutline,
-                                tint = iconButtonColor,
-                                contentDescription = "Call"
-                            )
+                        if (viewModel.isValidEmail(viewModel.thisPerson.email!!)){
+                            IconButton(onClick = {
+                                viewModel.openEmailComposer(context, viewModel.thisPerson.email!!, "")
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.MailOutline,
+                                    tint = iconButtonColor,
+                                    contentDescription = "Call"
+                                )
+                            }
                         }
                     }
                 }

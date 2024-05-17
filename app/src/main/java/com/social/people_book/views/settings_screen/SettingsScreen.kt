@@ -1,6 +1,5 @@
 package com.social.people_book.views.settings_screen
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
@@ -38,14 +38,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.social.people_book.MainViewModel
-import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmLogoutDialog
 import com.social.people_book.ui.common_views.ConfirmResetPasswordDialog
-import com.social.people_book.ui.layout.BackButtonArrow
-import com.social.people_book.ui.layout.CustomSwitch
 import com.social.people_book.ui.layout.MyText
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,7 +70,14 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
         topBar = {
             LargeTopAppBar(
                 navigationIcon = {
-                    BackButtonArrow(iconColor = textColor, navController)
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            modifier = Modifier.size(30.dp),
+                            tint = Color.Transparent,
+                            contentDescription = "Close"
+                        )
+                    }
                 },
                 title = {
                     MyText(
@@ -86,7 +89,14 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                     )
                 },
                 actions = {
-                    BackButtonArrow(iconColor = Color.Transparent, navController)
+//                    BackButtonArrow(iconColor = Color.Transparent, navController)
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            modifier = Modifier.size(30.dp),
+                            contentDescription = "Close"
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
@@ -122,52 +132,6 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                     .fillMaxWidth()
                     .nestedScroll(scrollBehavior.nestedScrollConnection)
             ) {
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                mainViewModel.setThemeMode(!isDarkMode)
-                            }
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        MyText(text = "Dark Theme", fontSize = 18.sp, color = textColor)
-
-                        CustomSwitch(
-                            height = 11.dp,
-                            width = 22.dp,
-                            gapBetweenThumbAndTrackEdge = 1.6.dp,
-                            checked = isDarkMode,
-                            onCheckedChange = {
-                                mainViewModel.setThemeMode(it)
-                            },
-                            modifier = Modifier.padding(top = 5.dp)
-                        )
-                    }
-                }
-
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                navController.navigate(Screens.TrashScreen.route)
-                            }
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        MyText(text = "Trash", fontSize = 18.sp, color = textColor)
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "trash",
-                            tint = textColor,
-                            modifier = Modifier.size(28.dp)
-                        )
-                    }
-                }
-
                 item {
                     Card(
                         modifier = Modifier

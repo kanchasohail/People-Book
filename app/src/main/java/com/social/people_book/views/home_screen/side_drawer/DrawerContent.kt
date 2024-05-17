@@ -57,14 +57,14 @@ fun DrawerContent(navController: NavController, mainViewModel: MainViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Spacer(modifier = Modifier.height(8.dp))
+//                Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
                             mainViewModel.setThemeMode(!isDarkMode)
                         }
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                        .padding(horizontal = 16.dp, vertical = 18.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -82,14 +82,14 @@ fun DrawerContent(navController: NavController, mainViewModel: MainViewModel) {
                     )
                 }
 
-                Spacer(modifier = Modifier.height(10.dp))
+//                Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
                             navController.navigate(Screens.TrashScreen.route)
                         }
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                        .padding(horizontal = 16.dp, vertical = 18.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     MyText(text = "Trash", fontSize = 18.sp, color = textColor)
@@ -111,7 +111,7 @@ fun DrawerContent(navController: NavController, mainViewModel: MainViewModel) {
                         .clickable {
                             navController.navigate(Screens.SettingsScreen.route)
                         }
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .padding(horizontal = 16.dp, vertical = 18.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     MyText(text = "Settings", fontSize = 18.sp, color = textColor)
@@ -123,7 +123,7 @@ fun DrawerContent(navController: NavController, mainViewModel: MainViewModel) {
                     )
                 }
 
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
             }
         }

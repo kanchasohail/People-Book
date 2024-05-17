@@ -47,7 +47,7 @@ fun DrawerHeader(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "Toggle Drawer",
                     tint = appBarTextColor,
-                    modifier = Modifier.size(35.dp)
+                    modifier = Modifier.size(30.dp)
                 )
             }
         },

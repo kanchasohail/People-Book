@@ -3,6 +3,7 @@ package com.social.people_book.views.add_person_screen
 import android.net.Uri
 import android.os.Build
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -24,8 +25,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -49,7 +53,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.canhub.cropper.CropImageContract
@@ -58,10 +61,10 @@ import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.social.people_book.MainViewModel
 import com.social.people_book.R
-import com.social.people_book.ui.layout.BackButtonArrow
+import com.social.people_book.model.util.image_converters.compressImage
+import com.social.people_book.ui.common_views.ConfirmSaveOrExitDialog
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.model.util.image_converters.compressImage
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -109,7 +112,8 @@ fun AddPersonScreen(
             cropShape = CropImageView.CropShape.RECTANGLE,
             aspectRatioX = 1,
             aspectRatioY = 1,
-            scaleType = CropImageView.ScaleType.CENTER,
+//            scaleType = CropImageView.ScaleType.CENTER,
+            scaleType = CropImageView.ScaleType.CENTER_INSIDE,
             cornerShape = CropImageView.CropCornerShape.RECTANGLE,
             fixAspectRatio = true
         )
@@ -123,6 +127,28 @@ fun AddPersonScreen(
     val appBarTextColor =
         if (isDarkMode) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
     val textColor = if (isDarkMode) Color.White else Color.Black
+
+    BackHandler {
+        if (viewModel.isChanged()) {
+            viewModel.showDialogState = true
+        } else {
+            navController.popBackStack()
+        }
+    }
+
+    ConfirmSaveOrExitDialog(
+        showDialog = viewModel.showDialogState,
+        onDismiss = {
+            viewModel.showDialogState = false
+            navController.popBackStack()
+        },
+        onConfirm = {
+            viewModel.showDialogState = false
+            viewModel.viewModelScope.launch {
+                viewModel.addPerson(context, navController)
+            }
+//            navController.popBackStack()
+        })
 
     Scaffold(
         topBar = {
@@ -146,7 +172,20 @@ fun AddPersonScreen(
                     }
                 },
                 navigationIcon = {
-                    BackButtonArrow(iconColor = appBarTextColor, navController)
+                    IconButton(onClick = {
+                        if (viewModel.isChanged()) {
+                            viewModel.showDialogState = true
+                        } else {
+                            navController.popBackStack()
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = appBarTextColor,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
                 },
                 actions = {
                     OutlinedButton(

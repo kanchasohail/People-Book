@@ -41,7 +41,6 @@ class HomeScreenViewModel : ViewModel() {
     var selectedTagItem by mutableStateOf("All")
 
     var isLoading by mutableStateOf(false)
-    var isTagExpanded by mutableStateOf(true)
 
     private val userDocumentAddress =
         db.collection("users").document(auth.currentUser?.uid.toString())
