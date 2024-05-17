@@ -2,6 +2,7 @@ package com.social.people_book.model.util
 
 
 import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -10,7 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
 @Composable
-fun LazyGridState.isScrollingUp(): Boolean {
+//fun LazyGridState.isScrollingUp(): Boolean {
+fun LazyStaggeredGridState.isScrollingUp(): Boolean {
     var previousIndex by remember(this) {
         mutableIntStateOf(firstVisibleItemIndex)
     }

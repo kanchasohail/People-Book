@@ -39,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.canhub.cropper.CropImageContract
@@ -47,11 +46,11 @@ import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.social.people_book.R
+import com.social.people_book.model.util.image_converters.compressImage
 import com.social.people_book.ui.common_views.ConfirmBackDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.model.util.image_converters.compressImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +83,8 @@ fun PersonDetailsEditingScreen(
             cropShape = CropImageView.CropShape.RECTANGLE,
             aspectRatioX = 1,
             aspectRatioY = 1,
-            scaleType = CropImageView.ScaleType.CENTER,
+//            scaleType = CropImageView.ScaleType.CENTER,
+            scaleType = CropImageView.ScaleType.CENTER_INSIDE,
             cornerShape = CropImageView.CropCornerShape.RECTANGLE,
             fixAspectRatio = true
         )

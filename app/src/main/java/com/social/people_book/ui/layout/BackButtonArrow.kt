@@ -1,6 +1,9 @@
 package com.social.people_book.ui.layout
 
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -18,7 +21,8 @@ fun BackButtonArrow(iconColor: Color, navController: NavHostController) {
         navController.navigateBack()
     }) {
         Icon(
-            painter = painterResource(id = R.drawable.back_arrow),
+//            painter = painterResource(id = R.drawable.back_arrow),
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = "Back",
             tint = iconColor,
             modifier = Modifier.size(28.dp)

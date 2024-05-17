@@ -9,10 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.CenterBox
@@ -53,7 +51,6 @@ fun SharedTransitionScope.SearchScreen(
         if (isDarkMode) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
     val textColor = if (isDarkMode) Color.White else Color.Black
 
-    val gridState = rememberLazyGridState()
 
     val searchBarText by viewModel.searchBarText.collectAsState()
     val persons by viewModel.searchedPersons.collectAsState()
@@ -106,23 +103,20 @@ fun SharedTransitionScope.SearchScreen(
 
                 if (isSearching) {
                     Box(
-                        modifier = Modifier.fillMaxSize(1f),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.fillMaxSize(1f), contentAlignment = Alignment.Center
                     ) {
                         LoadingIndicator()
                     }
                 } else {
-                    LazyVerticalGrid(
-                        state = gridState,
-                        columns = GridCells.Adaptive(150.dp),
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Adaptive(150.dp),
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         items(persons) {
-                            ItemCard(
-                                animatedVisibilityScope = animatedVisibilityScope,
+                            ItemCard(animatedVisibilityScope = animatedVisibilityScope,
                                 textColor = textColor,
                                 person = it,
                                 onClick = {
-                                    navController.popBackStack() // Pop the search screen
                                     navController.navigate(
                                         Screens.PersonDetailsGroup.withArgs(
                                             (it.id ?: 1).toString()
@@ -135,5 +129,5 @@ fun SharedTransitionScope.SearchScreen(
             }
         }
     }
-}
 
+}
