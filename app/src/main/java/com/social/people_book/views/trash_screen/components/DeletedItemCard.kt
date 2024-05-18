@@ -2,6 +2,7 @@ package com.social.people_book.views.trash_screen.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.R
 import com.social.people_book.model.room_database.Person
+import com.social.people_book.model.room_database.Tag
 import com.social.people_book.ui.layout.MyText
 
 @Composable
@@ -28,6 +30,7 @@ fun DeletedItemCard(
     modifier: Modifier = Modifier,
     person: Person,
     textColor: Color,
+    onClick: () -> Unit
 ) {
 
     Column(
@@ -35,6 +38,7 @@ fun DeletedItemCard(
             .padding(8.dp)
             .size(width = 150.dp, height = 250.dp)
             .border(.7.dp, textColor, shape = RoundedCornerShape(8.dp))
+            .clickable { onClick() }
     ) {
         if (person.image == null) {
             Icon(
@@ -50,20 +54,34 @@ fun DeletedItemCard(
             Image(
                 painter = rememberAsyncImagePainter(person.image),
                 modifier = Modifier
-                    .fillMaxWidth().padding(8.dp)
+                    .fillMaxWidth()
+                    .padding(8.dp)
                     .aspectRatio(1f)
                     .clip(RoundedCornerShape(8.dp)),
                 contentDescription = "person Image"
             )
         }
 
+        if (person.name.isNotEmpty()) {
+            MyText(
+                text = person.name,
+                color = textColor,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+        if (person.tag != Tag.None) {
+            MyText(
+                text = person.tag.name, color = textColor, fontSize = 17.sp,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        } else {
+            MyText(
+                text = "No Tag", color = textColor.copy(.7f), fontSize = 17.sp,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
 
-        MyText(text = person.name, color = textColor, fontSize = 18.sp, modifier = Modifier.padding(8.dp))
-
-        MyText(
-            text = "Tag", color = textColor, fontSize = 17.sp,
-            modifier = Modifier.padding(start = 8.dp)
-        )
         Spacer(modifier = Modifier.height(8.dp))
     }
 }

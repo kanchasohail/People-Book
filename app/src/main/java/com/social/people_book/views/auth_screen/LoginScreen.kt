@@ -104,7 +104,12 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
         ) {
 
 
-            MyText(text = "Welcome Back!", fontSize = 38.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            MyText(
+                text = "Welcome Back!",
+                fontSize = 38.sp,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
 
             Column(
                 modifier = Modifier
@@ -113,30 +118,30 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                 verticalArrangement = Arrangement.Top
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    if (!viewModel.isLoading) {
-                        GoogleSignUpButton(text = "Login") {
-                            viewModel.isLoading = true
-                            client.beginSignIn(request).addOnCompleteListener { task ->
-                                viewModel.isLoading = false
-                                if (task.isSuccessful) {
-                                    val intentSender = task.result.pendingIntent.intentSender
-                                    val intentSenderRequest =
-                                        IntentSenderRequest.Builder(intentSender).build()
-                                    signInResultLauncher.launch(intentSenderRequest)
-                                } else {
-                                    Toast.makeText(
-                                        context,
-                                        task.exception?.message.toString(),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+//                    if (!viewModel.isLoading) {
+                    GoogleSignUpButton(text = "Login", viewModel.isLoading) {
+                        viewModel.isLoading = true
+                        client.beginSignIn(request).addOnCompleteListener { task ->
+                            viewModel.isLoading = false
+                            if (task.isSuccessful) {
+                                val intentSender = task.result.pendingIntent.intentSender
+                                val intentSenderRequest =
+                                    IntentSenderRequest.Builder(intentSender).build()
+                                signInResultLauncher.launch(intentSenderRequest)
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    task.exception?.message.toString(),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
-                    } else {
-                        CenterBox {
-                            LoadingIndicator()
-                        }
                     }
+//                    } else {
+//                        CenterBox {
+//                            LoadingIndicator()
+//                        }
+//                    }
 
                     DividerWithText()
                 }
@@ -248,22 +253,22 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Login button
-                if (!viewModel.isLoading) {
-                    Button(
-                        onClick = {
-                            viewModel.login(navController, context)
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(45.dp)
-                    ) {
-                        MyText("Login", fontSize = 18.sp)
-                    }
-                } else {
-                    CenterBox {
-                        LoadingIndicator()
-                    }
+//                if (!viewModel.isLoading) {
+                Button(
+                    onClick = {
+                        viewModel.login(navController, context)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(45.dp)
+                ) {
+                    MyText(if (viewModel.isLoading) "Loading..." else "Login", fontSize = 18.sp)
                 }
+//                } else {
+//                    CenterBox {
+//                        LoadingIndicator()
+//                    }
+//                }
 
                 Spacer(modifier = Modifier.height(16.dp))
                 CenterBox {
@@ -271,7 +276,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                         fontSize = 16.sp,
                         modifier = Modifier.clickable {
                             navController.popBackStack()
-                    })
+                        })
                 }
             }
         }

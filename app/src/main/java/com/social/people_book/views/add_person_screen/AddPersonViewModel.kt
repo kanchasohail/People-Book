@@ -17,8 +17,9 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
 import com.social.people_book.model.room_database.Person
-import com.social.people_book.navigation.Screens
+import com.social.people_book.model.room_database.Tag
 import com.social.people_book.model.util.image_converters.getBitmapFromUri
+import com.social.people_book.navigation.Screens
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -29,10 +30,14 @@ class AddPersonViewModel : ViewModel() {
 
     private val personDao = MainActivity.db.personDao()
 
+    val tagsList = Tag.values()
+
     var name by mutableStateOf("")
     var number by mutableStateOf("")
     var email by mutableStateOf("")
     var about by mutableStateOf("")
+    var isFavorite by mutableStateOf(false)
+    var selectedTag by mutableStateOf(Tag.None)
 
     var selectedImage by mutableStateOf<Uri?>(null)
 
@@ -40,8 +45,19 @@ class AddPersonViewModel : ViewModel() {
 
     var showDialogState by mutableStateOf(false)
 
+    var isDropDownOpen by mutableStateOf(false)
+
 
     suspend fun addPerson(context: Context, navController: NavController) {
+        if (name == "" && number == "" && email == "" && about == "" && selectedImage == null) {
+            Toast.makeText(
+                context,
+                "Please enter something to save this person!",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
         val roomPerson = Person(
             id = null,
             name = name,
@@ -49,6 +65,8 @@ class AddPersonViewModel : ViewModel() {
             about = about,
             email = email,
             isDeleted = false,
+            isFavorite = isFavorite,
+            tag = selectedTag,
             image = selectedImage?.let { getBitmapFromUri(it, context) }
         )
         viewModelScope.launch {
@@ -66,17 +84,7 @@ class AddPersonViewModel : ViewModel() {
         navController: NavController,
         personId: Long
     ) {
-        if (name == "" && number == "" && email == "" && about == "" && selectedImage == null) {
-            Toast.makeText(
-                context,
-                "Please enter something to save this person!",
-                Toast.LENGTH_SHORT
-            ).show()
-            return
-        }
-
         isLoading = true
-
         runBlocking {
             val thisDocument = db.collection("users")
                 .document(auth.currentUser?.uid.toString())

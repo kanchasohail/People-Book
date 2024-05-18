@@ -12,11 +12,15 @@ interface PersonDao {
     @Query("SELECT * FROM person WHERE is_deleted = :isDeleted")
     fun getAll(isDeleted: Boolean = false): Flow<List<Person>>
 
+
+    @Query("SELECT * FROM person WHERE is_favorite = :isFavorite")
+    fun getAllFavorite(isFavorite: Boolean = true): Flow<List<Person>>
+
     @Query("SELECT * FROM person WHERE is_deleted = :isDeleted")
     fun getAllDeletedPerson(isDeleted: Boolean = true): Flow<List<Person>>
 
     @Query("SELECT * FROM person WHERE id = :id LIMIT 1")
-    fun getPersonById(id: Int): Person
+    fun getPersonById(id: Long): Person
 
     @Update
     suspend fun updatePerson(person: Person)
@@ -26,6 +30,9 @@ interface PersonDao {
 
     @Query("UPDATE person SET is_deleted = :isDeleted WHERE id = :personId")
     suspend fun deletePerson(personId: Long, isDeleted: Boolean = true)
+
+    @Query("UPDATE person SET is_deleted= :isDeleted WHERE id = :personId")
+    suspend fun restorePerson(personId: Long, isDeleted: Boolean = true)
 
     @Query("SELECT id FROM person WHERE is_deleted = :isDeleted")
     suspend fun getDeletedIds(isDeleted: Boolean = true): List<Long>

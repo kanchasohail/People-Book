@@ -65,6 +65,10 @@ class AuthViewModel : ViewModel() {
 
 
     fun signUp(navController: NavController, context: Context) {
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(context, "Invalid Email or Password", Toast.LENGTH_SHORT).show()
+            return
+        }
         isLoading = true
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             isLoading = false

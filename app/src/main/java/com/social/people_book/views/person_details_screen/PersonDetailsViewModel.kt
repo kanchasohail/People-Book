@@ -11,6 +11,7 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.app.ActivityCompat
@@ -28,9 +29,16 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
 import com.social.people_book.model.room_database.Person
+import com.social.people_book.model.room_database.Tag
+import com.social.people_book.model.room_database.deleted_person.DeletedPerson
 import com.social.people_book.model.util.image_converters.getBitmapFromUri
 import com.social.people_book.model.util.workers.DeleteTrashPersonWork
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.sql.Date
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class PersonDetailsViewModel : ViewModel() {
@@ -38,15 +46,20 @@ class PersonDetailsViewModel : ViewModel() {
     private val auth = Firebase.auth
     private val storage = Firebase.storage
     private val personDao = MainActivity.db.personDao()
+    private val deletedPersonDao = MainActivity.db.DeletedPersonDao()
+    val tagsList = Tag.values()
 
-    var savedPerson = Person(null, "", "", "", "", null, false)
+    var savedPerson = Person(null, "", "", "", "", Tag.None, null, false, false)
 
 
-    var thisPerson by mutableStateOf(Person(null, "", "", "", "", null, false))
+    var thisPerson by mutableStateOf(Person(null, "", "", "", "", Tag.None, null, false, false))
     var name by mutableStateOf("")
     var number by mutableStateOf("")
     var email by mutableStateOf("")
     var about by mutableStateOf("")
+    var isFavorite by mutableStateOf(false)
+
+    var selectedTag by mutableStateOf(Tag.None)
 
     var selectedImage by mutableStateOf<Uri?>(null)
 //    var downloadedImage by mutableStateOf<ByteArray?>(null)
@@ -54,6 +67,7 @@ class PersonDetailsViewModel : ViewModel() {
 
     var isLoading by mutableStateOf(false)
     var showDialogState by mutableStateOf(false)
+    var isDropDownOpen by mutableStateOf(false)
 
 
     fun loadForEditing() {
@@ -61,6 +75,8 @@ class PersonDetailsViewModel : ViewModel() {
         number = thisPerson.number.toString()
         email = thisPerson.email.toString()
         about = thisPerson.about.toString()
+        isFavorite = thisPerson.isFavorite
+        selectedTag = thisPerson.tag
     }
 
     fun isChanged(): Boolean {
@@ -71,11 +87,34 @@ class PersonDetailsViewModel : ViewModel() {
             email = email,
             about = about,
             image = savedPerson.image,
-            isDeleted = savedPerson.isDeleted
+            isDeleted = savedPerson.isDeleted,
+            isFavorite = savedPerson.isFavorite,
+            tag = savedPerson.tag
         )
         return savedPerson != p || selectedImage != null
     }
 
+//    fun markFavorite(isFavorite: Boolean) {
+//        isLoading = true
+//        viewModelScope.launch {
+//            runBlocking {
+//                personDao.updatePerson(
+//                    Person(
+//                        thisPerson.id,
+//                        thisPerson.name,
+//                        thisPerson.number,
+//                        thisPerson.email,
+//                        thisPerson.about,
+//                        thisPerson.tag,
+//                        thisPerson.image,
+//                        isFavorite,
+//                        thisPerson.isDeleted
+//                    )
+//                )
+//                isLoading = false
+//            }
+//        }
+//    }
 
     fun makePhoneCall(context: Context, number: String) {
         if (ContextCompat.checkSelfPermission(
@@ -162,6 +201,10 @@ class PersonDetailsViewModel : ViewModel() {
     fun deletePerson(personId: Long, context: Context, navController: NavController) {
         viewModelScope.launch {
             personDao.deletePerson(personId)
+            val thisDate = Calendar.getInstance().timeInMillis
+            val deletedPerson =
+                DeletedPerson(id = null, personId = personId, deletedDate = Date(thisDate))
+            deletedPersonDao.deletePerson(deletedPerson)
         }
         scheduleDeleteWork(personId, context)
         navController.popBackStack()
@@ -257,7 +300,9 @@ class PersonDetailsViewModel : ViewModel() {
             email = email,
             about = about,
             image = selectedImage?.let { getBitmapFromUri(it, context) },
-            isDeleted = false
+            isDeleted = false,
+            isFavorite = isFavorite,
+            tag = selectedTag
         )
         viewModelScope.launch {
             personDao.updatePerson(person)

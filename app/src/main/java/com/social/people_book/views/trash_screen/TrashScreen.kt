@@ -1,4 +1,5 @@
 package com.social.people_book.views.trash_screen
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.social.people_book.MainViewModel
+import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmEmptyTrashDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
@@ -42,12 +44,12 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrashScreen(
+    viewModel: TrashScreenViewModel,
     mainViewModel: MainViewModel,
     navController: NavHostController,
     isDarkMode: Boolean
 ) {
     val context = LocalContext.current
-    val viewModel = viewModel<TrashScreenViewModel>()
     val deletedPeople =
         mainViewModel.personDao.getAllDeletedPerson().collectAsState(initial = emptyList())
 
@@ -132,8 +134,11 @@ fun TrashScreen(
                     items(deletedPeople.value) {
                         DeletedItemCard(
                             textColor = textColor,
-                             person = it,
-                        )
+                            person = it,
+                        ) {
+                            it.id?.let { it1 -> viewModel.loadPerson(it1) }
+                            navController.navigate(Screens.TrashPersonDetailsScreen.route)
+                        }
                     }
                 }
             }

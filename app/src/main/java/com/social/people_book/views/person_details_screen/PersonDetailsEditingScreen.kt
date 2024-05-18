@@ -8,20 +8,22 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,10 +37,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.canhub.cropper.CropImageContract
@@ -49,8 +51,9 @@ import com.social.people_book.R
 import com.social.people_book.model.util.image_converters.compressImage
 import com.social.people_book.ui.common_views.ConfirmBackDialog
 import com.social.people_book.ui.layout.BackButtonArrow
-import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.views.person_details_screen.components.DropDownMenuEditing
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,18 +81,19 @@ fun PersonDetailsEditingScreen(
     val avatarPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-
-        val cropImageOptions = CropImageOptions(
-            cropShape = CropImageView.CropShape.RECTANGLE,
-            aspectRatioX = 1,
-            aspectRatioY = 1,
+        if (uri != null) {
+            val cropImageOptions = CropImageOptions(
+                cropShape = CropImageView.CropShape.RECTANGLE,
+                aspectRatioX = 1,
+                aspectRatioY = 1,
 //            scaleType = CropImageView.ScaleType.CENTER,
-            scaleType = CropImageView.ScaleType.CENTER_INSIDE,
-            cornerShape = CropImageView.CropCornerShape.RECTANGLE,
-            fixAspectRatio = true
-        )
-        val cropOptions = CropImageContractOptions(uri, cropImageOptions)
-        avatarCropLauncher.launch(cropOptions)
+                scaleType = CropImageView.ScaleType.CENTER_INSIDE,
+                cornerShape = CropImageView.CropCornerShape.RECTANGLE,
+                fixAspectRatio = true
+            )
+            val cropOptions = CropImageContractOptions(uri, cropImageOptions)
+            avatarCropLauncher.launch(cropOptions)
+        }
 
     }
 
@@ -105,7 +109,7 @@ fun PersonDetailsEditingScreen(
     BackHandler {
         if (viewModel.isChanged()) {
             viewModel.showDialogState = true
-        }else {
+        } else {
             navController.popBackStack()
         }
     }
@@ -116,23 +120,46 @@ fun PersonDetailsEditingScreen(
                     containerColor = appBarBackGroundColor,
                 ),
                 title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        MyText(
-                            text = "Tag : ",
-                            color = appBarTextColor,
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                        MyText(
-                            text = "No Tag",
-                            color = appBarTextColor,
-                            fontSize = 21.sp,
-                        )
-                    }
+//                    Row(verticalAlignment = Alignment.CenterVertically) {
+//                        MyText(
+//                            text = "Tag : ",
+//                            color = appBarTextColor,
+//                            fontSize = 22.sp,
+//                            fontWeight = FontWeight.SemiBold
+//                        )
+                    DropDownMenuEditing(viewModel = viewModel)
+//                    }
                 },
                 navigationIcon = {
                     BackButtonArrow(iconColor = appBarTextColor, navController)
                 },
+                actions = {
+                    IconButton(onClick = {
+                        viewModel.isFavorite = !viewModel.isFavorite
+                    }) {
+                        Icon(
+                            painter = painterResource(id = if (viewModel.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outlined),
+                            modifier = Modifier.size(30.dp),
+                            contentDescription = "Favorite"
+                        )
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            if (!viewModel.isLoading) {
+                                viewModel.viewModelScope.launch {
+                                    viewModel.updatePerson(context, navController)
+                                }
+                            }
+                        },
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        MyText(
+                            text = if (!viewModel.isLoading) "Save" else "Saving...",
+                            color = appBarTextColor,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
             )
         }
     ) { paddingValues ->
@@ -142,6 +169,7 @@ fun PersonDetailsEditingScreen(
                 .padding(
                     paddingValues
                 )
+                .verticalScroll(rememberScrollState())
         ) {
             ConfirmBackDialog(
                 showDialog = viewModel.showDialogState,
@@ -195,13 +223,15 @@ fun PersonDetailsEditingScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.BottomEnd
                     ) {
-                        IconButton(onClick = {
+                        OutlinedButton(onClick = {
                             avatarPickerLauncher.launch("image/*")
                         }) {
+                            MyText(text = "Add", fontSize = 18.sp)
+                            Spacer(modifier = Modifier.width(6.dp))
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_camera),
                                 contentDescription = "addImage",
-                                modifier = Modifier.size(28.dp)
+                                modifier = Modifier.size(24.dp)
                             )
                         }
                     }
@@ -254,25 +284,6 @@ fun PersonDetailsEditingScreen(
                     label = { Text(text = "About") },
                     modifier = Modifier.padding(8.dp)
                 )
-
-                Spacer(modifier = Modifier.weight(1f))
-                Button(
-                    onClick = {
-                        if (!viewModel.isLoading) {
-                            viewModel.updatePerson(context, navController)
-                        }
-                    },
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                ) {
-                    if (!viewModel.isLoading) {
-                        MyText(text = "Save", fontSize = 16.sp)
-                    } else {
-                        LoadingIndicator()
-                    }
-                }
-
             }
         }
     }
