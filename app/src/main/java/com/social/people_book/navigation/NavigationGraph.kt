@@ -19,6 +19,7 @@ import com.social.people_book.views.auth_screen.AuthViewModel
 import com.social.people_book.views.auth_screen.ForgotPasswordScreen
 import com.social.people_book.views.auth_screen.LoginScreen
 import com.social.people_book.views.auth_screen.SignUpScreen
+import com.social.people_book.views.home_screen.FavoritesScreen
 import com.social.people_book.views.home_screen.HomeScreen
 import com.social.people_book.views.home_screen.HomeScreenViewModel
 import com.social.people_book.views.home_screen.SearchScreen
@@ -28,7 +29,9 @@ import com.social.people_book.views.person_details_screen.PersonDetailsViewModel
 import com.social.people_book.views.premium_screen.PremiumScreen
 import com.social.people_book.views.settings_screen.SettingsScreen
 import com.social.people_book.views.splash_screen.SplashScreen
+import com.social.people_book.views.trash_screen.TrashPersonDetailsScreen
 import com.social.people_book.views.trash_screen.TrashScreen
+import com.social.people_book.views.trash_screen.TrashScreenViewModel
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @RequiresApi(Build.VERSION_CODES.P)
@@ -69,6 +72,18 @@ fun SharedTransitionScope.NavigationGraph(
             composable(Screens.SearchScreen.route) { entry ->
                 val viewModel = entry.sharedViewModel<HomeScreenViewModel>(navController)
                 SearchScreen(
+                    navController = navController,
+                    animatedVisibilityScope = this,
+                    viewModel = viewModel,
+                    isDarkMode = isDarkMode
+                )
+            }
+
+            //Favorites Screen
+            composable(Screens.FavoritesScreen.route) { entry ->
+                val viewModel =
+                    entry.sharedViewModel<HomeScreenViewModel>(navController = navController)
+                FavoritesScreen(
                     navController = navController,
                     animatedVisibilityScope = this,
                     viewModel = viewModel,
@@ -145,9 +160,29 @@ fun SharedTransitionScope.NavigationGraph(
             SettingsScreen(mainViewModel, navController)
         }
 
-        //Trash Screen
-        composable(Screens.TrashScreen.route) {
-            TrashScreen(mainViewModel, navController, isDarkMode)
+        // Trash Navigation Group
+        navigation(
+            route = Screens.TrashScreenGroup.route,
+            startDestination = Screens.TrashScreen.route
+        ) {
+
+            //Trash Screen
+            composable(Screens.TrashScreen.route) { entry ->
+                val viewModel = entry.sharedViewModel<TrashScreenViewModel>(navController)
+                TrashScreen(viewModel, mainViewModel, navController, isDarkMode)
+            }
+
+            //Trash Person Details Screen
+            composable(Screens.TrashPersonDetailsScreen.route) { entry ->
+                val viewModel = entry.sharedViewModel<TrashScreenViewModel>(navController)
+
+                TrashPersonDetailsScreen(
+                    navController = navController,
+                    animatedVisibilityScope = this,
+                    isDarkMode = isDarkMode,
+                    viewModel = viewModel
+                )
+            }
         }
 
     }

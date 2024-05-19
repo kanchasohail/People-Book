@@ -1,4 +1,5 @@
-package com.social.people_book.views.person_details_screen
+package com.social.people_book.views.trash_screen
+
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -50,6 +51,7 @@ import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.redColor
+import com.social.people_book.views.person_details_screen.PersonDetailsViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -60,33 +62,13 @@ import kotlinx.coroutines.launch
     ExperimentalSharedTransitionApi::class
 )
 @Composable
-fun SharedTransitionScope.PersonDetailsScreen(
+fun SharedTransitionScope.TrashPersonDetailsScreen(
     navController: NavHostController,
     animatedVisibilityScope: AnimatedVisibilityScope,
     isDarkMode: Boolean,
-    personId: String,
-    viewModel: PersonDetailsViewModel,
-    mainViewModel: MainViewModel
+    viewModel: TrashScreenViewModel,
 ) {
     val context = LocalContext.current
-    fun loadPerson(id: Long) {
-        val roomPerson = mainViewModel.personDao.getPersonById(id)
-        viewModel.thisPerson = roomPerson
-        viewModel.savedPerson = roomPerson
-        viewModel.isFavorite = roomPerson.isFavorite
-        viewModel.selectedImage = null
-
-//        viewModel.downloadedImage =
-//            roomPerson.image?.let { getBytesFromBitmap(it, Bitmap.CompressFormat.JPEG, 100) }
-    }
-
-
-    LaunchedEffect(key1 = Unit) {
-        GlobalScope.launch(Dispatchers.IO) {
-            loadPerson(personId.toLong())
-        }
-    }
-
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
@@ -137,7 +119,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                 onDismiss = { viewModel.showDialogState = false },
 //                onConfirm = { viewModel.deletePerson(personId, context, navController) })
                 onConfirm = {
-                    viewModel.deletePerson(personId.toLong(), context, navController)
+//                    viewModel.deletePerson(personId, context, navController)
                 })
 
 
@@ -176,7 +158,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .sharedElement(
-                                        state = rememberSharedContentState(key = "blank_profile$personId"),
+                                        state = rememberSharedContentState(key = "blank_profile${viewModel.thisPerson.id}"),
                                         animatedVisibilityScope = animatedVisibilityScope,
                                         boundsTransform = { _, _ ->
                                             tween(durationMillis = 1000)
@@ -191,7 +173,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                                 ),
                                 modifier = Modifier
                                     .sharedElement(
-                                        state = rememberSharedContentState(key = "user_profile$personId"),
+                                        state = rememberSharedContentState(key = "user_profile${viewModel.thisPerson.id}"),
                                         animatedVisibilityScope = animatedVisibilityScope,
                                         boundsTransform = { _, _ ->
                                             tween(durationMillis = 1000)
@@ -209,7 +191,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                         modifier = Modifier
                             .padding(8.dp)
                             .sharedElement(
-                                state = rememberSharedContentState(key = "user_name$personId"),
+                                state = rememberSharedContentState(key = "user_name${viewModel.thisPerson.name}"),
                                 animatedVisibilityScope = animatedVisibilityScope,
                                 boundsTransform = { _, _ ->
                                     tween(durationMillis = 1000)
@@ -285,9 +267,13 @@ fun SharedTransitionScope.PersonDetailsScreen(
                                 contentDescription = "Copy"
                             )
                         }
-                        if (viewModel.isValidEmail(viewModel.thisPerson.email!!)){
+                        if (viewModel.isValidEmail(viewModel.thisPerson.email!!)) {
                             IconButton(onClick = {
-                                viewModel.openEmailComposer(context, viewModel.thisPerson.email!!, "")
+                                viewModel.openEmailComposer(
+                                    context,
+                                    viewModel.thisPerson.email!!,
+                                    ""
+                                )
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.MailOutline,
@@ -327,9 +313,15 @@ fun SharedTransitionScope.PersonDetailsScreen(
 
                     Button(modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            navController.navigate(Screens.PersonDetailsEditingScreen.route)
+                            viewModel.thisPerson.id?.let {
+                                viewModel.restorePerson(
+                                    it,
+                                    context,
+                                    navController
+                                )
+                            }
                         }) {
-                        MyText(text = "Edit", fontSize = 17.sp)
+                        MyText(text = "Restore", fontSize = 17.sp)
                     }
                 }
             }

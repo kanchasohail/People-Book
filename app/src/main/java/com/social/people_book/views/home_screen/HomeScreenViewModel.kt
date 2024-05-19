@@ -11,6 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.social.people_book.MainActivity
 import com.social.people_book.model.room_database.Person
+import com.social.people_book.model.room_database.Tag
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +31,8 @@ class HomeScreenViewModel : ViewModel() {
     private val auth = Firebase.auth
     private val personDao = MainActivity.db.personDao()
 
+    val tagsList = Tag.values()
+
     // Search Field Logic
     private val _searchText = MutableStateFlow("")
     val searchBarText = _searchText.asStateFlow()
@@ -38,7 +41,8 @@ class HomeScreenViewModel : ViewModel() {
     val isSearching = _isSearching.asStateFlow()
 
 
-    var selectedTagItem by mutableStateOf("All")
+    //    var selectedTagItem by mutableStateOf("All")
+    var selectedTagItem by mutableStateOf(Tag.None)
 
     var isLoading by mutableStateOf(false)
 
@@ -52,15 +56,32 @@ class HomeScreenViewModel : ViewModel() {
         _searchText.value = text
     }
 
-    val persons = MutableStateFlow<List<Person>>(emptyList())
+    private val persons = MutableStateFlow<List<Person>>(emptyList())
 
+    var filteredPersons = MutableStateFlow<List<Person>>(emptyList())
+
+
+    fun filterPerson(tag: Tag) {
+        if (tag == Tag.None) {
+            filteredPersons.value = emptyList()
+            filteredPersons.value = persons.value
+        } else {
+            filteredPersons.value = emptyList()
+            filteredPersons.value = persons.value.filter { it.tag == tag }
+        }
+    }
+
+    fun getFavoritePersons(): List<Person> {
+        return persons.value.filter { it.isFavorite }
+    }
 
 
     @OptIn(FlowPreview::class)
     val searchedPersons = searchBarText.debounce(500L).onEach { _isSearching.update { true } }
         .combine(persons) { text, persons ->
             if (text.isBlank()) {
-                persons
+//                persons
+                emptyList()
             } else {
                 delay(1000L) //Just to simulate a delay
                 persons.filter {
@@ -70,7 +91,8 @@ class HomeScreenViewModel : ViewModel() {
         }.onEach { _isSearching.update { false } }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
-            persons.value
+//            persons.value
+            emptyList()
         )
 
 
@@ -78,11 +100,12 @@ class HomeScreenViewModel : ViewModel() {
         viewModelScope.launch {
             personDao.getAll().collectLatest { personList ->
                 persons.value = personList
+                filteredPersons.value = personList
             }
         }
     }
 
-    private fun loadPersons() : List<Person> {
+    private fun loadPersons(): List<Person> {
         isLoading = true
         val dbItems = mutableStateListOf<Person>()
         userDocumentAddress.collection("persons")
@@ -95,6 +118,8 @@ class HomeScreenViewModel : ViewModel() {
                         email = document["email"].toString(),
                         about = null,
                         isDeleted = document["is_deleted"].toString() == "true",
+                        isFavorite = document["is_favorite"].toString() == "true",
+                        tag = tagsList.find { it.name == document["tag"].toString() } ?: Tag.None,
                         image = null
 
                     )
@@ -117,8 +142,6 @@ class HomeScreenViewModel : ViewModel() {
 //
 //        return dbItems
 //    }
-
-
 
 
 }

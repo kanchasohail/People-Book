@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -51,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.social.people_book.MainViewModel
+import com.social.people_book.model.room_database.Tag
 import com.social.people_book.model.util.isScrollingUp
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.CenterBox
@@ -83,7 +83,8 @@ fun SharedTransitionScope.HomeScreen(
     val gridState = rememberLazyStaggeredGridState()
 
 
-    val persons by viewModel.persons.collectAsState()
+//    val persons by viewModel.persons.collectAsState()
+    val persons = viewModel.filteredPersons.collectAsState().value
     val isSearching by viewModel.isSearching.collectAsState()
 
     val localCoroutineScope = rememberCoroutineScope()
@@ -152,11 +153,11 @@ fun SharedTransitionScope.HomeScreen(
                             )
                         }
                         IconButton(onClick = {
-
+                            navController.navigate(Screens.FavoritesScreen.route)
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Star,
-                                contentDescription = "More",
+                                contentDescription = "Favorites",
                                 tint = appBarTextColor,
                                 modifier = Modifier.size(28.dp)
                             )
@@ -195,13 +196,24 @@ fun SharedTransitionScope.HomeScreen(
                     FlowRow(
                         verticalArrangement = Arrangement.spacedBy((-8).dp),
                     ) {
-                        viewModel.tags.forEach { tagItem ->
+//                        viewModel.tags.forEach { tagItem ->
+//                            TagsChip(
+//                                chipText = tagItem,
+//                                textColor = textColor,
+//                                isSelected = tagItem == viewModel.selectedTagItem
+//                            ) {
+//                                viewModel.selectedTagItem = tagItem
+//                            }
+//                        }
+
+                        viewModel.tagsList.map {
                             TagsChip(
-                                chipText = tagItem,
+                                chipText = if (it == Tag.None) "All" else it.name,
                                 textColor = textColor,
-                                isSelected = tagItem == viewModel.selectedTagItem
+                                isSelected = it == viewModel.selectedTagItem
                             ) {
-                                viewModel.selectedTagItem = tagItem
+                                viewModel.selectedTagItem = it
+                                viewModel.filterPerson(it)
                             }
                         }
                     }

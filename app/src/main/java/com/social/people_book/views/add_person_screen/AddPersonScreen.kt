@@ -8,6 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -65,6 +68,7 @@ import com.social.people_book.model.util.image_converters.compressImage
 import com.social.people_book.ui.common_views.ConfirmSaveOrExitDialog
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.views.add_person_screen.components.DropDownMenu
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -107,19 +111,19 @@ fun AddPersonScreen(
     val avatarPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-
-        val cropImageOptions = CropImageOptions(
-            cropShape = CropImageView.CropShape.RECTANGLE,
-            aspectRatioX = 1,
-            aspectRatioY = 1,
+        if (uri != null) {
+            val cropImageOptions = CropImageOptions(
+                cropShape = CropImageView.CropShape.RECTANGLE,
+                aspectRatioX = 1,
+                aspectRatioY = 1,
 //            scaleType = CropImageView.ScaleType.CENTER,
-            scaleType = CropImageView.ScaleType.CENTER_INSIDE,
-            cornerShape = CropImageView.CropCornerShape.RECTANGLE,
-            fixAspectRatio = true
-        )
-        val cropOptions = CropImageContractOptions(uri, cropImageOptions)
-        avatarCropLauncher.launch(cropOptions)
-
+                scaleType = CropImageView.ScaleType.CENTER_INSIDE,
+                cornerShape = CropImageView.CropCornerShape.RECTANGLE,
+                fixAspectRatio = true
+            )
+            val cropOptions = CropImageContractOptions(uri, cropImageOptions)
+            avatarCropLauncher.launch(cropOptions)
+        }
     }
 
     val appBarBackGroundColor =
@@ -157,19 +161,20 @@ fun AddPersonScreen(
                     containerColor = appBarBackGroundColor,
                 ),
                 title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        MyText(
-                            text = "Tag : ",
-                            color = appBarTextColor,
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                        MyText(
-                            text = "No Tag",
-                            color = appBarTextColor,
-                            fontSize = 21.sp,
-                        )
-                    }
+//                    Row(verticalAlignment = Alignment.CenterVertically) {
+//                        MyText(
+//                            text = "Tag : ",
+//                            color = appBarTextColor,
+//                            fontSize = 22.sp,
+//                            fontWeight = FontWeight.SemiBold
+//                        )
+//                        MyText(
+//                            text = "No Tag",
+//                            color = appBarTextColor,
+//                            fontSize = 21.sp,
+//                        )
+                    DropDownMenu(viewModel = viewModel)
+//                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -188,6 +193,15 @@ fun AddPersonScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = {
+                        viewModel.isFavorite = !viewModel.isFavorite
+                    }) {
+                        Icon(
+                            painter = painterResource(id = if (viewModel.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outlined),
+                            modifier = Modifier.size(30.dp),
+                            contentDescription = "Favorite"
+                        )
+                    }
                     OutlinedButton(
                         onClick = {
                             if (!viewModel.isLoading) {
@@ -198,11 +212,11 @@ fun AddPersonScreen(
                         },
                         modifier = Modifier.padding(8.dp)
                     ) {
-                        if (!viewModel.isLoading) {
-                            MyText(text = "Save", color = appBarTextColor, fontSize = 16.sp)
-                        } else {
-                            LoadingIndicator()
-                        }
+                        MyText(
+                            text = if (!viewModel.isLoading) "Save" else "Saving...",
+                            color = appBarTextColor,
+                            fontSize = 16.sp
+                        )
                     }
                 }
             )
@@ -249,6 +263,7 @@ fun AddPersonScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.BottomEnd
                     ) {
+
                         OutlinedButton(onClick = {
                             avatarPickerLauncher.launch("image/*")
                         }) {

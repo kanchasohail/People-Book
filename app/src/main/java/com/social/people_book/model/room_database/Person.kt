@@ -12,7 +12,9 @@ data class Person(
     @ColumnInfo(name = "number") val number: String?,
     @ColumnInfo(name = "email") val email: String?,
     @ColumnInfo(name = "about") val about: String?,
+    @ColumnInfo(name = "tag") val tag: Tag,
     @ColumnInfo(name = "image") val image: Bitmap?,
+    @ColumnInfo(name = "is_favorite") val isFavorite: Boolean,
     @ColumnInfo(name = "is_deleted") val isDeleted: Boolean
 ) {
     fun doesMatchSearchQuery(query: String): Boolean {
@@ -27,4 +29,11 @@ data class Person(
         }
     }
 
+}
+
+
+enum class Tag {
+    None,
+    Work, School, Family, Friend,
+    Student, Teacher, Staff, Neighbour
 }

@@ -22,7 +22,7 @@ import com.social.people_book.R
 import com.social.people_book.ui.layout.MyText
 
 @Composable
-fun GoogleSignUpButton(text: String , onClick: () -> Unit) {
+fun GoogleSignUpButton(text: String, isLoading: Boolean, onClick: () -> Unit) {
     Button(
         onClick = { onClick() },
         modifier = Modifier
@@ -36,10 +36,17 @@ fun GoogleSignUpButton(text: String , onClick: () -> Unit) {
                 .size(32.dp)
                 .padding(end = 8.dp)
         )
-        MyText(
-            text = "$text with Google",
-            fontSize = 18.sp,
-        )
+        if (!isLoading) {
+            MyText(
+                text = "$text with Google",
+                fontSize = 18.sp,
+            )
+        } else {
+            MyText(
+                text = "Loading...",
+                fontSize = 18.sp,
+            )
+        }
     }
 }
 

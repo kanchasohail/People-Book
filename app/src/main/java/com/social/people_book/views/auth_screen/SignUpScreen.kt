@@ -103,7 +103,12 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                 .padding(paddingValues)
         ) {
 
-            MyText(text = "Create an Account!", fontSize = 38.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            MyText(
+                text = "Create an Account!",
+                fontSize = 38.sp,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
             Spacer(modifier = Modifier.height(10.dp))
 
             Column(
@@ -113,25 +118,30 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
 //                verticalArrangement = Arrangement.Center
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    if (!viewModel.isLoading) {
-                        GoogleSignUpButton(text = "Signup") {
-                            viewModel.isLoading = true
-                            client.beginSignIn(request).addOnCompleteListener { task ->
-                                viewModel.isLoading = false
-                                if (task.isSuccessful) {
-                                    val intentSender = task.result.pendingIntent.intentSender
-                                    val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
-                                    signInResultLauncher.launch(intentSenderRequest)
-                                } else {
-                                    Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT).show()
-                                }
+//                    if (!viewModel.isLoading) {
+                    GoogleSignUpButton(text = "Signup", isLoading = viewModel.isLoading) {
+                        viewModel.isLoading = true
+                        client.beginSignIn(request).addOnCompleteListener { task ->
+                            viewModel.isLoading = false
+                            if (task.isSuccessful) {
+                                val intentSender = task.result.pendingIntent.intentSender
+                                val intentSenderRequest =
+                                    IntentSenderRequest.Builder(intentSender).build()
+                                signInResultLauncher.launch(intentSenderRequest)
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    task.exception?.message.toString(),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
-                    } else {
-                        CenterBox {
-                            LoadingIndicator()
-                        }
                     }
+//                    } else {
+//                        CenterBox {
+//                            LoadingIndicator()
+//                        }
+//                    }
 
                     DividerWithText()
                 }
@@ -250,7 +260,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                 }
 
                 // Login button
-                if (!viewModel.isLoading) {
+//                if (!viewModel.isLoading) {
                     Button(
                         onClick = {
                             viewModel.signUp(navController, context)
@@ -259,13 +269,16 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                             .fillMaxWidth()
                             .height(45.dp)
                     ) {
-                        MyText("SignUp", fontSize = 18.sp)
+                        MyText(
+                            if (!viewModel.isLoading) "SignUp" else "Loading...",
+                            fontSize = 18.sp
+                        )
                     }
-                } else {
-                    CenterBox {
-                        LoadingIndicator()
-                    }
-                }
+//                } else {
+//                    CenterBox {
+//                        LoadingIndicator()
+//                    }
+//                }
 
                 Spacer(modifier = Modifier.height(16.dp))
                 CenterBox {
@@ -291,7 +304,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                                 start = offset,
                                 end = offset
                             ).firstOrNull()?.let {
-                               navController.navigate(Screens.LoginScreen.route)
+                                navController.navigate(Screens.LoginScreen.route)
                             }
                         },
                         style = TextStyle(
