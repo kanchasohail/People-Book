@@ -8,18 +8,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.social.people_book.model.room_database.deleted_person.DeletedPerson
-import com.social.people_book.model.room_database.deleted_person.DeletedPersonDao
 import java.io.ByteArrayOutputStream
 import java.sql.Date
 
-@Database(entities = [Person::class, DeletedPerson::class], version = 1)
+@Database(entities = [Person::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class PersonDatabase : RoomDatabase() {
     abstract fun personDao(): PersonDao
-
-    abstract fun DeletedPersonDao(): DeletedPersonDao
-
 
     companion object {
         @Volatile

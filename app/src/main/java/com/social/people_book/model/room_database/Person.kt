@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.sql.Date
 
 @Entity
 data class Person(
@@ -13,9 +14,11 @@ data class Person(
     @ColumnInfo(name = "email") val email: String?,
     @ColumnInfo(name = "about") val about: String?,
     @ColumnInfo(name = "tag") val tag: Tag,
-    @ColumnInfo(name = "image") val image: Bitmap?,
+    @ColumnInfo(name = "image") val image: String?,
     @ColumnInfo(name = "is_favorite") val isFavorite: Boolean,
-    @ColumnInfo(name = "is_deleted") val isDeleted: Boolean
+    @ColumnInfo(name = "is_deleted") val isDeleted: Boolean,
+    @ColumnInfo(name = "deleted_at") val deletedAt: Date?
+
 ) {
     fun doesMatchSearchQuery(query: String): Boolean {
         val matchingCombinations = listOf(

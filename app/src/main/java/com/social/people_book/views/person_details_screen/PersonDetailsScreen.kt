@@ -41,9 +41,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.MainViewModel
 import com.social.people_book.R
+import com.social.people_book.model.util.image_converters.loadImageBitmap
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmDeletionDialog
 import com.social.people_book.ui.layout.BackButtonArrow
@@ -185,10 +187,24 @@ fun SharedTransitionScope.PersonDetailsScreen(
                                     .clip(RoundedCornerShape(18.dp))
                             )
                         } else {
-                            Image(
-                                painter = rememberAsyncImagePainter(
-                                    viewModel.thisPerson.image
-                                ),
+//                            Image(
+//                                painter = rememberAsyncImagePainter(
+//                                    viewModel.thisPerson.image
+//                                ),
+//                                modifier = Modifier
+//                                    .sharedElement(
+//                                        state = rememberSharedContentState(key = "user_profile$personId"),
+//                                        animatedVisibilityScope = animatedVisibilityScope,
+//                                        boundsTransform = { _, _ ->
+//                                            tween(durationMillis = 1000)
+//                                        }
+//                                    )
+//                                    .clip(RoundedCornerShape(18.dp)),
+//                                contentDescription = "person Image"
+//                            )
+
+                            AsyncImage(
+                                model = loadImageBitmap(viewModel.thisPerson.image!!, context),
                                 modifier = Modifier
                                     .sharedElement(
                                         state = rememberSharedContentState(key = "user_profile$personId"),
@@ -200,6 +216,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                                     .clip(RoundedCornerShape(18.dp)),
                                 contentDescription = "person Image"
                             )
+
                         }
                     }
                     MyText(
@@ -285,9 +302,13 @@ fun SharedTransitionScope.PersonDetailsScreen(
                                 contentDescription = "Copy"
                             )
                         }
-                        if (viewModel.isValidEmail(viewModel.thisPerson.email!!)){
+                        if (viewModel.isValidEmail(viewModel.thisPerson.email!!)) {
                             IconButton(onClick = {
-                                viewModel.openEmailComposer(context, viewModel.thisPerson.email!!, "")
+                                viewModel.openEmailComposer(
+                                    context,
+                                    viewModel.thisPerson.email!!,
+                                    ""
+                                )
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.MailOutline,

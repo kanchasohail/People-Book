@@ -120,8 +120,8 @@ class HomeScreenViewModel : ViewModel() {
                         isDeleted = document["is_deleted"].toString() == "true",
                         isFavorite = document["is_favorite"].toString() == "true",
                         tag = tagsList.find { it.name == document["tag"].toString() } ?: Tag.None,
-                        image = null
-
+                        image = null,
+                        deletedAt = null
                     )
                     dbItems.add(thisPerson)
                 }

@@ -11,12 +11,10 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -28,15 +26,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
+import com.social.people_book.model.LocalFileStorageRepository
 import com.social.people_book.model.room_database.Person
 import com.social.people_book.model.room_database.Tag
-import com.social.people_book.model.room_database.deleted_person.DeletedPerson
 import com.social.people_book.model.util.image_converters.getBitmapFromUri
 import com.social.people_book.model.util.workers.DeleteTrashPersonWork
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.sql.Date
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -46,13 +41,25 @@ class PersonDetailsViewModel : ViewModel() {
     private val auth = Firebase.auth
     private val storage = Firebase.storage
     private val personDao = MainActivity.db.personDao()
-    private val deletedPersonDao = MainActivity.db.DeletedPersonDao()
     val tagsList = Tag.values()
 
-    var savedPerson = Person(null, "", "", "", "", Tag.None, null, false, false)
+    var savedPerson = Person(null, "", "", "", "", Tag.None, null, false, false, null)
 
 
-    var thisPerson by mutableStateOf(Person(null, "", "", "", "", Tag.None, null, false, false))
+    var thisPerson by mutableStateOf(
+        Person(
+            null,
+            "",
+            "",
+            "",
+            "",
+            Tag.None,
+            null,
+            false,
+            false,
+            null
+        )
+    )
     var name by mutableStateOf("")
     var number by mutableStateOf("")
     var email by mutableStateOf("")
@@ -89,7 +96,8 @@ class PersonDetailsViewModel : ViewModel() {
             image = savedPerson.image,
             isDeleted = savedPerson.isDeleted,
             isFavorite = savedPerson.isFavorite,
-            tag = savedPerson.tag
+            tag = savedPerson.tag,
+            deletedAt = savedPerson.deletedAt
         )
         return savedPerson != p || selectedImage != null
     }
@@ -200,11 +208,9 @@ class PersonDetailsViewModel : ViewModel() {
 
     fun deletePerson(personId: Long, context: Context, navController: NavController) {
         viewModelScope.launch {
-            personDao.deletePerson(personId)
             val thisDate = Calendar.getInstance().timeInMillis
-            val deletedPerson =
-                DeletedPerson(id = null, personId = personId, deletedDate = Date(thisDate))
-            deletedPersonDao.deletePerson(deletedPerson)
+            personDao.deletePerson(personId, deletedAt = Date(thisDate))
+            deletePerson(personId)
         }
         scheduleDeleteWork(personId, context)
         navController.popBackStack()
@@ -228,17 +234,12 @@ class PersonDetailsViewModel : ViewModel() {
         WorkManager.getInstance(context).enqueue(workRequest)
     }
 
-//    fun deletePerson(personId: String, context: Context, navController: NavController) {
-//        showDialogState = false
-//        db.collection("users").document(auth.currentUser?.uid.toString()).collection("persons")
-//            .document(personId).delete().addOnSuccessListener {
-//                deletePersonImage(personId)
-//                navController.popBackStack()
-//                Toast.makeText(context, "Person Deleted Successfully", Toast.LENGTH_SHORT).show()
-//            }.addOnFailureListener {
-//                Toast.makeText(context, "Failed to delete person.", Toast.LENGTH_SHORT).show()
-//            }
-//    }
+    private fun deletePerson(personId: Long) {
+        db.collection("users").document(auth.currentUser?.uid.toString()).collection("persons")
+            .document(personId.toString()).update("is_deleted", true).addOnSuccessListener {
+
+            }
+    }
 
     private fun deletePersonImage(documentId: String) {
         val imageRef =
@@ -263,7 +264,10 @@ class PersonDetailsViewModel : ViewModel() {
                     "name" to name,
                     "number" to number,
                     "email" to email,
-                    "about" to about
+                    "about" to about,
+                    "image" to "profile_${thisPerson.id}",
+                    "is_favorite" to isFavorite,
+                    "is_deleted" to false,
                 )
             ).addOnSuccessListener {
                 updatePersonInRoomDatabase(context)
@@ -299,13 +303,25 @@ class PersonDetailsViewModel : ViewModel() {
             number = number,
             email = email,
             about = about,
-            image = selectedImage?.let { getBitmapFromUri(it, context) },
+//            image = selectedImage?.let { getBitmapFromUri(it, context) },
+            image = "profile_${thisPerson.id}",
             isDeleted = false,
             isFavorite = isFavorite,
-            tag = selectedTag
+            tag = selectedTag,
+            deletedAt = null
         )
         viewModelScope.launch {
             personDao.updatePerson(person)
+            if (selectedImage != null) {
+                val localFileStorage = LocalFileStorageRepository(context)
+                val bitmap = getBitmapFromUri(selectedImage!!, context)
+                bitmap?.let {
+                    localFileStorage.saveImageToInternalStorage(
+                        filename = "profile_${thisPerson.id}",
+                        bitmap = it
+                    )
+                }
+            }
         }
     }
 

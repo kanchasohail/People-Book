@@ -135,6 +135,7 @@ fun TrashScreen(
                         DeletedItemCard(
                             textColor = textColor,
                             person = it,
+                            remainingDays = viewModel.getRemainingDays(it.deletedAt)
                         ) {
                             it.id?.let { it1 -> viewModel.loadPerson(it1) }
                             navController.navigate(Screens.TrashPersonDetailsScreen.route)

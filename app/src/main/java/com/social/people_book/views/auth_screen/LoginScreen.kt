@@ -9,14 +9,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imeNestedScroll
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,7 +33,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -46,9 +42,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.CenterBox
-import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.model.util.google_sign_in.GoogleSignInHelper
+import com.social.people_book.views.auth_screen.components.DividerWithText
+import com.social.people_book.views.auth_screen.components.GoogleSignUpButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,7 +75,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
             val idToken = credential.googleIdToken
 
             if (idToken != null) {
-                viewModel.loginWithGoogle(idToken, navController)
+                viewModel.loginWithGoogle(idToken,context, navController)
             } else {
                 Toast.makeText(context, "Failed to Login", Toast.LENGTH_SHORT).show()
             }

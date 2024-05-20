@@ -2,9 +2,11 @@ package com.social.people_book.model.room_database
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import java.sql.Date
 
 
 @Dao
@@ -25,14 +27,14 @@ interface PersonDao {
     @Update
     suspend fun updatePerson(person: Person)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPerson(person: Person): Long
 
-    @Query("UPDATE person SET is_deleted = :isDeleted WHERE id = :personId")
-    suspend fun deletePerson(personId: Long, isDeleted: Boolean = true)
+    @Query("UPDATE person SET is_deleted = :isDeleted , deleted_at = :deletedAt WHERE id = :personId")
+    suspend fun deletePerson(personId: Long, deletedAt: Date, isDeleted: Boolean = true)
 
-    @Query("UPDATE person SET is_deleted= :isDeleted WHERE id = :personId")
-    suspend fun restorePerson(personId: Long, isDeleted: Boolean = true)
+    @Query("UPDATE person SET is_deleted = :isDeleted , deleted_at = :deletedAt WHERE id = :personId")
+    suspend fun restorePerson(personId: Long, deletedAt: Date? = null, isDeleted: Boolean = false)
 
     @Query("SELECT id FROM person WHERE is_deleted = :isDeleted")
     suspend fun getDeletedIds(isDeleted: Boolean = true): List<Long>
@@ -43,5 +45,8 @@ interface PersonDao {
 
     @Query("DELETE FROM person WHERE is_deleted = :isDeleted AND id = :personId")
     suspend fun deletePersonFromTrash(personId: Long, isDeleted: Boolean = true)
+
+   @Query("DELETE FROM person")
+    suspend fun clearDatabase()
 
 }

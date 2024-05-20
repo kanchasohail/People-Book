@@ -55,7 +55,7 @@ android {
 dependencies {
 
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation(platform("androidx.compose:compose-bom:2024.05.00"))
     implementation("androidx.compose.ui:ui")
@@ -83,12 +83,12 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
     //view Model
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
 
     //For displaying uri image (Coil)
     implementation("io.coil-kt:coil-compose:2.4.0")
     //Compose Animation
-    implementation("androidx.compose.animation:animation:1.7.0-alpha08")
+    implementation("androidx.compose.animation:animation:1.7.0-beta01")
 
     //Image Cropper
     implementation("com.vanniktech:android-image-cropper:4.5.0")

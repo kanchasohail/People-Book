@@ -9,17 +9,25 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.social.people_book.model.LocalFileStorageRepository
 import com.social.people_book.model.room_database.Person
 import com.social.people_book.model.room_database.Tag
+import com.social.people_book.model.util.image_converters.loadImageBitmap
 import com.social.people_book.ui.layout.MyText
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -27,11 +35,12 @@ import com.social.people_book.ui.layout.MyText
 fun SharedTransitionScope.ItemCard(
     modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
+    localFileStorageRepository: LocalFileStorageRepository,
     person: Person,
     textColor: Color,
     onClick: () -> Unit
 ) {
-
+    val context = LocalContext.current
     Column(
         modifier = modifier
             .padding(8.dp)
@@ -42,27 +51,24 @@ fun SharedTransitionScope.ItemCard(
                 onClick()
             }
     ) {
-        if (person.image == null) {
-//            Icon(
-//                painter = painterResource(id = R.drawable.ic_blank_profile),
-//                tint = textColor,
+        if (person.image != null) {
+//            Image(
+//                painter = rememberAsyncImagePainter(person.image),
+////                painter = rememberAsyncImagePainter(localFileStorageRepository.loadImageFromInternalStorage("")),
 //                modifier = Modifier
 //                    .fillMaxWidth()
 //                    .padding(8.dp)
 //                    .aspectRatio(1f)
 //                    .sharedElement(
-//                        state = rememberSharedContentState(key = "blank_profile${person.id}"),
+//                        state = rememberSharedContentState(key = "user_profile${person.id}"),
 //                        animatedVisibilityScope = animatedVisibilityScope,
-////                        boundsTransform = { _, _ ->
-////                            tween(durationMillis = 1000)
-////                        }
 //                    )
-//                    .clip(RoundedCornerShape(18.dp)),
-//                contentDescription = "user_profile"
+//                    .clip(RoundedCornerShape(8.dp)),
+//                contentDescription = "person Image"
 //            )
-        } else {
-            Image(
-                painter = rememberAsyncImagePainter(person.image),
+
+            AsyncImage(
+                model = loadImageBitmap(person.image, context),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -74,6 +80,7 @@ fun SharedTransitionScope.ItemCard(
                     .clip(RoundedCornerShape(8.dp)),
                 contentDescription = "person Image"
             )
+
         }
 
         if (person.name.isNotEmpty()) {
@@ -95,7 +102,7 @@ fun SharedTransitionScope.ItemCard(
                 text = person.tag.toString(), color = textColor, fontSize = 17.sp,
                 modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
             )
-        }else {
+        } else {
             MyText(
                 text = "No Tag", color = textColor.copy(.7f), fontSize = 17.sp,
                 modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)

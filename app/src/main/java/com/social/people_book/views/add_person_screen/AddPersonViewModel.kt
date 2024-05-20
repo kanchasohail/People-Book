@@ -16,6 +16,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
+import com.social.people_book.model.LocalFileStorageRepository
 import com.social.people_book.model.room_database.Person
 import com.social.people_book.model.room_database.Tag
 import com.social.people_book.model.util.image_converters.getBitmapFromUri
@@ -67,10 +68,29 @@ class AddPersonViewModel : ViewModel() {
             isDeleted = false,
             isFavorite = isFavorite,
             tag = selectedTag,
-            image = selectedImage?.let { getBitmapFromUri(it, context) }
+//            image = selectedImage?.let { getBitmapFromUri(it, context) },
+            image = null,
+            deletedAt = null,
         )
         viewModelScope.launch {
             val personId = personDao.addPerson(roomPerson)
+
+            if (selectedImage != null) {
+                val localFileStorage = LocalFileStorageRepository(context)
+                val bitmap = getBitmapFromUri(selectedImage!!, context)
+                val isSaved = bitmap?.let {
+                    localFileStorage.saveImageToInternalStorage(
+                        filename = "profile_$personId",
+                        bitmap = it
+                    )
+                }
+                if (isSaved == true) personDao.updatePerson(
+                    roomPerson.copy(
+                        id = personId,
+                        image = "profile_$personId"
+                    )
+                )
+            }
             addPersonInFirebase(context, navController, personId)
         }
     }
@@ -98,11 +118,13 @@ class AddPersonViewModel : ViewModel() {
                     "name" to name,
                     "number" to number,
                     "email" to email,
-                    "about" to about
+                    "about" to about,
+                    "is_favorite" to isFavorite,
+                    "image" to "profile_$personId"
                 )
             ).addOnSuccessListener {
                 saveImage(thisDocument.id)
-                clearFields()
+//                clearFields()
                 isLoading = false
                 if (navController.currentDestination?.route == Screens.AddPersonScreen.route) {
                     navController.popBackStack()
@@ -135,12 +157,12 @@ class AddPersonViewModel : ViewModel() {
     }
 
 
-    private fun clearFields() {
-        name = ""
-        number = ""
-        email = ""
-        about = ""
-        selectedImage = null
-    }
+//    private fun clearFields() {
+//        name = ""
+//        number = ""
+//        email = ""
+//        about = ""
+//        selectedImage = null
+//    }
 
 }

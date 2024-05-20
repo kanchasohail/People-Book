@@ -1,4 +1,4 @@
-package com.social.people_book.views.auth_screen
+package com.social.people_book.views.auth_screen.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
