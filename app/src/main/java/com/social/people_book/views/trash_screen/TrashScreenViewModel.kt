@@ -28,12 +28,14 @@ import com.social.people_book.model.room_database.Tag
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.sql.Date
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 class TrashScreenViewModel : ViewModel() {
     private val personDao = MainActivity.db.personDao()
-    private val deletedPersonDao = MainActivity.db.DeletedPersonDao()
     private val db = Firebase.firestore
     private val auth = com.google.firebase.ktx.Firebase.auth
     private val storage = com.google.firebase.ktx.Firebase.storage
@@ -43,7 +45,20 @@ class TrashScreenViewModel : ViewModel() {
     var isLoading by mutableStateOf(false)
 
 
-    var thisPerson by mutableStateOf(Person(null, "", "", "", "", Tag.None, null, false, false))
+    var thisPerson by mutableStateOf(
+        Person(
+            null,
+            "",
+            "",
+            "",
+            "",
+            Tag.None,
+            null,
+            false,
+            false,
+            null
+        )
+    )
 
     @OptIn(DelicateCoroutinesApi::class)
     fun loadPerson(personId: Long) {
@@ -56,13 +71,38 @@ class TrashScreenViewModel : ViewModel() {
     fun restorePerson(personId: Long, context: Context, navController: NavController) {
         isLoading = true
         viewModelScope.launch {
-            deletedPersonDao.clearDeletedPerson(personId)
             personDao.restorePerson(personId)
         }.also {
             isLoading = false
             Toast.makeText(context, "Restored Successfully", Toast.LENGTH_SHORT).show()
             navController.popBackStack()
         }
+    }
+
+    fun getRemainingDays(startDate: Date?): String {
+        if (startDate == null) {
+            return "0 days"
+        }
+        val thirtyDaysLater = Date(startDate.time + TimeUnit.DAYS.toMillis(30))
+        val today = java.util.Date()
+        val diffTime = abs(thirtyDaysLater.time - today.time)
+        val diffDays = TimeUnit.MILLISECONDS.toDays(diffTime).toInt()
+
+        return when {
+            diffDays == 1 -> "$diffDays day"
+            else -> "$diffDays days"
+        }
+    }
+
+
+    fun deletePersonFromTrash(personId: Long, context: Context, navController: NavController) {
+        viewModelScope.launch {
+            personDao.deletePersonFromTrash(personId)
+            deleteFromFirebase(listOf(personId))
+        }
+        showDialogState = false
+        navController.popBackStack()
+        Toast.makeText(context, "Person Deleted Successfully", Toast.LENGTH_SHORT).show()
     }
 
     fun makePhoneCall(context: Context, number: String) {
@@ -117,7 +157,6 @@ class TrashScreenViewModel : ViewModel() {
             }
 
             personDao.emptyTrash()
-            deletedPersonDao.emptyTrash()
             isLoading = false
             navController.popBackStack()
             Toast.makeText(context, "Trash Cleared Successfully", Toast.LENGTH_SHORT).show()

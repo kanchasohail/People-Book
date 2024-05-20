@@ -16,8 +16,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.social.people_book.model.LocalFileStorageRepository
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.MyText
@@ -32,6 +34,8 @@ fun SharedTransitionScope.FavoritesScreen(
     isDarkMode: Boolean
 ) {
 
+    val context = LocalContext.current
+    val localFileStorage = LocalFileStorageRepository(context)
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
@@ -64,6 +68,7 @@ fun SharedTransitionScope.FavoritesScreen(
                 items(favoritePerson) {
                     ItemCard(
                         animatedVisibilityScope = animatedVisibilityScope,
+                        localFileStorageRepository = localFileStorage,
                         textColor = textColor,
                         person = it,
                         onClick = {

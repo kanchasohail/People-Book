@@ -1,5 +1,6 @@
 package com.social.people_book.views.settings_screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -68,7 +70,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
 
     Scaffold(
         topBar = {
-            LargeTopAppBar(
+            MediumTopAppBar(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -84,8 +86,9 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                         text = "Settings",
                         fontSize = 35.sp,
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                            .fillMaxWidth()
+//                            .background(Color.Red),
+                        ,textAlign = TextAlign.Center
                     )
                 },
                 actions = {
@@ -126,7 +129,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                     viewModel.logOut(navController)
                 })
 
-            Spacer(modifier = Modifier.height(30.dp))
+//            Spacer(modifier = Modifier.height(30.dp))
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()

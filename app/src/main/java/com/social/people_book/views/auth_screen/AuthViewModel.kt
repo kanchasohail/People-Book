@@ -1,21 +1,29 @@
 package com.social.people_book.views.auth_screen
 
+
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.social.people_book.MainActivity
+import com.social.people_book.model.LocalFileStorageRepository
 import com.social.people_book.navigation.Screens
+
 
 class AuthViewModel : ViewModel() {
     private val auth = Firebase.auth
     private val db = Firebase.firestore
+    private val storage = Firebase.storage
+    private val personDao = MainActivity.db.personDao()
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
@@ -24,6 +32,21 @@ class AuthViewModel : ViewModel() {
     var isShowPassword by mutableStateOf(false)
     var isEmailValid by mutableStateOf(true)
     var isPasswordValid by mutableStateOf(true)
+
+
+    private fun fetch(context: Context) {
+
+        auth.currentUser?.uid?.let {
+            fetchAndSaveDataFromFirebase(
+                db = db,
+                storage = storage,
+                personDao = personDao,
+                viewModelScope = viewModelScope,
+                localFileStorageRepository = LocalFileStorageRepository(context),
+                userId = it,
+            )
+        }
+    }
 
 
     fun isValidEmail(email: String): Boolean {
@@ -38,12 +61,13 @@ class AuthViewModel : ViewModel() {
     }
 
 
-    fun loginWithGoogle(idToken: String, navController: NavController) {
+    fun loginWithGoogle(idToken: String,context: Context ,navController: NavController) {
         isLoading = true
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    fetch(context)
                     navController.navigate(Screens.HomeScreen.route)
                 }
             }
@@ -56,6 +80,7 @@ class AuthViewModel : ViewModel() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    fetch(context)
                     saveUser(context)
                     navController.navigate(Screens.HomeScreen.route)
                 }
@@ -73,6 +98,7 @@ class AuthViewModel : ViewModel() {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             isLoading = false
             if (task.isSuccessful) {
+                fetch(context)
                 saveUser(context)
                 navController.navigate(Screens.HomeScreen.route)
             } else {
@@ -87,6 +113,7 @@ class AuthViewModel : ViewModel() {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             isLoading = false
             if (task.isSuccessful) {
+                fetch(context)
                 navController.navigate(Screens.HomeScreen.route)
             } else {
                 Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT)
@@ -96,7 +123,7 @@ class AuthViewModel : ViewModel() {
     }
 
 
-    fun saveUser(context: Context) {
+    private fun saveUser(context: Context) {
         val userDoc = db.collection("users").document(auth.currentUser?.uid.toString())
         userDoc.set(
             mapOf(

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
@@ -49,6 +51,7 @@ import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.social.people_book.R
 import com.social.people_book.model.util.image_converters.compressImage
+import com.social.people_book.model.util.image_converters.loadImageBitmap
 import com.social.people_book.ui.common_views.ConfirmBackDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.MyText
@@ -203,13 +206,19 @@ fun PersonDetailsEditingScreen(
                         )
                     } else {
                         if (viewModel.selectedImage == null) {
-                            Image(
-                                painter = rememberAsyncImagePainter(
-                                    viewModel.thisPerson.image
-                                ),
+//                            Image(
+//                                painter = rememberAsyncImagePainter(
+//                                    viewModel.thisPerson.image
+//                                ),
+//                                modifier = Modifier.clip(RoundedCornerShape(18.dp)),
+//                                contentDescription = "person Image"
+//                            )
+                            AsyncImage(
+                                model = loadImageBitmap(viewModel.thisPerson.image!!, context),
                                 modifier = Modifier.clip(RoundedCornerShape(18.dp)),
                                 contentDescription = "person Image"
                             )
+
                         } else {
                             Image(
                                 painter = rememberAsyncImagePainter(

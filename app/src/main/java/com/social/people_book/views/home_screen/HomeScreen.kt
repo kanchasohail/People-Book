@@ -46,16 +46,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.social.people_book.MainActivity
 import com.social.people_book.MainViewModel
+import com.social.people_book.model.LocalFileStorageRepository
 import com.social.people_book.model.room_database.Tag
 import com.social.people_book.model.util.isScrollingUp
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.views.auth_screen.fetchAndSaveDataFromFirebase
 import com.social.people_book.views.home_screen.components.ItemCard
 import com.social.people_book.views.home_screen.side_drawer.DrawerContent
 import com.social.people_book.views.home_screen.side_drawer.DrawerHeader
@@ -73,6 +83,8 @@ fun SharedTransitionScope.HomeScreen(
     viewModel: HomeScreenViewModel,
     mainViewModel: MainViewModel
 ) {
+    val context = LocalContext.current
+    val localFileStorage = LocalFileStorageRepository(context)
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
@@ -143,7 +155,24 @@ fun SharedTransitionScope.HomeScreen(
                     },
                     actions = {
                         IconButton(onClick = {
-                            navController.navigate(Screens.SearchScreen.route)
+//                            navController.navigate(Screens.SearchScreen.route)
+
+                            val auth = Firebase.auth
+                            val db = Firebase.firestore
+                            val storage = Firebase.storage
+                            val personDao = MainActivity.db.personDao()
+
+                            auth.currentUser?.uid?.let {
+                                fetchAndSaveDataFromFirebase(
+                                    db = db,
+                                    storage,
+                                    userId = it,
+                                    personDao = personDao,
+                                    localFileStorageRepository = LocalFileStorageRepository(context),
+                                    viewModelScope = viewModel.viewModelScope
+                                )
+                            }
+
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Search,
@@ -235,6 +264,7 @@ fun SharedTransitionScope.HomeScreen(
                             items(persons) {
                                 ItemCard(
                                     animatedVisibilityScope = animatedVisibilityScope,
+                                    localFileStorageRepository = localFileStorage,
                                     textColor = textColor,
                                     person = it,
                                     onClick = {
