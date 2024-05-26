@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -40,6 +41,8 @@ fun DeletedItemCard(
     onClick: () -> Unit
 ) {
     val context = LocalContext.current
+    val imageBitmap = loadImageBitmap("profile_${person.id}", context)
+
     Column(
         modifier = modifier
             .padding(8.dp)
@@ -66,15 +69,24 @@ fun DeletedItemCard(
 //                    .clip(RoundedCornerShape(8.dp)),
 //                contentDescription = "person Image"
 //            )
-            AsyncImage(
-                model = loadImageBitmap(person.image, context),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .aspectRatio(1f)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentDescription = "person Image"
-            )
+
+//            AsyncImage(
+//                model = loadImageBitmap(person.image, context),
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(8.dp)
+//                    .aspectRatio(1f)
+//                    .clip(RoundedCornerShape(8.dp)),
+//                contentDescription = "person Image"
+//            )
+
+            if (imageBitmap != null) {
+                Image(
+                    bitmap = imageBitmap.asImageBitmap(),
+                    modifier = Modifier.clip(RoundedCornerShape(18.dp)),
+                    contentDescription = "person Image"
+                )
+            }
         }
 
         if (person.name.isNotEmpty()) {

@@ -17,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,6 +42,7 @@ fun SharedTransitionScope.ItemCard(
     onClick: () -> Unit
 ) {
     val context = LocalContext.current
+    val imageBitmap = loadImageBitmap(person.image, context)
     Column(
         modifier = modifier
             .padding(8.dp)
@@ -51,7 +53,7 @@ fun SharedTransitionScope.ItemCard(
                 onClick()
             }
     ) {
-        if (person.image != null) {
+        if (person.image != null && imageBitmap != null) {
 //            Image(
 //                painter = rememberAsyncImagePainter(person.image),
 ////                painter = rememberAsyncImagePainter(localFileStorageRepository.loadImageFromInternalStorage("")),
@@ -67,8 +69,23 @@ fun SharedTransitionScope.ItemCard(
 //                contentDescription = "person Image"
 //            )
 
-            AsyncImage(
-                model = loadImageBitmap(person.image, context),
+//            AsyncImage(
+////                model = loadImageBitmap(person.image, context),
+//                model = imageBitmap,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(8.dp)
+//                    .aspectRatio(1f)
+//                    .sharedElement(
+//                        state = rememberSharedContentState(key = "user_profile${person.id}"),
+//                        animatedVisibilityScope = animatedVisibilityScope,
+//                    )
+//                    .clip(RoundedCornerShape(8.dp)),
+//                contentDescription = "person Image"
+//            )
+
+            Image(
+                bitmap = imageBitmap.asImageBitmap(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)

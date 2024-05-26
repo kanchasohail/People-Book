@@ -1,6 +1,7 @@
 package com.social.people_book.ui.common_views
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
@@ -30,7 +31,7 @@ fun ConfirmLogoutDialog(
     if (showDialog) {
         AlertDialog(
             title = {
-                MyText("Log Out" , fontSize = 22.sp)
+                MyText("Log Out", fontSize = 22.sp)
             },
             text = {
                 Text(
@@ -51,7 +52,11 @@ fun ConfirmLogoutDialog(
                         contentColor = Color.White
                     )
                 ) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "logout")
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ExitToApp,
+                        contentDescription = "logout",
+                        modifier = Modifier.size(22.dp)
+                    )
                     MyText("Logout", fontSize = 17.sp)
                 }
 

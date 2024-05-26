@@ -16,12 +16,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,9 +38,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -71,6 +77,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
     mainViewModel: MainViewModel
 ) {
     val context = LocalContext.current
+    val imageBitmap = loadImageBitmap("profile_$personId", context)
     fun loadPerson(id: Long) {
         val roomPerson = mainViewModel.personDao.getPersonById(id)
         viewModel.thisPerson = roomPerson
@@ -99,16 +106,16 @@ fun SharedTransitionScope.PersonDetailsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = appBarBackGroundColor,
                 ),
                 title = {
                     MyText(
-                        text = viewModel.thisPerson.name,
+                        text = viewModel.thisPerson.tag.toString(),
                         color = appBarTextColor,
                         fontSize = 22.sp,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
                     )
                 },
                 navigationIcon = {
@@ -127,12 +134,38 @@ fun SharedTransitionScope.PersonDetailsScreen(
 //                    }
 //                }
             )
+        },
+        bottomBar = {
+            Row(
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = {
+                    viewModel.showDialogState = true
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete",
+                        tint = redColor,
+                        modifier = Modifier.size(35.dp)
+                    )
+                }
+
+
+                Button(modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        navController.navigate(Screens.PersonDetailsEditingScreen.route)
+                    }) {
+                    MyText(text = "Edit", fontSize = 17.sp)
+                }
+            }
         }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
         ) {
             ConfirmDeletionDialog(
                 showDialog = viewModel.showDialogState,
@@ -203,19 +236,35 @@ fun SharedTransitionScope.PersonDetailsScreen(
 //                                contentDescription = "person Image"
 //                            )
 
-                            AsyncImage(
-                                model = loadImageBitmap(viewModel.thisPerson.image!!, context),
-                                modifier = Modifier
-                                    .sharedElement(
-                                        state = rememberSharedContentState(key = "user_profile$personId"),
-                                        animatedVisibilityScope = animatedVisibilityScope,
-                                        boundsTransform = { _, _ ->
-                                            tween(durationMillis = 1000)
-                                        }
-                                    )
-                                    .clip(RoundedCornerShape(18.dp)),
-                                contentDescription = "person Image"
-                            )
+//                            AsyncImage(
+//                                model = loadImageBitmap(viewModel.thisPerson.image!!, context),
+//                                modifier = Modifier
+//                                    .sharedElement(
+//                                        state = rememberSharedContentState(key = "user_profile$personId"),
+//                                        animatedVisibilityScope = animatedVisibilityScope,
+//                                        boundsTransform = { _, _ ->
+//                                            tween(durationMillis = 1000)
+//                                        }
+//                                    )
+//                                    .clip(RoundedCornerShape(18.dp)),
+//                                contentDescription = "person Image"
+//                            )
+
+                            if (imageBitmap != null) {
+                                Image(
+                                    bitmap = imageBitmap.asImageBitmap(),
+                                    modifier = Modifier
+                                        .sharedElement(
+                                            state = rememberSharedContentState(key = "user_profile$personId"),
+                                            animatedVisibilityScope = animatedVisibilityScope,
+                                            boundsTransform = { _, _ ->
+                                                tween(durationMillis = 1000)
+                                            }
+                                        )
+                                        .clip(RoundedCornerShape(18.dp)),
+                                    contentDescription = "person Image"
+                                )
+                            }
 
                         }
                     }
@@ -247,32 +296,39 @@ fun SharedTransitionScope.PersonDetailsScreen(
                     Spacer(modifier = Modifier.width(10.dp))
                     MyText(text = viewModel.thisPerson.number.toString(), color = textColor)
 
-                    if (viewModel.thisPerson.number != null && viewModel.thisPerson.number != "") {
-                        IconButton(onClick = {
-                            viewModel.copyToClipboard(
-                                context,
-                                viewModel.thisPerson.number!!,
-                                "Number"
-                            )
-                        }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_copy_icon),
-                                tint = iconButtonColor,
-                                contentDescription = "Copy"
-                            )
-                        }
-                        if (viewModel.thisPerson.number!!.length > 4) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+
+                        if (viewModel.thisPerson.number != null && viewModel.thisPerson.number != "") {
                             IconButton(onClick = {
-                                viewModel.makePhoneCall(context, viewModel.thisPerson.number!!)
+                                viewModel.copyToClipboard(
+                                    context,
+                                    viewModel.thisPerson.number!!,
+                                    "Number"
+                                )
                             }) {
                                 Icon(
-                                    imageVector = Icons.Default.Call,
+                                    painter = painterResource(id = R.drawable.ic_copy_icon),
                                     tint = iconButtonColor,
-                                    contentDescription = "Call"
+                                    contentDescription = "Copy"
                                 )
+                            }
+                            if (viewModel.thisPerson.number!!.length > 4) {
+                                IconButton(onClick = {
+                                    viewModel.makePhoneCall(context, viewModel.thisPerson.number!!)
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Call,
+                                        tint = iconButtonColor,
+                                        contentDescription = "Call"
+                                    )
+                                }
                             }
                         }
                     }
+
 
                 }
 
@@ -288,36 +344,42 @@ fun SharedTransitionScope.PersonDetailsScreen(
                     Spacer(modifier = Modifier.width(10.dp))
                     MyText(text = viewModel.thisPerson.email.toString(), color = textColor)
 
-                    if (viewModel.thisPerson.email != null && viewModel.thisPerson.email != "") {
-                        IconButton(onClick = {
-                            viewModel.copyToClipboard(
-                                context,
-                                viewModel.thisPerson.email!!,
-                                "Email"
-                            )
-                        }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_copy_icon),
-                                tint = iconButtonColor,
-                                contentDescription = "Copy"
-                            )
-                        }
-                        if (viewModel.isValidEmail(viewModel.thisPerson.email!!)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        if (viewModel.thisPerson.email != null && viewModel.thisPerson.email != "") {
                             IconButton(onClick = {
-                                viewModel.openEmailComposer(
+                                viewModel.copyToClipboard(
                                     context,
                                     viewModel.thisPerson.email!!,
-                                    ""
+                                    "Email"
                                 )
                             }) {
                                 Icon(
-                                    imageVector = Icons.Default.MailOutline,
+                                    painter = painterResource(id = R.drawable.ic_copy_icon),
                                     tint = iconButtonColor,
-                                    contentDescription = "Call"
+                                    contentDescription = "Copy"
                                 )
+                            }
+                            if (viewModel.isValidEmail(viewModel.thisPerson.email!!)) {
+                                IconButton(onClick = {
+                                    viewModel.openEmailComposer(
+                                        context,
+                                        viewModel.thisPerson.email!!,
+                                        ""
+                                    )
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.MailOutline,
+                                        tint = iconButtonColor,
+                                        contentDescription = "Call"
+                                    )
+                                }
                             }
                         }
                     }
+
                 }
 
                 Row(
@@ -333,26 +395,26 @@ fun SharedTransitionScope.PersonDetailsScreen(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = {
-                        viewModel.showDialogState = true
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete",
-                            tint = redColor,
-                            modifier = Modifier.size(35.dp)
-                        )
-                    }
-
-
-                    Button(modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            navController.navigate(Screens.PersonDetailsEditingScreen.route)
-                        }) {
-                        MyText(text = "Edit", fontSize = 17.sp)
-                    }
-                }
+//                Row(verticalAlignment = Alignment.CenterVertically) {
+//                    IconButton(onClick = {
+//                        viewModel.showDialogState = true
+//                    }) {
+//                        Icon(
+//                            imageVector = Icons.Default.Delete,
+//                            contentDescription = "Delete",
+//                            tint = redColor,
+//                            modifier = Modifier.size(35.dp)
+//                        )
+//                    }
+//
+//
+//                    Button(modifier = Modifier.fillMaxWidth(),
+//                        onClick = {
+//                            navController.navigate(Screens.PersonDetailsEditingScreen.route)
+//                        }) {
+//                        MyText(text = "Edit", fontSize = 17.sp)
+//                    }
+//                }
             }
         }
     }
