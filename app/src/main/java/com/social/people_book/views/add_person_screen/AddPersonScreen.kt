@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -173,7 +175,7 @@ fun AddPersonScreen(
 //                            color = appBarTextColor,
 //                            fontSize = 21.sp,
 //                        )
-                    DropDownMenu(viewModel = viewModel)
+                    DropDownMenu(viewModel = viewModel, color = appBarTextColor)
 //                    }
                 },
                 navigationIcon = {
@@ -263,10 +265,17 @@ fun AddPersonScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.BottomEnd
                     ) {
-
-                        OutlinedButton(onClick = {
-                            avatarPickerLauncher.launch("image/*")
-                        }) {
+                        Row(
+                            modifier = Modifier
+                                .border(
+                                    width = 1.dp,
+                                    shape = CardDefaults.shape,
+                                    color = MaterialTheme.colorScheme.outline
+                                )
+                                .padding(8.dp)
+                                .clickable {
+                                    avatarPickerLauncher.launch("image/*")
+                                }) {
                             MyText(text = "Add", fontSize = 18.sp)
                             Spacer(modifier = Modifier.width(6.dp))
                             Icon(
@@ -275,6 +284,18 @@ fun AddPersonScreen(
                                 modifier = Modifier.size(24.dp)
                             )
                         }
+
+//                        OutlinedButton(onClick = {
+//                            avatarPickerLauncher.launch("image/*")
+//                        }) {
+//                            MyText(text = "Add", fontSize = 18.sp)
+//                            Spacer(modifier = Modifier.width(6.dp))
+//                            Icon(
+//                                painter = painterResource(id = R.drawable.ic_camera),
+//                                contentDescription = "addImage",
+//                                modifier = Modifier.size(24.dp)
+//                            )
+//                        }
                     }
 
                 }

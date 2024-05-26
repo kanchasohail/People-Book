@@ -63,8 +63,11 @@ fun PeopleBookTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor =
+            val barsColors =
                 if (darkTheme) colorScheme.surface.toArgb() else colorScheme.primary.toArgb()
+            window.statusBarColor = barsColors
+            window.navigationBarColor = barsColors
+
             val statusBarColor = window.statusBarColor
             val rgb = intArrayOf(
                 Color.red(statusBarColor),

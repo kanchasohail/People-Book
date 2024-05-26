@@ -49,33 +49,33 @@ fun SplashScreen(navController: NavController, isDarkMode: Boolean, auth: Fireba
             navController.navigate(Screens.AuthScreen.route)
         }
     }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Spacer(modifier = Modifier.fillMaxWidth())
-
-        Icon(
-            painter = painterResource(id = if (isDarkMode) R.drawable.app_icon_horizontal_dark else R.drawable.app_icon_horizontal_light),
-            tint = iconColor,
-            contentDescription = "logo",
-            modifier = Modifier
-                .scale(scale.value)
-        )
-
-        Icon(
-            painter = painterResource(id = R.drawable.app_brand_logo),
-            tint = iconColor,
-            contentDescription = "brand_logo",
-            modifier = Modifier
-                .fillMaxWidth(.4f)
-                .padding(vertical = 32.dp)
-                .padding(bottom = 16.dp)
-        )
-
-    }
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(MaterialTheme.colorScheme.surface),
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        verticalArrangement = Arrangement.SpaceBetween
+//    ) {
+//        Spacer(modifier = Modifier.fillMaxWidth())
+//
+//        Icon(
+//            painter = painterResource(id = if (isDarkMode) R.drawable.app_icon_horizontal_dark else R.drawable.app_icon_horizontal_light),
+//            tint = iconColor,
+//            contentDescription = "logo",
+//            modifier = Modifier
+//                .scale(scale.value)
+//        )
+//
+//        Icon(
+//            painter = painterResource(id = R.drawable.app_brand_logo),
+//            tint = iconColor,
+//            contentDescription = "brand_logo",
+//            modifier = Modifier
+//                .fillMaxWidth(.4f)
+//                .padding(vertical = 32.dp)
+//                .padding(bottom = 16.dp)
+//        )
+//
+//    }
 }

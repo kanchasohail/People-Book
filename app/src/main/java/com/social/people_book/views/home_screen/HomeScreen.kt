@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,14 +22,18 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +52,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
@@ -138,9 +144,10 @@ fun SharedTransitionScope.HomeScreen(
                     ),
                     navigationIcon = {
                         IconButton(onClick = {
-                            localCoroutineScope.launch {
-                                drawerState.open()
-                            }
+//                            localCoroutineScope.launch {
+//                                drawerState.open()
+//                            }
+                            navController.navigate(Screens.SettingsScreen.route)
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
@@ -151,27 +158,27 @@ fun SharedTransitionScope.HomeScreen(
                         }
                     },
                     title = {
-                        MyText(text = "People Book")
+                        MyText(text = "People Book", color = appBarTextColor)
                     },
                     actions = {
                         IconButton(onClick = {
-//                            navController.navigate(Screens.SearchScreen.route)
+                            navController.navigate(Screens.SearchScreen.route)
 
-                            val auth = Firebase.auth
-                            val db = Firebase.firestore
-                            val storage = Firebase.storage
-                            val personDao = MainActivity.db.personDao()
-
-                            auth.currentUser?.uid?.let {
-                                fetchAndSaveDataFromFirebase(
-                                    db = db,
-                                    storage,
-                                    userId = it,
-                                    personDao = personDao,
-                                    localFileStorageRepository = LocalFileStorageRepository(context),
-                                    viewModelScope = viewModel.viewModelScope
-                                )
-                            }
+//                            val auth = Firebase.auth
+//                            val db = Firebase.firestore
+//                            val storage = Firebase.storage
+//                            val personDao = MainActivity.db.personDao()
+//
+//                            auth.currentUser?.uid?.let {
+//                                fetchAndSaveDataFromFirebase(
+//                                    db = db,
+//                                    storage,
+//                                    userId = it,
+//                                    personDao = personDao,
+//                                    localFileStorageRepository = LocalFileStorageRepository(context),
+//                                    viewModelScope = viewModel.viewModelScope
+//                                )
+//                            }
 
                         }) {
                             Icon(
@@ -241,6 +248,11 @@ fun SharedTransitionScope.HomeScreen(
                                 textColor = textColor,
                                 isSelected = it == viewModel.selectedTagItem
                             ) {
+                                if (viewModel.selectedTagItem == it) {
+                                    viewModel.selectedTagItem = null
+                                    viewModel.filterPerson(Tag.None)
+                                    return@TagsChip
+                                }
                                 viewModel.selectedTagItem = it
                                 viewModel.filterPerson(it)
                             }
@@ -295,14 +307,36 @@ private fun TagsChip(
 ) {
     val borderColor: Color? = if (isSelected) Color.White else null
 
-    AssistChip(
-        onClick = onClick, label = {
-            MyText(
-                text = chipText,
-                color = if (isSelected) Color.Black else textColor,
-            )
+//    AssistChip(
+    FilterChip(
+        onClick = onClick,
+        label = {
+            if (isSelected) {
+
+                MyText(
+                    text = chipText,
+//                    color = if (isSelected) Color.Black else textColor,
+                )
+            } else {
+                MyText(
+                    text = chipText,
+                    color = textColor,
+                )
+            }
         },
-        colors = AssistChipDefaults.assistChipColors(
+        selected = isSelected,
+        leadingIcon = if (isSelected) {
+            {
+                Icon(
+                    imageVector = Icons.Filled.Done,
+                    contentDescription = "Done icon",
+                    modifier = Modifier.size(FilterChipDefaults.IconSize)
+                )
+            }
+        } else {
+            null
+        },
+        colors = FilterChipDefaults.filterChipColors(
             containerColor = if (isSelected) Color.White else Color.Transparent
         ),
 //        border = borderColor?.let {

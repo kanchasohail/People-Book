@@ -57,7 +57,7 @@ fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
                 .fillMaxWidth()
                 .padding(top = 12.dp, bottom = 12.dp, start = 14.dp, end = 8.dp)
         ) {
-            MyText(text = "About Us", fontSize = 22.sp, color = textColor)
+            MyText(text = "About Us", fontSize = 20.sp, color = textColor)
 
             Column(
                 modifier = Modifier

@@ -42,7 +42,8 @@ class HomeScreenViewModel : ViewModel() {
 
 
     //    var selectedTagItem by mutableStateOf("All")
-    var selectedTagItem by mutableStateOf(Tag.None)
+//    var selectedTagItem by mutableStateOf(Tag.None)
+    var selectedTagItem by mutableStateOf<Tag?>(null)
 
     var isLoading by mutableStateOf(false)
 

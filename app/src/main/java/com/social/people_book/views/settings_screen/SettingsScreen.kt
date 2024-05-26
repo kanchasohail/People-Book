@@ -1,6 +1,7 @@
 package com.social.people_book.views.settings_screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,8 +43,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.social.people_book.MainViewModel
+import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmLogoutDialog
 import com.social.people_book.ui.common_views.ConfirmResetPasswordDialog
+import com.social.people_book.ui.layout.CustomSwitch
 import com.social.people_book.ui.layout.MyText
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,11 +87,11 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                 title = {
                     MyText(
                         text = "Settings",
-                        fontSize = 35.sp,
+                        fontSize = 33.sp,
                         modifier = Modifier
                             .fillMaxWidth()
 //                            .background(Color.Red),
-                        ,textAlign = TextAlign.Center
+                        , textAlign = TextAlign.Center
                     )
                 },
                 actions = {
@@ -135,6 +138,58 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                     .fillMaxWidth()
                     .nestedScroll(scrollBehavior.nestedScrollConnection)
             ) {
+
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+//                Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    mainViewModel.setThemeMode(!isDarkMode)
+                                }
+                                .padding(horizontal = 16.dp, vertical = 18.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            MyText(text = "Dark Theme", fontSize = 18.sp, color = textColor)
+
+                            CustomSwitch(
+                                height = 11.dp,
+                                width = 22.dp,
+                                gapBetweenThumbAndTrackEdge = 1.6.dp,
+                                checked = isDarkMode,
+                                onCheckedChange = {
+                                    mainViewModel.setThemeMode(it)
+                                },
+                                modifier = Modifier.padding(top = 5.dp)
+                            )
+                        }
+
+//                Spacer(modifier = Modifier.height(10.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    navController.navigate(Screens.TrashScreen.route)
+                                }
+                                .padding(horizontal = 16.dp, vertical = 18.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            MyText(text = "Trash", fontSize = 18.sp, color = textColor)
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "trash",
+                                tint = textColor,
+                                modifier = Modifier.size(28.dp)
+                            )
+                        }
+                    }
+                }
+
                 item {
                     Card(
                         modifier = Modifier
@@ -151,44 +206,70 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                                 .fillMaxWidth()
                                 .padding(top = 12.dp, bottom = 12.dp, start = 14.dp, end = 8.dp)
                         ) {
-                            MyText(text = "Account Settings", fontSize = 22.sp, color = textColor)
+                            MyText(
+                                text = "Account",
+                                fontSize = 20.sp,
+                                color = textColor
+                            )
 
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(top = 8.dp)
                             ) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    MyText(text = "Email: ")
-                                    MyText(text = viewModel.email)
-                                    IconButton(onClick = { /*TODO*/ }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Edit,
-                                            contentDescription = "Edit email"
+
+                                if (viewModel.email.isNotEmpty()) {
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth(),
+//                                        horizontalArrangement = Arrangement.SpaceBetween,
+//                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        MyText(text = "Email: ", color = textColor.copy(.8f))
+                                        MyText(
+                                            text = viewModel.email,
+                                            fontSize = 20.sp,
+                                            modifier = Modifier.padding(start = 8.dp)
+                                        )
+//                                        IconButton(onClick = { /*TODO*/ }) {
+//                                            Icon(
+//                                                imageVector = Icons.Default.Edit,
+//                                                contentDescription = "Edit email"
+//                                            )
+//                                        }
+                                    }
+
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 8.dp),
+//                                        horizontalArrangement = Arrangement.SpaceBetween,
+//                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            MyText(text = "Password: ", color = textColor.copy(.8f))
+                                            IconButton(onClick = {
+                                                viewModel.showDialogState = true
+                                            }) {
+                                                Icon(
+                                                    imageVector = Icons.Default.Edit,
+                                                    tint = MaterialTheme.colorScheme.primary,
+                                                    contentDescription = "Edit password",
+
+                                                    )
+                                            }
+                                        }
+                                        MyText(
+                                            text = "********",
+                                            fontSize = 20.sp,
+                                            modifier = Modifier.padding(start = 8.dp)
                                         )
                                     }
                                 }
 
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    MyText(text = "Password: ")
-                                    MyText(text = "********")
-                                    IconButton(onClick = {
-                                        viewModel.showDialogState = true
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Edit,
-                                            contentDescription = "Edit password"
-                                        )
-                                    }
-                                }
 
                                 OutlinedButton(
                                     onClick = { /*TODO*/ },

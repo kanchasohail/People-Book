@@ -7,8 +7,11 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +23,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -66,6 +71,8 @@ fun PersonDetailsEditingScreen(
     viewModel: PersonDetailsViewModel,
 ) {
     val context = LocalContext.current
+    val imageBitmap = loadImageBitmap("profile_${viewModel.savedPerson.id}", context)
+
 
     val avatarCropLauncher =
         rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
@@ -130,7 +137,7 @@ fun PersonDetailsEditingScreen(
 //                            fontSize = 22.sp,
 //                            fontWeight = FontWeight.SemiBold
 //                        )
-                    DropDownMenuEditing(viewModel = viewModel)
+                    DropDownMenuEditing(viewModel = viewModel, color = appBarTextColor)
 //                    }
                 },
                 navigationIcon = {
@@ -213,11 +220,19 @@ fun PersonDetailsEditingScreen(
 //                                modifier = Modifier.clip(RoundedCornerShape(18.dp)),
 //                                contentDescription = "person Image"
 //                            )
-                            AsyncImage(
-                                model = loadImageBitmap(viewModel.thisPerson.image!!, context),
-                                modifier = Modifier.clip(RoundedCornerShape(18.dp)),
-                                contentDescription = "person Image"
-                            )
+//                            AsyncImage(
+//                                model = loadImageBitmap(viewModel.thisPerson.image!!, context),
+//                                modifier = Modifier.clip(RoundedCornerShape(18.dp)),
+//                                contentDescription = "person Image"
+//                            )
+
+                            if (imageBitmap != null) {
+                                Image(
+                                    bitmap = imageBitmap.asImageBitmap(),
+                                    modifier = Modifier.clip(RoundedCornerShape(18.dp)),
+                                    contentDescription = "person Image"
+                                )
+                            }
 
                         } else {
                             Image(
@@ -232,9 +247,17 @@ fun PersonDetailsEditingScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.BottomEnd
                     ) {
-                        OutlinedButton(onClick = {
-                            avatarPickerLauncher.launch("image/*")
-                        }) {
+                        Row(
+                            modifier = Modifier
+                                .border(
+                                    width = 1.dp,
+                                    shape = CardDefaults.shape,
+                                    color = MaterialTheme.colorScheme.outline
+                                )
+                                .padding(8.dp)
+                                .clickable {
+                                    avatarPickerLauncher.launch("image/*")
+                                }) {
                             MyText(text = "Add", fontSize = 18.sp)
                             Spacer(modifier = Modifier.width(6.dp))
                             Icon(
@@ -243,6 +266,17 @@ fun PersonDetailsEditingScreen(
                                 modifier = Modifier.size(24.dp)
                             )
                         }
+//                        OutlinedButton(onClick = {
+//                            avatarPickerLauncher.launch("image/*")
+//                        }) {
+//                            MyText(text = "Add", fontSize = 18.sp)
+//                            Spacer(modifier = Modifier.width(6.dp))
+//                            Icon(
+//                                painter = painterResource(id = R.drawable.ic_camera),
+//                                contentDescription = "addImage",
+//                                modifier = Modifier.size(24.dp)
+//                            )
+//                        }
                     }
                 }
 
