@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -48,6 +49,7 @@ import com.social.people_book.ui.common_views.ConfirmLogoutDialog
 import com.social.people_book.ui.common_views.ConfirmResetPasswordDialog
 import com.social.people_book.ui.layout.CustomSwitch
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.layout.navigateBack
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,7 +77,9 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
         topBar = {
             MediumTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+//                        navController.popBackStack()
+                    }) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             modifier = Modifier.size(30.dp),
@@ -95,8 +99,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                     )
                 },
                 actions = {
-//                    BackButtonArrow(iconColor = Color.Transparent, navController)
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.navigateBack() }) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             modifier = Modifier.size(30.dp),
@@ -219,17 +222,18 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                             ) {
 
                                 if (viewModel.email.isNotEmpty()) {
-                                    Column(
+                                    Row(
                                         modifier = Modifier.fillMaxWidth(),
-//                                        horizontalArrangement = Arrangement.SpaceBetween,
-//                                        verticalAlignment = Alignment.CenterVertically
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         MyText(text = "Email: ", color = textColor.copy(.8f))
                                         MyText(
                                             text = viewModel.email,
-                                            fontSize = 20.sp,
+                                            fontSize = 18.sp,
                                             modifier = Modifier.padding(start = 8.dp)
                                         )
+                                        Box(modifier = Modifier)
 //                                        IconButton(onClick = { /*TODO*/ }) {
 //                                            Icon(
 //                                                imageVector = Icons.Default.Edit,
@@ -238,19 +242,24 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
 //                                        }
                                     }
 
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(vertical = 8.dp),
+//                                    Row(
+//                                        modifier = Modifier
+//                                            .fillMaxWidth()
+//                                            .padding(vertical = 8.dp),
 //                                        horizontalArrangement = Arrangement.SpaceBetween,
 //                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
+//                                    ) {
                                         Row(
                                             modifier = Modifier.fillMaxWidth(),
                                             verticalAlignment = Alignment.CenterVertically,
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
                                             MyText(text = "Password: ", color = textColor.copy(.8f))
+                                            MyText(
+                                                text = "********",
+                                                fontSize = 20.sp,
+                                                modifier = Modifier.padding(start = 8.dp)
+                                            )
                                             IconButton(onClick = {
                                                 viewModel.showDialogState = true
                                             }) {
@@ -262,13 +271,8 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                                                     )
                                             }
                                         }
-                                        MyText(
-                                            text = "********",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.padding(start = 8.dp)
-                                        )
                                     }
-                                }
+//                                }
 
 
                                 OutlinedButton(
@@ -304,7 +308,13 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                 item {
                     AboutUsCard(textColor = textColor)
                     Spacer(modifier = Modifier.weight(1f))
-                    MyText(text = "App version: 1.0.0", modifier = Modifier.padding(8.dp))
+                    MyText(
+                        text = "App version: 1.0.0",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                    )
                 }
 
             }

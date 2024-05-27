@@ -69,8 +69,9 @@ class PersonDetailsViewModel : ViewModel() {
     var selectedTag by mutableStateOf(Tag.None)
 
     var selectedImage by mutableStateOf<Uri?>(null)
-//    var downloadedImage by mutableStateOf<ByteArray?>(null)
 
+    //    var downloadedImage by mutableStateOf<ByteArray?>(null)
+    var imageBitmap by mutableStateOf<android.graphics.Bitmap?>(null)
 
     var isLoading by mutableStateOf(false)
     var showDialogState by mutableStateOf(false)
@@ -304,7 +305,7 @@ class PersonDetailsViewModel : ViewModel() {
             email = email,
             about = about,
 //            image = selectedImage?.let { getBitmapFromUri(it, context) },
-            image = "profile_${thisPerson.id}",
+            image = if (selectedImage != null && imageBitmap != null) "profile_${thisPerson.id}" else null,
             isDeleted = false,
             isFavorite = isFavorite,
             tag = selectedTag,

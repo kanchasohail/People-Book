@@ -57,17 +57,17 @@ fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
                 .fillMaxWidth()
                 .padding(top = 12.dp, bottom = 12.dp, start = 14.dp, end = 8.dp)
         ) {
-            MyText(text = "About Us", fontSize = 20.sp, color = textColor)
+            MyText(text = "About", fontSize = 20.sp, color = textColor)
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp, top = 8.dp, end = 8.dp),
+                    .padding(start = 4.dp, top = 4.dp, end = 4.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 val annotatedString = buildAnnotatedString {
-                    append("We are committed to protect all the information you put in our app. This is our business interest to serve our customers and make sure no one can see any information you are giving.\nVisit our ")
+                    append("We are committed to protect all the information you put in the app. No one, not even the developers have access to your information. Check our ")
                     pushStringAnnotation(
                         tag = "policy",
                         annotation = "https://shimul-riley.github.io/The-Ordinary-Android-Dev/#privacy"
@@ -79,10 +79,10 @@ fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
                             fontFamily = RobotoFontFamily
                         )
                     ) {
-                        append("Privacy Policy ")
+                        append("policy ")
                     }
                     pop()
-                    append("page to learn more.")
+                    append("to learn how seriously we take your privacy")
                 }
 
                 ClickableText(

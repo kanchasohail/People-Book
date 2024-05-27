@@ -40,6 +40,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -200,6 +201,7 @@ fun AddPersonScreen(
                     }) {
                         Icon(
                             painter = painterResource(id = if (viewModel.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outlined),
+                            tint = appBarTextColor,
                             modifier = Modifier.size(30.dp),
                             contentDescription = "Favorite"
                         )
@@ -258,31 +260,42 @@ fun AddPersonScreen(
                         Image(
                             painter = rememberAsyncImagePainter(
                                 viewModel.selectedImage
-                            ), contentDescription = "person Image"
+                            ),
+                            modifier = Modifier.clip(RoundedCornerShape(18.dp)),
+                            contentDescription = "person Image"
                         )
                     }
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.BottomEnd
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    shape = CardDefaults.shape,
-                                    color = MaterialTheme.colorScheme.outline
+                        Column {
+                            Row(
+                                modifier = Modifier
+                                    .border(
+                                        width = 1.dp,
+                                        shape = CardDefaults.shape,
+                                        color = MaterialTheme.colorScheme.outline
+                                    )
+                                    .padding(8.dp)
+                                    .clickable {
+                                        avatarPickerLauncher.launch("image/*")
+                                    }) {
+                                MyText(text = "Add", fontSize = 18.sp)
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_camera),
+                                    contentDescription = "addImage",
+                                    modifier = Modifier.size(24.dp)
                                 )
-                                .padding(8.dp)
-                                .clickable {
-                                    avatarPickerLauncher.launch("image/*")
+                            }
+                            if (viewModel.selectedImage != null)
+                                TextButton(onClick = {
+                                    viewModel.selectedImage = null
                                 }) {
-                            MyText(text = "Add", fontSize = 18.sp)
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_camera),
-                                contentDescription = "addImage",
-                                modifier = Modifier.size(24.dp)
-                            )
+                                    MyText(text = "Remove", color = MaterialTheme.colorScheme.error)
+                                }
+
                         }
 
 //                        OutlinedButton(onClick = {
@@ -307,7 +320,9 @@ fun AddPersonScreen(
                         viewModel.name = it
                     },
                     label = { Text(text = "Name") },
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(.85f)
                 )
 
 
@@ -322,7 +337,9 @@ fun AddPersonScreen(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Phone
                     ),
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(.85f)
                 )
 
                 OutlinedTextField(
@@ -335,7 +352,9 @@ fun AddPersonScreen(
                         keyboardType = KeyboardType.Email
                     ),
                     label = { Text(text = "Email") },
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(.85f)
                 )
 
 
@@ -345,7 +364,9 @@ fun AddPersonScreen(
                         viewModel.about = it
                     },
                     label = { Text(text = "About") },
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(.85f)
                 )
 
             }
