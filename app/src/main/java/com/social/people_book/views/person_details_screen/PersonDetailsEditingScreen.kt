@@ -32,6 +32,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -71,7 +72,8 @@ fun PersonDetailsEditingScreen(
     viewModel: PersonDetailsViewModel,
 ) {
     val context = LocalContext.current
-    val imageBitmap = loadImageBitmap("profile_${viewModel.savedPerson.id}", context)
+//    var imageBitmap = loadImageBitmap("profile_${viewModel.savedPerson.id}", context)
+    viewModel.imageBitmap = loadImageBitmap("profile_${viewModel.savedPerson.id}", context)
 
 
     val avatarCropLauncher =
@@ -149,6 +151,7 @@ fun PersonDetailsEditingScreen(
                     }) {
                         Icon(
                             painter = painterResource(id = if (viewModel.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outlined),
+                            tint = appBarTextColor,
                             modifier = Modifier.size(30.dp),
                             contentDescription = "Favorite"
                         )
@@ -202,7 +205,7 @@ fun PersonDetailsEditingScreen(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (viewModel.thisPerson.image == null && viewModel.selectedImage == null) {
+                    if (viewModel.thisPerson.image == null && viewModel.selectedImage == null || ( viewModel.imageBitmap == null && viewModel.selectedImage == null)) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_blank_profile),
                             contentDescription = "Profile",
@@ -226,9 +229,9 @@ fun PersonDetailsEditingScreen(
 //                                contentDescription = "person Image"
 //                            )
 
-                            if (imageBitmap != null) {
+                            if (viewModel.imageBitmap != null) {
                                 Image(
-                                    bitmap = imageBitmap.asImageBitmap(),
+                                    bitmap = viewModel.imageBitmap!!.asImageBitmap(),
                                     modifier = Modifier.clip(RoundedCornerShape(18.dp)),
                                     contentDescription = "person Image"
                                 )
@@ -247,24 +250,35 @@ fun PersonDetailsEditingScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.BottomEnd
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    shape = CardDefaults.shape,
-                                    color = MaterialTheme.colorScheme.outline
+                        Column {
+
+
+                            Row(
+                                modifier = Modifier
+                                    .border(
+                                        width = 1.dp,
+                                        shape = CardDefaults.shape,
+                                        color = MaterialTheme.colorScheme.outline
+                                    )
+                                    .padding(8.dp)
+                                    .clickable {
+                                        avatarPickerLauncher.launch("image/*")
+                                    }) {
+                                MyText(text = "Add", fontSize = 18.sp)
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_camera),
+                                    contentDescription = "addImage",
+                                    modifier = Modifier.size(24.dp)
                                 )
-                                .padding(8.dp)
-                                .clickable {
-                                    avatarPickerLauncher.launch("image/*")
+                            }
+                            if (viewModel.selectedImage != null || viewModel.imageBitmap != null && viewModel.thisPerson.imagest != null)
+                                TextButton(onClick = {
+                                    viewModel.selectedImage = null
+                                    viewModel.imageBitmap = null
                                 }) {
-                            MyText(text = "Add", fontSize = 18.sp)
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_camera),
-                                contentDescription = "addImage",
-                                modifier = Modifier.size(24.dp)
-                            )
+                                    MyText(text = "Remove", color = MaterialTheme.colorScheme.error)
+                                }
                         }
 //                        OutlinedButton(onClick = {
 //                            avatarPickerLauncher.launch("image/*")
@@ -287,7 +301,9 @@ fun PersonDetailsEditingScreen(
                         viewModel.name = it
                     },
                     label = { Text(text = "Name") },
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(.85f)
                 )
 
 
@@ -302,7 +318,9 @@ fun PersonDetailsEditingScreen(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Phone
                     ),
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(.85f)
                 )
 
 
@@ -316,7 +334,9 @@ fun PersonDetailsEditingScreen(
                         keyboardType = KeyboardType.Email
                     ),
                     label = { Text(text = "Email") },
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(.85f)
                 )
 
                 OutlinedTextField(
@@ -325,7 +345,9 @@ fun PersonDetailsEditingScreen(
                         viewModel.about = it
                     },
                     label = { Text(text = "About") },
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(.85f)
                 )
             }
         }

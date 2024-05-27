@@ -5,24 +5,37 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.social.people_book.model.LocalFileStorageRepository
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.layout.navigateBack
 import com.social.people_book.views.home_screen.components.ItemCard
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -46,14 +59,47 @@ fun SharedTransitionScope.FavoritesScreen(
 
     val favoritePerson = viewModel.getFavoritePersons()
 
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(
         topBar = {
-            TopAppBar(title = { MyText(text = "Favorites") }, navigationIcon = {
-                BackButtonArrow(
-                    iconColor = appBarTextColor,
-                    navController = navController
-                )
-            })
+            MediumTopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = {
+//                        navController.popBackStack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            modifier = Modifier.size(30.dp),
+                            tint = Color.Transparent,
+                            contentDescription = "Close"
+                        )
+                    }
+                },
+                title = {
+                    MyText(
+                        text = "Favourites",
+                        fontSize = 33.sp,
+                        modifier = Modifier
+                            .fillMaxWidth(), textAlign = TextAlign.Center
+                    )
+                },
+                actions = {
+//                    BackButtonArrow(iconColor = Color.Transparent, navController)
+                    IconButton(onClick = { navController.navigateBack() }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            modifier = Modifier.size(30.dp),
+                            contentDescription = "Close"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surface
+                ),
+                scrollBehavior = scrollBehavior,
+            )
         }
     ) { paddingValues ->
         Column(
@@ -63,7 +109,9 @@ fun SharedTransitionScope.FavoritesScreen(
         ) {
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Adaptive(150.dp),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
             ) {
                 items(favoritePerson) {
                     ItemCard(
