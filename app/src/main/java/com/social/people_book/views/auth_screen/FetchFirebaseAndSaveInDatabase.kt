@@ -1,6 +1,5 @@
 package com.social.people_book.views.auth_screen
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
@@ -43,11 +42,11 @@ fun fetchAndSaveDataFromFirebase(
                     )
                     saveToRoomDatabase(person, viewModelScope, personDao)
                     loadAndSavePersonImage(
-                        storage,
-                        document.id,
-                        userId,
-                        localFileStorageRepository,
-                        viewModelScope
+                        storage = storage,
+                        userId = userId,
+                        documentId = document.id,
+                        localFileStorageRepository = localFileStorageRepository,
+                        viewModelScope = viewModelScope
                     )
                 }
             }
@@ -70,14 +69,15 @@ private fun loadAndSavePersonImage(
     viewModelScope: CoroutineScope
 ) {
     val imageRef =
-        storage.reference.child("images/${userId}/$documentId/profile.jpg")
+        storage.reference.child("images/$userId/$documentId/profile.jpg")
 
     val ONE_MEGABYTE: Long = 1024 * 1024
     imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
         //   downloadedImage = it
         val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+
         viewModelScope.launch {
-            localFileStorageRepository.saveImageToInternalStorage("profile_${userId}", bitmap)
+            localFileStorageRepository.saveImageToInternalStorage("profile_$documentId", bitmap)
         }
         Log.d("Person Image", "Downloading Successful")
 

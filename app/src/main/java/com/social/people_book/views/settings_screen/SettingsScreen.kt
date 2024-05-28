@@ -1,6 +1,5 @@
 package com.social.people_book.views.settings_screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -17,15 +16,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedButton
@@ -81,7 +79,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
 //                        navController.popBackStack()
                     }) {
                         Icon(
-                            imageVector = Icons.Default.Close,
+                            imageVector = Icons.Rounded.Close,
                             modifier = Modifier.size(30.dp),
                             tint = Color.Transparent,
                             contentDescription = "Close"
@@ -101,7 +99,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                 actions = {
                     IconButton(onClick = { navController.navigateBack() }) {
                         Icon(
-                            imageVector = Icons.Default.Close,
+                            imageVector = Icons.Rounded.Close,
                             modifier = Modifier.size(30.dp),
                             contentDescription = "Close"
                         )
@@ -249,29 +247,29 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
 //                                        horizontalArrangement = Arrangement.SpaceBetween,
 //                                        verticalAlignment = Alignment.CenterVertically
 //                                    ) {
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.SpaceBetween
-                                        ) {
-                                            MyText(text = "Password: ", color = textColor.copy(.8f))
-                                            MyText(
-                                                text = "********",
-                                                fontSize = 20.sp,
-                                                modifier = Modifier.padding(start = 8.dp)
-                                            )
-                                            IconButton(onClick = {
-                                                viewModel.showDialogState = true
-                                            }) {
-                                                Icon(
-                                                    imageVector = Icons.Default.Edit,
-                                                    tint = MaterialTheme.colorScheme.primary,
-                                                    contentDescription = "Edit password",
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        MyText(text = "Password: ", color = textColor.copy(.8f))
+                                        MyText(
+                                            text = "********",
+                                            fontSize = 20.sp,
+                                            modifier = Modifier.padding(start = 8.dp)
+                                        )
+                                        IconButton(onClick = {
+                                            viewModel.showDialogState = true
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Default.Edit,
+                                                tint = MaterialTheme.colorScheme.primary,
+                                                contentDescription = "Edit password",
 
-                                                    )
-                                            }
+                                                )
                                         }
                                     }
+                                }
 //                                }
 
 
@@ -280,12 +278,13 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     MyText(text = "Delete Account")
-                                    Spacer(modifier = Modifier.width(3.dp))
-                                    Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = "Delete account",
-                                        modifier = Modifier.size(24.dp)
-                                    )
+//                                    Spacer(modifier = Modifier.width(3.dp))
+//                                    MyText(text = "!", fontSize = 20.sp, fontWeight = FontWeight.Bold,color = MaterialTheme.colorScheme.error)
+//                                    Icon(
+//                                        imageVector = Icons.Default.Delete,
+//                                        contentDescription = "Delete account",
+//                                        modifier = Modifier.size(24.dp)
+//                                    )
                                 }
                                 Spacer(modifier = Modifier.height(4.dp))
                                 OutlinedButton(

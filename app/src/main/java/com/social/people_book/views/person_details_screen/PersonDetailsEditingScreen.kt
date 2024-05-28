@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,6 +62,7 @@ import com.social.people_book.model.util.image_converters.loadImageBitmap
 import com.social.people_book.ui.common_views.ConfirmBackDialog
 import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.theme.OutfitFontFamily
 import com.social.people_book.views.person_details_screen.components.DropDownMenuEditing
 import kotlinx.coroutines.launch
 
@@ -272,7 +274,7 @@ fun PersonDetailsEditingScreen(
                                     modifier = Modifier.size(24.dp)
                                 )
                             }
-                            if (viewModel.selectedImage != null || viewModel.imageBitmap != null && viewModel.thisPerson.imagest != null)
+                            if (viewModel.selectedImage != null || viewModel.imageBitmap != null && viewModel.thisPerson.image != null)
                                 TextButton(onClick = {
                                     viewModel.selectedImage = null
                                     viewModel.imageBitmap = null
@@ -297,6 +299,7 @@ fun PersonDetailsEditingScreen(
                 OutlinedTextField(
                     value = viewModel.name,
                     singleLine = true,
+                    textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                     onValueChange = {
                         viewModel.name = it
                     },
@@ -311,6 +314,7 @@ fun PersonDetailsEditingScreen(
                 OutlinedTextField(
                     value = viewModel.number,
                     singleLine = true,
+                    textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                     onValueChange = {
                         viewModel.number = it
                     },
@@ -327,6 +331,7 @@ fun PersonDetailsEditingScreen(
                 OutlinedTextField(
                     value = viewModel.email,
                     singleLine = true,
+                    textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                     onValueChange = {
                         viewModel.email = it
                     },
@@ -341,6 +346,7 @@ fun PersonDetailsEditingScreen(
 
                 OutlinedTextField(
                     value = viewModel.about,
+                    textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                     onValueChange = {
                         viewModel.about = it
                     },

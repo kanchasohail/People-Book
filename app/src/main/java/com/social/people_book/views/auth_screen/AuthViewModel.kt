@@ -28,7 +28,8 @@ class AuthViewModel : ViewModel() {
     var email by mutableStateOf("")
     var password by mutableStateOf("")
 
-    var isLoading by mutableStateOf(false)
+    var isGoogleButtonLoading by mutableStateOf(false)
+    var isLoginButtonLoading by mutableStateOf(false)
     var isShowPassword by mutableStateOf(false)
     var isEmailValid by mutableStateOf(true)
     var isPasswordValid by mutableStateOf(true)
@@ -61,8 +62,8 @@ class AuthViewModel : ViewModel() {
     }
 
 
-    fun loginWithGoogle(idToken: String,context: Context ,navController: NavController) {
-        isLoading = true
+    fun loginWithGoogle(idToken: String, context: Context, navController: NavController) {
+        isGoogleButtonLoading = true
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
@@ -71,11 +72,11 @@ class AuthViewModel : ViewModel() {
                     navController.navigate(Screens.HomeScreen.route)
                 }
             }
-        isLoading = false
+        isGoogleButtonLoading = false
     }
 
     fun singUpWithGoogle(idToken: String, context: Context, navController: NavController) {
-        isLoading = true
+        isGoogleButtonLoading = true
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
@@ -85,7 +86,7 @@ class AuthViewModel : ViewModel() {
                     navController.navigate(Screens.HomeScreen.route)
                 }
             }
-        isLoading = false
+        isGoogleButtonLoading = false
     }
 
 
@@ -94,9 +95,9 @@ class AuthViewModel : ViewModel() {
             Toast.makeText(context, "Invalid Email or Password", Toast.LENGTH_SHORT).show()
             return
         }
-        isLoading = true
+        isLoginButtonLoading = true
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            isLoading = false
+            isLoginButtonLoading = false
             if (task.isSuccessful) {
                 fetch(context)
                 saveUser(context)
@@ -109,9 +110,9 @@ class AuthViewModel : ViewModel() {
     }
 
     fun login(navController: NavController, context: Context) {
-        isLoading = true
+        isLoginButtonLoading = true
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            isLoading = false
+            isLoginButtonLoading = false
             if (task.isSuccessful) {
                 fetch(context)
                 navController.navigate(Screens.HomeScreen.route)
@@ -139,13 +140,18 @@ class AuthViewModel : ViewModel() {
     }
 
     fun sendPasswordResetEmail(context: Context) {
-        isLoading = true
+        val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
+        if (!emailRegex.matches(email)) {
+            Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+            return
+        }
+        isLoginButtonLoading = true
         auth.sendPasswordResetEmail(email).addOnSuccessListener {
-            isLoading = false
+            isLoginButtonLoading = false
             Toast.makeText(context, "Password reset link sent to your email", Toast.LENGTH_LONG)
                 .show()
         }.addOnFailureListener {
-            isLoading = false
+            isLoginButtonLoading = false
             Toast.makeText(context, "Something went wrong please try again", Toast.LENGTH_LONG)
                 .show()
         }

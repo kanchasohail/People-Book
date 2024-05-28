@@ -53,6 +53,7 @@ import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.RobotoFontFamily
 import com.social.people_book.model.util.google_sign_in.GoogleSignInHelper
 import com.social.people_book.model.util.rememberImeState
+import com.social.people_book.ui.theme.OutfitFontFamily
 import com.social.people_book.views.auth_screen.components.DividerWithText
 import com.social.people_book.views.auth_screen.components.GoogleSignUpButton
 
@@ -134,10 +135,10 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
 //                    if (!viewModel.isLoading) {
-                    GoogleSignUpButton(text = "Signup", isLoading = viewModel.isLoading) {
-                        viewModel.isLoading = true
+                    GoogleSignUpButton(text = "Signup", isLoading = viewModel.isGoogleButtonLoading) {
+                        viewModel.isGoogleButtonLoading = true
                         client.beginSignIn(request).addOnCompleteListener { task ->
-                            viewModel.isLoading = false
+                            viewModel.isGoogleButtonLoading = false
                             if (task.isSuccessful) {
                                 val intentSender = task.result.pendingIntent.intentSender
                                 val intentSenderRequest =
@@ -190,6 +191,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                             viewModel.isValidEmail(it)
                         },
                         singleLine = true,
+                        textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                         keyboardOptions = KeyboardOptions.Default.copy(
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Email
@@ -265,6 +267,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
 //                                })
                         },
                         singleLine = true,
+                        textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                         visualTransformation = if (viewModel.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(
                             mask = '*'
                         ),
@@ -285,7 +288,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                         .height(45.dp)
                 ) {
                     MyText(
-                        if (!viewModel.isLoading) "SignUp" else "Loading...",
+                        if (!viewModel.isLoginButtonLoading) "SignUp" else "Loading...",
                         fontSize = 18.sp
                     )
                 }

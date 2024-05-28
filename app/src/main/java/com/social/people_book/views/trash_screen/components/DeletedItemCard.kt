@@ -83,7 +83,9 @@ fun DeletedItemCard(
             if (imageBitmap != null) {
                 Image(
                     bitmap = imageBitmap.asImageBitmap(),
-                    modifier = Modifier.clip(RoundedCornerShape(18.dp)),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clip(RoundedCornerShape(18.dp)),
                     contentDescription = "person Image"
                 )
             }
