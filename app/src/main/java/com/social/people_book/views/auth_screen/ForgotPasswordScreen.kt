@@ -13,7 +13,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,15 +29,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.social.people_book.ui.common_views.CenterBox
-import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.theme.OutfitFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,6 +128,7 @@ fun ForgotPasswordScreen(
                             viewModel.isValidEmail(it)
                         },
                         singleLine = true,
+                        textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                         keyboardOptions = KeyboardOptions.Default.copy(
                             imeAction = ImeAction.Next,
                             keyboardType = KeyboardType.Email
@@ -148,24 +148,21 @@ fun ForgotPasswordScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Reset button
-                if (!viewModel.isLoading) {
-                    Button(
-                        onClick = {
-                            //Todo handle reset password
-                            if(viewModel.isValidEmail(viewModel.email)){
-                                viewModel.sendPasswordResetEmail(context)
-                            }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(45.dp)
-                    ) {
-                        MyText("Reset Password", fontSize = 18.sp)
-                    }
-                } else {
-                    CenterBox {
-                        LoadingIndicator()
-                    }
+
+                Button(
+                    onClick = {
+                        if (viewModel.isValidEmail(viewModel.email)) {
+                            viewModel.sendPasswordResetEmail(context)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(45.dp)
+                ) {
+                    MyText(
+                        if (!viewModel.isLoginButtonLoading) "Reset Password" else "Loading...",
+                        fontSize = 18.sp
+                    )
                 }
             }
         }

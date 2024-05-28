@@ -11,14 +11,14 @@ import java.sql.Date
 
 @Dao
 interface PersonDao {
-    @Query("SELECT * FROM person WHERE is_deleted = :isDeleted")
+    @Query("SELECT * FROM person WHERE is_deleted = :isDeleted ORDER BY id DESC")
     fun getAll(isDeleted: Boolean = false): Flow<List<Person>>
 
 
-    @Query("SELECT * FROM person WHERE is_favorite = :isFavorite")
+    @Query("SELECT * FROM person WHERE is_favorite = :isFavorite ORDER BY id DESC")
     fun getAllFavorite(isFavorite: Boolean = true): Flow<List<Person>>
 
-    @Query("SELECT * FROM person WHERE is_deleted = :isDeleted")
+    @Query("SELECT * FROM person WHERE is_deleted = :isDeleted ORDER BY id DESC")
     fun getAllDeletedPerson(isDeleted: Boolean = true): Flow<List<Person>>
 
     @Query("SELECT * FROM person WHERE id = :id LIMIT 1")

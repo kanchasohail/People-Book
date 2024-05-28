@@ -26,6 +26,8 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CardDefaults
@@ -52,6 +54,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,6 +67,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
 import com.social.people_book.MainViewModel
+import com.social.people_book.R
 import com.social.people_book.model.LocalFileStorageRepository
 import com.social.people_book.model.room_database.Tag
 import com.social.people_book.model.util.isScrollingUp
@@ -182,7 +186,7 @@ fun SharedTransitionScope.HomeScreen(
 
                         }) {
                             Icon(
-                                imageVector = Icons.Default.Search,
+                                painter = painterResource(id = R.drawable.ic_search_icon),
                                 contentDescription = "search",
                                 tint = appBarTextColor,
                                 modifier = Modifier.size(28.dp)
@@ -192,7 +196,7 @@ fun SharedTransitionScope.HomeScreen(
                             navController.navigate(Screens.FavoritesScreen.route)
                         }) {
                             Icon(
-                                imageVector = Icons.Default.Star,
+                                painter = painterResource(id = R.drawable.ic_star_filled),
                                 contentDescription = "Favorites",
                                 tint = appBarTextColor,
                                 modifier = Modifier.size(28.dp)
@@ -204,7 +208,7 @@ fun SharedTransitionScope.HomeScreen(
             floatingActionButton = {
                 ExtendedFloatingActionButton(
                     text = { MyText(text = "Add", fontSize = 16.sp) },
-                    icon = { Icon(imageVector = Icons.Default.Add, contentDescription = "Add") },
+                    icon = { Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add") },
                     onClick = { navController.navigate(Screens.AddPersonScreen.route) },
                     expanded = gridState.isScrollingUp()
                 )

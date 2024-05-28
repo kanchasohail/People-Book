@@ -36,6 +36,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -48,6 +49,7 @@ import com.social.people_book.ui.common_views.CenterBox
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.model.util.google_sign_in.GoogleSignInHelper
 import com.social.people_book.model.util.rememberImeState
+import com.social.people_book.ui.theme.OutfitFontFamily
 import com.social.people_book.views.auth_screen.components.DividerWithText
 import com.social.people_book.views.auth_screen.components.GoogleSignUpButton
 
@@ -89,7 +91,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
             val idToken = credential.googleIdToken
 
             if (idToken != null) {
-                viewModel.loginWithGoogle(idToken,context, navController)
+                viewModel.loginWithGoogle(idToken, context, navController)
             } else {
                 Toast.makeText(context, "Failed to Login", Toast.LENGTH_SHORT).show()
             }
@@ -111,7 +113,8 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues).verticalScroll(scrollState)
+                .padding(paddingValues)
+                .verticalScroll(scrollState)
         ) {
 
 
@@ -122,6 +125,8 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                 textAlign = TextAlign.Center
             )
 
+            Spacer(modifier = Modifier.height(10.dp))
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -130,10 +135,10 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
 //                    if (!viewModel.isLoading) {
-                    GoogleSignUpButton(text = "Login", viewModel.isLoading) {
-                        viewModel.isLoading = true
+                    GoogleSignUpButton(text = "Login", viewModel.isGoogleButtonLoading) {
+                        viewModel.isGoogleButtonLoading = true
                         client.beginSignIn(request).addOnCompleteListener { task ->
-                            viewModel.isLoading = false
+                            viewModel.isGoogleButtonLoading = false
                             if (task.isSuccessful) {
                                 val intentSender = task.result.pendingIntent.intentSender
                                 val intentSenderRequest =
@@ -160,7 +165,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                 Column(
                     modifier = Modifier
                         .padding(8.dp)
-                        .padding(bottom = 16.dp)
+//                        .padding(bottom = 16.dp)
                 ) {
                     Row(
                         modifier = Modifier
@@ -185,6 +190,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                             viewModel.isValidEmail(it)
                         },
                         singleLine = true,
+                        textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                         keyboardOptions = KeyboardOptions.Default.copy(
                             imeAction = androidx.compose.ui.text.input.ImeAction.Next,
                             keyboardType = KeyboardType.Email
@@ -200,6 +206,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
+                Spacer(modifier = Modifier.height(8.dp))
 
 
                 // Password field
@@ -237,6 +244,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
 //                            })
                     },
                     singleLine = true,
+                    textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                     visualTransformation = if (viewModel.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(
                         mask = '*'
                     ),
@@ -273,7 +281,10 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
                         .fillMaxWidth()
                         .height(45.dp)
                 ) {
-                    MyText(if (viewModel.isLoading) "Loading..." else "Login", fontSize = 18.sp)
+                    MyText(
+                        if (viewModel.isLoginButtonLoading) "Loading..." else "Login",
+                        fontSize = 18.sp
+                    )
                 }
 //                } else {
 //                    CenterBox {

@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -71,6 +72,7 @@ import com.social.people_book.model.util.image_converters.compressImage
 import com.social.people_book.ui.common_views.ConfirmSaveOrExitDialog
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.theme.OutfitFontFamily
 import com.social.people_book.views.add_person_screen.components.DropDownMenu
 import kotlinx.coroutines.launch
 
@@ -316,6 +318,7 @@ fun AddPersonScreen(
                 OutlinedTextField(
                     value = viewModel.name,
                     singleLine = true,
+                    textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                     onValueChange = {
                         viewModel.name = it
                     },
@@ -330,6 +333,7 @@ fun AddPersonScreen(
                 OutlinedTextField(
                     value = viewModel.number,
                     singleLine = true,
+                    textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                     onValueChange = {
                         viewModel.number = it
                     },
@@ -345,6 +349,7 @@ fun AddPersonScreen(
                 OutlinedTextField(
                     value = viewModel.email,
                     singleLine = true,
+                    textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                     onValueChange = {
                         viewModel.email = it
                     },
@@ -360,6 +365,7 @@ fun AddPersonScreen(
 
                 OutlinedTextField(
                     value = viewModel.about,
+                    textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                     onValueChange = {
                         viewModel.about = it
                     },

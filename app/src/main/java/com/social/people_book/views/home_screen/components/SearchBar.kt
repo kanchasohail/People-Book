@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -21,9 +22,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.social.people_book.R
+import com.social.people_book.ui.theme.OutfitFontFamily
 import com.social.people_book.ui.theme.RobotoFontFamily
 
 @Composable
@@ -43,7 +47,7 @@ fun SearchBar(
         textStyle = TextStyle(
             color = textColor,
             fontSize = 20.sp,
-            fontFamily = RobotoFontFamily
+            fontFamily = OutfitFontFamily
         ),
         cursorBrush = SolidColor(if (text.isEmpty()) Color.Transparent else textColor),
         keyboardOptions = KeyboardOptions.Default.copy(
@@ -68,7 +72,7 @@ fun SearchBar(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Search,
+                        painter = painterResource(id = R.drawable.ic_search_icon),
                         contentDescription = "Search",
                         tint = iconTint,
                         modifier = Modifier

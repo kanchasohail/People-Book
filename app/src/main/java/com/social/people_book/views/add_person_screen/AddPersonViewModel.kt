@@ -119,8 +119,10 @@ class AddPersonViewModel : ViewModel() {
                     "number" to number,
                     "email" to email,
                     "about" to about,
+                    "tag" to selectedTag,
                     "is_favorite" to isFavorite,
-                    "image" to "profile_$personId"
+//                    "image" to "profile_$personId"
+                    "image" to if (selectedImage != null) "profile_$personId" else null
                 )
             ).addOnSuccessListener {
                 saveImage(thisDocument.id)
