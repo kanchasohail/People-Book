@@ -1,6 +1,8 @@
 package com.social.people_book.views.settings_screen
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +38,17 @@ class SettingsViewModel : ViewModel() {
             }
     }
 
+    fun contactUsEmail(context: Context) {
+        val email = "thegeniuscoder100@gmail.com"
+        val subject = ""
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:") // Only email apps should handle this
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+        }
+        context.startActivity(intent)
+    }
+
     fun sendPasswordResetEmail(context: Context) {
         isLoading = true
         auth.sendPasswordResetEmail(email).addOnSuccessListener {
@@ -49,10 +62,10 @@ class SettingsViewModel : ViewModel() {
         }
     }
 
-    fun logOut(navController: NavController){
+    fun logOut(navController: NavController) {
         isLoading = true
         auth.signOut()
-        navController.popBackStack(Screens.HomeScreen.route , inclusive = true)
+        navController.popBackStack(Screens.HomeScreen.route, inclusive = true)
         navController.navigate(Screens.AuthScreen.route)
     }
 

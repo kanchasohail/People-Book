@@ -91,8 +91,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                         text = "Settings",
                         fontSize = 33.sp,
                         modifier = Modifier
-                            .fillMaxWidth()
-//                            .background(Color.Red),
+                            .fillMaxWidth().padding(end = 20.dp)
                         , textAlign = TextAlign.Center
                     )
                 },
@@ -152,15 +151,15 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                                 .clickable {
                                     mainViewModel.setThemeMode(!isDarkMode)
                                 }
-                                .padding(horizontal = 16.dp, vertical = 18.dp),
+                                .padding(horizontal = 12.dp, vertical = 18.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             MyText(text = "Dark Theme", fontSize = 18.sp, color = textColor)
 
                             CustomSwitch(
-                                height = 11.dp,
-                                width = 22.dp,
+                                height = 10.dp,
+                                width = 20.dp,
                                 gapBetweenThumbAndTrackEdge = 1.6.dp,
                                 checked = isDarkMode,
                                 onCheckedChange = {
@@ -177,7 +176,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                                 .clickable {
                                     navController.navigate(Screens.TrashScreen.route)
                                 }
-                                .padding(horizontal = 16.dp, vertical = 18.dp),
+                                .padding(horizontal = 12.dp, vertical = 18.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             MyText(text = "Trash", fontSize = 18.sp, color = textColor)
@@ -305,7 +304,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                 }
 
                 item {
-                    AboutUsCard(textColor = textColor)
+                    AboutUsCard(textColor = textColor, viewModel = viewModel)
                     Spacer(modifier = Modifier.weight(1f))
                     MyText(
                         text = "App version: 1.0.0",

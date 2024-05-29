@@ -20,7 +20,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.theme.OutfitFontFamily
 import com.social.people_book.ui.theme.RobotoFontFamily
+import com.social.people_book.ui.theme.dialogButtonBlackColor
 
 @Composable
 fun ConfirmLogoutDialog(
@@ -36,8 +38,9 @@ fun ConfirmLogoutDialog(
             text = {
                 Text(
                     text = "Are you sure to log out?", style = TextStyle(
-                        fontFamily = RobotoFontFamily,
-                        fontSize = 16.sp
+                        fontFamily = OutfitFontFamily,
+                        fontSize = 16.sp,
+                        lineHeight = 24.sp
                     ),
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -48,7 +51,7 @@ fun ConfirmLogoutDialog(
                 OutlinedButton(
                     onClick = onConfirm,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
+                        containerColor = dialogButtonBlackColor,
                         contentColor = Color.White
                     )
                 ) {

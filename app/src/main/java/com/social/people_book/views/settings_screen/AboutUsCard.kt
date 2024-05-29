@@ -33,11 +33,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.social.people_book.R
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.theme.OutfitFontFamily
 import com.social.people_book.ui.theme.RobotoFontFamily
 
 
 @Composable
-fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
+fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color, viewModel: SettingsViewModel) {
     val context = LocalContext.current
 
     val privacyPolicyUrl = context.getString(R.string.privacy_policy)
@@ -66,45 +67,56 @@ fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                val annotatedString = buildAnnotatedString {
-                    append("We are committed to protect all the information you put in the app. No one, not even the developers have access to your information. Check our ")
-                    pushStringAnnotation(
-                        tag = "policy",
-                        annotation = "https://shimul-riley.github.io/The-Ordinary-Android-Dev/#privacy"
-                    )
-                    withStyle(
-                        style = SpanStyle(
-                            fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontFamily = RobotoFontFamily
-                        )
-                    ) {
-                        append("policy ")
-                    }
-                    pop()
-                    append("to learn how seriously we take your privacy")
-                }
+//                val annotatedString = buildAnnotatedString {
+//                    append("We are committed to protect all the information you put in the app. No one, not even the developers have access to your information. Check our ")
+//                    pushStringAnnotation(
+//                        tag = "policy",
+//                        annotation = "https://shimul-riley.github.io/The-Ordinary-Android-Dev/#privacy"
+//                    )
+//                    withStyle(
+//                        style = SpanStyle(
+//                            fontSize = 16.sp,
+//                            color = MaterialTheme.colorScheme.primary,
+//                            fontFamily = OutfitFontFamily
+//                        )
+//                    ) {
+//                        append("policy ")
+//                    }
+//                    pop()
+//                    append("to learn how seriously we take your privacy")
+//                }
+//
+//                ClickableText(
+//                    text = annotatedString,
+//                    onClick = { offset ->
+//                        annotatedString.getStringAnnotations(
+//                            tag = "policy",
+//                            start = offset,
+//                            end = offset
+//                        )
+//                            .firstOrNull()?.let {
+//                                val urlIntent = Intent(
+//                                    Intent.ACTION_VIEW,
+//                                    Uri.parse(it.item)
+//                                )
+//                                context.startActivity(urlIntent)
+//                            }
+//                    },
+//                    style = TextStyle(
+//                        fontSize = 16.sp,
+//                        color = textColor.copy(.8f),
+//                        fontFamily = OutfitFontFamily,
+//                        lineHeight = 24.sp
+//                    ),
+//                )
 
-                ClickableText(
-                    text = annotatedString,
-                    onClick = { offset ->
-                        annotatedString.getStringAnnotations(
-                            tag = "policy",
-                            start = offset,
-                            end = offset
-                        )
-                            .firstOrNull()?.let {
-                                val urlIntent = Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(it.item)
-                                )
-                                context.startActivity(urlIntent)
-                            }
-                    },
+                MyText(
+                    text = "We are committed to protect all the information you put in the app. No one, not even the developers have access to your information. Check our policy to learn how seriously we take your privacy",
                     style = TextStyle(
                         fontSize = 16.sp,
-                        color = textColor,
-                        fontFamily = RobotoFontFamily
+                        color = textColor.copy(.8f),
+                        fontFamily = OutfitFontFamily,
+                        lineHeight = 24.sp
                     ),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -130,7 +142,8 @@ fun AboutUsCard(modifier: Modifier = Modifier, textColor: Color) {
 
                 Spacer(modifier = Modifier.height(4.dp))
                 OutlinedButton(
-                    onClick = { //Todo
+                    onClick = {
+                        viewModel.contactUsEmail(context)
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {

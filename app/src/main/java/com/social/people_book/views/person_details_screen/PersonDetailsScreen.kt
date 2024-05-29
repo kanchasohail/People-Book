@@ -199,7 +199,7 @@ fun SharedTransitionScope.PersonDetailsScreen(
                 ) {
                     Box(
                         modifier = Modifier
-                            .height(160.dp)
+                            .height(170.dp)
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
@@ -336,7 +336,8 @@ fun SharedTransitionScope.PersonDetailsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .padding(top = 10.dp),
+//                        .padding(top = 10.dp),
+                        .padding(top = 0.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {

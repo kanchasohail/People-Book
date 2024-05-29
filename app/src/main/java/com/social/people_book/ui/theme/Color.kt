@@ -10,12 +10,16 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val darkPrimaryColor = Color(0xFFA1C8FF)
-val darkSurfaceColor = Color(0xFF0d1217)
-val darkBackgroundColor = Color(0xFF0d1217)
+//val darkSurfaceColor = Color(0xFF0d1217)
+val darkSurfaceColor = Color(0xFF0B141B)
+val darkBackgroundColor = Color(0xFF0B141B)
 
-val lightPrimaryColor = Color(0xFF0d1217)
+//val lightPrimaryColor = Color(0xFF0d1217)
+val lightPrimaryColor = Color(0xFF0B141B)
 
 val whiteTextColor = Color(0xFFededed)
 val textFieldBackGroundColor = Color(0xFF1c1c1c)
 
 val personIconColor = Color(0xFFdbdbdb)
+
+val dialogButtonBlackColor = Color(0xFF0b0f12)

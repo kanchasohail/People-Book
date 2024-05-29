@@ -19,7 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.social.people_book.R
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.theme.OutfitFontFamily
 import com.social.people_book.ui.theme.RobotoFontFamily
+import com.social.people_book.ui.theme.dialogButtonBlackColor
 
 
 @Composable
@@ -37,8 +39,9 @@ fun ConfirmEmptyTrashDialog(
                 Text(
                     text = "All items in the trash will be deleted forever and you will not be able to restore them.",
                     style = TextStyle(
-                        fontFamily = RobotoFontFamily,
-                        fontSize = 16.sp
+                        fontFamily = OutfitFontFamily,
+                        fontSize = 16.sp,
+                        lineHeight = 24.sp
                     )
                 )
             },
@@ -48,7 +51,7 @@ fun ConfirmEmptyTrashDialog(
                 OutlinedButton(
                     onClick = onConfirm,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
+                        containerColor = dialogButtonBlackColor,
                         contentColor = Color.White
                     )
                 ) {

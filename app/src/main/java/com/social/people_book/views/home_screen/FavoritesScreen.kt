@@ -84,7 +84,7 @@ fun SharedTransitionScope.FavoritesScreen(
                         text = "Favourites",
                         fontSize = 33.sp,
                         modifier = Modifier
-                            .fillMaxWidth(), textAlign = TextAlign.Center
+                            .fillMaxWidth().padding(end = 20.dp), textAlign = TextAlign.Center
                     )
                 },
                 actions = {

@@ -234,7 +234,7 @@ fun SharedTransitionScope.HomeScreen(
                 ) {
 
                     FlowRow(
-                        verticalArrangement = Arrangement.spacedBy((-8).dp),
+                        verticalArrangement = Arrangement.spacedBy((-12).dp),
                     ) {
 //                        viewModel.tags.forEach { tagItem ->
 //                            TagsChip(
@@ -247,18 +247,21 @@ fun SharedTransitionScope.HomeScreen(
 //                        }
 
                         viewModel.tagsList.map {
-                            TagsChip(
-                                chipText = if (it == Tag.None) "All" else it.name,
-                                textColor = textColor,
-                                isSelected = it == viewModel.selectedTagItem
-                            ) {
-                                if (viewModel.selectedTagItem == it) {
-                                    viewModel.selectedTagItem = null
-                                    viewModel.filterPerson(Tag.None)
-                                    return@TagsChip
+                            if (it != Tag.None) {
+                                TagsChip(
+                                    chipText = it.name,
+                                    textColor = textColor,
+                                    isSelected = it == viewModel.selectedTagItem,
+                                    isDarkMode = isDarkMode
+                                ) {
+                                    if (viewModel.selectedTagItem == it) {
+                                        viewModel.selectedTagItem = null
+                                        viewModel.filterPerson(Tag.None)
+                                        return@TagsChip
+                                    }
+                                    viewModel.selectedTagItem = it
+                                    viewModel.filterPerson(it)
                                 }
-                                viewModel.selectedTagItem = it
-                                viewModel.filterPerson(it)
                             }
                         }
                     }
@@ -307,9 +310,10 @@ private fun TagsChip(
     chipText: String,
     textColor: Color,
     isSelected: Boolean,
+    isDarkMode: Boolean,
     onClick: () -> Unit
 ) {
-    val borderColor: Color? = if (isSelected) Color.White else null
+    val borderColor: Color = if (isSelected) Color.Gray else Color.Transparent
 
 //    AssistChip(
     FilterChip(
@@ -341,13 +345,13 @@ private fun TagsChip(
             null
         },
         colors = FilterChipDefaults.filterChipColors(
-            containerColor = if (isSelected) Color.White else Color.Transparent
+            containerColor = if (isSelected) Color.White else if(isDarkMode) Color.Gray.copy(.3f) else Color.LightGray.copy(.3f)
         ),
-//        border = borderColor?.let {
-//            AssistChipDefaults.assistChipBorder(
-//                borderColor = it
-//            )
-//        },
+        border = FilterChipDefaults.filterChipBorder(
+            enabled = false,
+            selected = isSelected,
+            borderColor = borderColor
+        ),
         modifier = modifier.padding(4.dp)
     )
 }
