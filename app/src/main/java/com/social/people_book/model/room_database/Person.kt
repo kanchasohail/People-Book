@@ -37,6 +37,6 @@ data class Person(
 
 enum class Tag {
     None,
-    Work, School, Family, Friend,
-    Student, Teacher
+    Family, Friends, Work,
+    Teacher, Student
 }

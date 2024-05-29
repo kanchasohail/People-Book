@@ -59,8 +59,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val passwordFocusRequester = remember { FocusRequester() }
-
-
+    
     val imeState = rememberImeState()
     val scrollState = rememberScrollState()
 

@@ -20,7 +20,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.social.people_book.ui.layout.MyText
+import com.social.people_book.ui.theme.OutfitFontFamily
 import com.social.people_book.ui.theme.RobotoFontFamily
+import com.social.people_book.ui.theme.dialogButtonBlackColor
 
 @Composable
 fun ConfirmResetPasswordDialog(
@@ -40,7 +42,7 @@ fun ConfirmResetPasswordDialog(
                         append("This will send a reset password link to ")
                         withStyle(
                             style = SpanStyle(
-                                fontFamily = RobotoFontFamily,
+                                fontFamily = OutfitFontFamily,
                                 fontSize = 16.sp, fontWeight = FontWeight.SemiBold
                             )
                         ) {
@@ -48,8 +50,9 @@ fun ConfirmResetPasswordDialog(
                         }
                         append("\n\nPlease make sure to check the Spam folder in case you can't find it in your inbox.")
                     }, style = TextStyle(
-                        fontFamily = RobotoFontFamily,
-                        fontSize = 16.sp
+                        fontFamily = OutfitFontFamily,
+                        fontSize = 16.sp,
+                        lineHeight = 24.sp
                     )
                 )
             },
@@ -59,7 +62,7 @@ fun ConfirmResetPasswordDialog(
                 OutlinedButton(
                     onClick = onConfirm,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
+                        containerColor = dialogButtonBlackColor,
                         contentColor = Color.White
                     )
                 ) {

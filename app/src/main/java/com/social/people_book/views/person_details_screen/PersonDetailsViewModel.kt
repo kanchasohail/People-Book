@@ -257,6 +257,11 @@ class PersonDetailsViewModel : ViewModel() {
     }
 
     fun updatePerson(context: Context, navController: NavController) {
+        if (name.isEmpty() && number.isEmpty() && email.isEmpty() && (selectedImage == null && imageBitmap == null)) {
+            thisPerson.id?.let { deletePerson(it, context, navController) }
+            navController.popBackStack()
+            return
+        }
         isLoading = true
         db.collection("users").document(auth.currentUser?.uid.toString()).collection("persons")
             .document(thisPerson.id.toString()).update(

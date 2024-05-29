@@ -11,7 +11,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -19,12 +22,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.social.people_book.R
 import com.social.people_book.model.LocalFileStorageRepository
 import com.social.people_book.model.room_database.Person
 import com.social.people_book.model.room_database.Tag
@@ -48,7 +53,7 @@ fun SharedTransitionScope.ItemCard(
             .padding(8.dp)
 //            .size(width = 150.dp, height = 250.dp)
 //            .size(width = 150.dp)
-            .border(.7.dp, textColor, shape = RoundedCornerShape(8.dp))
+            .border(.7.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(8.dp))
             .clickable {
                 onClick()
             }
@@ -98,6 +103,14 @@ fun SharedTransitionScope.ItemCard(
                 contentDescription = "person Image"
             )
 
+        } else {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_person_icon),
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(start = 4.dp, top = 4.dp),
+                contentDescription = "Blank profile"
+            )
         }
 
         if (person.name.isNotEmpty()) {

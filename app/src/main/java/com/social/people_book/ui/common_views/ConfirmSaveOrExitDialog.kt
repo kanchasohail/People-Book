@@ -25,7 +25,8 @@ fun ConfirmSaveOrExitDialog(
                 MyText(
                     text = "Are you sure to exit? Any changes will not be saved",
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    lineHeight = 24.sp
                 )
             },
             onDismissRequest = onDismiss,

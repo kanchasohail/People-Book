@@ -156,7 +156,7 @@ fun SharedTransitionScope.TrashPersonDetailsScreen(
                 ) {
                     Box(
                         modifier = Modifier
-                            .height(160.dp)
+                            .height(170.dp)
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {

@@ -135,7 +135,10 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
 //                    if (!viewModel.isLoading) {
-                    GoogleSignUpButton(text = "Signup", isLoading = viewModel.isGoogleButtonLoading) {
+                    GoogleSignUpButton(
+                        text = "Signup",
+                        isLoading = viewModel.isGoogleButtonLoading
+                    ) {
                         viewModel.isGoogleButtonLoading = true
                         client.beginSignIn(request).addOnCompleteListener { task ->
                             viewModel.isGoogleButtonLoading = false
@@ -299,37 +302,49 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
 //                }
 
                 Spacer(modifier = Modifier.height(16.dp))
+//                CenterBox {
+//                    val annotatedString = buildAnnotatedString {
+//                        append("Already have an account? ")
+//                        pushStringAnnotation(tag = "login", annotation = "nothing")
+//                        withStyle(
+//                            style = SpanStyle(
+//                                color = MaterialTheme.colorScheme.inverseSurface,
+//                                fontFamily = RobotoFontFamily,
+//                                fontSize = 16.sp
+//                            )
+//                        ) {
+//                            append("Login Instead")
+//                        }
+//                        pop()
+//                    }
+//                    ClickableText(
+//                        text = annotatedString,
+//                        onClick = { offset ->
+//                            annotatedString.getStringAnnotations(
+//                                tag = "login",
+//                                start = offset,
+//                                end = offset
+//                            ).firstOrNull()?.let {
+//                                navController.navigate(Screens.LoginScreen.route)
+//                            }
+//                        },
+//                        style = TextStyle(
+//                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+//                            fontFamily = RobotoFontFamily,
+//                            fontSize = 16.sp
+//                        )
+//                    )
+//                }
                 CenterBox {
-                    val annotatedString = buildAnnotatedString {
-                        append("Already have an account? ")
-                        pushStringAnnotation(tag = "login", annotation = "nothing")
-                        withStyle(
-                            style = SpanStyle(
-                                color = MaterialTheme.colorScheme.inverseSurface,
-                                fontFamily = RobotoFontFamily,
-                                fontSize = 16.sp
-                            )
-                        ) {
-                            append("Login Instead")
-                        }
-                        pop()
-                    }
-                    ClickableText(
-                        text = annotatedString,
-                        onClick = { offset ->
-                            annotatedString.getStringAnnotations(
-                                tag = "login",
-                                start = offset,
-                                end = offset
-                            ).firstOrNull()?.let {
-                                navController.navigate(Screens.LoginScreen.route)
-                            }
-                        },
+                    MyText(
+                        text = "Already have an account? Login Instead",
                         style = TextStyle(
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontFamily = RobotoFontFamily,
+                            fontFamily = OutfitFontFamily,
                             fontSize = 16.sp
-                        )
+                        ),
+                        modifier = Modifier.clickable {
+                            navController.navigate(Screens.LoginScreen.route)
+                        }
                     )
                 }
             }

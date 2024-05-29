@@ -13,6 +13,10 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,9 +57,9 @@ fun TrashScreen(
     val deletedPeople =
         mainViewModel.personDao.getAllDeletedPerson().collectAsState(initial = emptyList())
 
-    val gridState = rememberLazyGridState()
+    val gridState = rememberLazyStaggeredGridState()
 
-    val textColor = if (isDarkMode) Color.White else Color.Black
+    val textColor = if (isDarkMode) Color.White else Color.Black.copy(.8f)
 
     Scaffold(
         topBar = {
@@ -70,7 +74,7 @@ fun TrashScreen(
                     TextButton(onClick = {
                         viewModel.showDialogState = true
                     }) {
-                        MyText(text = "Empty Trash", fontSize = 18.sp)
+                        MyText(text = "Empty Trash", fontSize = 17.sp)
                     }
                 }
             )
@@ -127,9 +131,9 @@ fun TrashScreen(
                     MyText(text = "No Items In Trash", fontSize = 20.sp)
                 }
             } else {
-                LazyVerticalGrid(
+                LazyVerticalStaggeredGrid(
                     state = gridState,
-                    columns = GridCells.Adaptive(150.dp),
+                    columns = StaggeredGridCells.Adaptive(150.dp),
                 ) {
                     items(deletedPeople.value) {
                         DeletedItemCard(

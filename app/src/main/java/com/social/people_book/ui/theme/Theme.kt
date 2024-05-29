@@ -27,7 +27,7 @@ private val DarkColorScheme = darkColorScheme(
     background = darkBackgroundColor,
     onPrimary = lightPrimaryColor,
 
-    outline = whiteTextColor
+    outline = androidx.compose.ui.graphics.Color.Gray.copy(.8f)
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -35,7 +35,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = PurpleGrey40,
     tertiary = Pink40,
 
-    outline = androidx.compose.ui.graphics.Color.Black
+    outline = androidx.compose.ui.graphics.Color.Gray.copy(.8f)
 )
 
 @Composable

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,17 +47,16 @@ fun DeletedItemCard(
     Column(
         modifier = modifier
             .padding(8.dp)
-            .border(.7.dp, textColor, shape = RoundedCornerShape(8.dp))
+            .border(.7.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(8.dp))
             .clickable { onClick() }
     ) {
         if (person.image == null) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_blank_profile),
+                painter = painterResource(id = R.drawable.ic_person_icon),
                 tint = textColor,
                 modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth()
-                    .aspectRatio(1f),
+                    .size(40.dp)
+                    .padding(top = 4.dp, start = 4.dp),
                 contentDescription = "user_profile"
             )
         } else {
@@ -116,7 +116,7 @@ fun DeletedItemCard(
         MyText(
             text = "$remainingDays left",
             color = textColor,
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             textAlign = TextAlign.End,
             modifier = Modifier
                 .fillMaxWidth()
