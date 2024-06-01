@@ -34,6 +34,8 @@ class AuthViewModel : ViewModel() {
     var isEmailValid by mutableStateOf(true)
     var isPasswordValid by mutableStateOf(true)
 
+    var showDialogState by mutableStateOf(false)
+
 
     private fun fetch(context: Context) {
 
@@ -68,8 +70,9 @@ class AuthViewModel : ViewModel() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    saveUserAndNavigate(context, navController)
                     fetch(context)
-                    navController.navigate(Screens.HomeScreen.route)
+//                    navController.navigate(Screens.HomeScreen.route)
                 }
             }
         isGoogleButtonLoading = false
@@ -82,8 +85,8 @@ class AuthViewModel : ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     fetch(context)
-                    saveUser(context)
-                    navController.navigate(Screens.HomeScreen.route)
+                    saveUserAndNavigate(context, navController)
+//                    navController.navigate(Screens.HomeScreen.route)
                 }
             }
         isGoogleButtonLoading = false
@@ -100,8 +103,8 @@ class AuthViewModel : ViewModel() {
             isLoginButtonLoading = false
             if (task.isSuccessful) {
                 fetch(context)
-                saveUser(context)
-                navController.navigate(Screens.HomeScreen.route)
+                saveUserAndNavigate(context, navController, true)
+//                navController.navigate(Screens.HomeScreen.route)
             } else {
                 Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT)
                     .show()
@@ -114,8 +117,9 @@ class AuthViewModel : ViewModel() {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             isLoginButtonLoading = false
             if (task.isSuccessful) {
+                saveUserAndNavigate(context, navController, true)
                 fetch(context)
-                navController.navigate(Screens.HomeScreen.route)
+//                navController.navigate(Screens.HomeScreen.route)
             } else {
                 Toast.makeText(context, task.exception?.message.toString(), Toast.LENGTH_SHORT)
                     .show()
@@ -124,20 +128,40 @@ class AuthViewModel : ViewModel() {
     }
 
 
-    private fun saveUser(context: Context) {
+    private fun saveUserAndNavigate(
+        context: Context,
+        navController: NavController,
+        withPassword: Boolean? = null,
+    ) {
         val userDoc = db.collection("users").document(auth.currentUser?.uid.toString())
-        userDoc.set(
-            mapOf(
-                "email" to email
-            )
-        ).addOnSuccessListener {
-            Toast.makeText(
-                context,
-                "Saving User successful",
-                Toast.LENGTH_SHORT,
-            ).show()
+
+        userDoc.get().addOnSuccessListener { result ->
+            val isDeleted = result["isDeleted"] == true
+
+            if (isDeleted) {
+                showDialogState = true
+            } else {
+                navController.navigate(Screens.HomeScreen.route)
+            }
+
+            // Save the user info and set isDeleted to false
+            userDoc.set(
+                mapOf(
+                    "email" to email,
+                    "withPassword" to withPassword,
+                    "isDeleted" to false
+                )
+            ).addOnSuccessListener {
+                Toast.makeText(
+                    context,
+                    "Saving User successful",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
         }
+
     }
+
 
     fun sendPasswordResetEmail(context: Context) {
         val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()

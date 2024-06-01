@@ -1,4 +1,4 @@
-package com.social.people_book.ui.common_views
+package com.social.people_book.ui.layout
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

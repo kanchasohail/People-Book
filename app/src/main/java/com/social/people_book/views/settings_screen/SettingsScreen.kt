@@ -31,8 +31,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -43,8 +48,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.social.people_book.MainViewModel
 import com.social.people_book.navigation.Screens
+import com.social.people_book.ui.common_views.ConfirmAccountDeletionDialog
 import com.social.people_book.ui.common_views.ConfirmLogoutDialog
 import com.social.people_book.ui.common_views.ConfirmResetPasswordDialog
+import com.social.people_book.ui.common_views.EnterPasswordDialogBeforeDeleting
 import com.social.people_book.ui.layout.CustomSwitch
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.layout.navigateBack
@@ -64,6 +71,35 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
     val textColor = if (isDarkMode) Color.White else Color.Black
 
     val viewModel = viewModel<SettingsViewModel>()
+
+    val passwordFocusRequester = remember { FocusRequester() }
+
+    var showDialogState by remember { mutableStateOf(false) }
+    var showPasswordDialog by remember { mutableStateOf(false) }
+
+    ConfirmAccountDeletionDialog(
+        showDialog = showDialogState,
+        onDismiss = { showDialogState = false }) {
+        if (viewModel.withPassword) {
+            showDialogState = false
+            showPasswordDialog = true
+//            passwordFocusRequester.requestFocus()
+        } else {
+            showPasswordDialog = false
+            viewModel.scheduleAccountDeletion(context, navController)
+        }
+    }
+
+    EnterPasswordDialogBeforeDeleting(
+        showDialog = showPasswordDialog,
+        viewModel = viewModel,
+        passwordFocusRequester = passwordFocusRequester,
+        onDismiss = {
+            showPasswordDialog = false
+            viewModel.password = ""
+        }) {
+        viewModel.verifyPasswordAndDelete(context , navController)
+    }
 
     SideEffect {
         viewModel.getUserDetails(context)
@@ -91,8 +127,8 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                         text = "Settings",
                         fontSize = 33.sp,
                         modifier = Modifier
-                            .fillMaxWidth().padding(end = 20.dp)
-                        , textAlign = TextAlign.Center
+                            .fillMaxWidth()
+                            .padding(end = 20.dp), textAlign = TextAlign.Center
                     )
                 },
                 actions = {
@@ -218,7 +254,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                                     .padding(top = 8.dp)
                             ) {
 
-                                if (viewModel.email.isNotEmpty()) {
+                                if (viewModel.email != "null" && viewModel.email.isNotEmpty()) {
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -246,34 +282,38 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
 //                                        horizontalArrangement = Arrangement.SpaceBetween,
 //                                        verticalAlignment = Alignment.CenterVertically
 //                                    ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        MyText(text = "Password: ", color = textColor.copy(.8f))
-                                        MyText(
-                                            text = "********",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.padding(start = 8.dp)
-                                        )
-                                        IconButton(onClick = {
-                                            viewModel.showDialogState = true
-                                        }) {
-                                            Icon(
-                                                imageVector = Icons.Default.Edit,
-                                                tint = MaterialTheme.colorScheme.primary,
-                                                contentDescription = "Edit password",
+                                    if (viewModel.withPassword) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            MyText(text = "Password: ", color = textColor.copy(.8f))
+                                            MyText(
+                                                text = "********",
+                                                fontSize = 20.sp,
+                                                modifier = Modifier.padding(start = 8.dp)
+                                            )
+                                            IconButton(onClick = {
+                                                viewModel.showDialogState = true
+                                            }) {
+                                                Icon(
+                                                    imageVector = Icons.Default.Edit,
+                                                    tint = MaterialTheme.colorScheme.primary,
+                                                    contentDescription = "Edit password",
 
-                                                )
+                                                    )
+                                            }
                                         }
+                                    } else {
+                                        Spacer(modifier = Modifier.height(8.dp))
                                     }
                                 }
 //                                }
 
 
                                 OutlinedButton(
-                                    onClick = { /*TODO*/ },
+                                    onClick = { showDialogState = true },
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     MyText(text = "Delete Account")
