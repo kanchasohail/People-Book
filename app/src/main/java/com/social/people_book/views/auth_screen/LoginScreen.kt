@@ -45,10 +45,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.social.people_book.navigation.Screens
-import com.social.people_book.ui.common_views.CenterBox
+import com.social.people_book.ui.layout.CenterBox
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.model.util.google_sign_in.GoogleSignInHelper
 import com.social.people_book.model.util.rememberImeState
+import com.social.people_book.ui.common_views.AccountRecoveredDialog
 import com.social.people_book.ui.theme.OutfitFontFamily
 import com.social.people_book.views.auth_screen.components.DividerWithText
 import com.social.people_book.views.auth_screen.components.GoogleSignUpButton
@@ -59,7 +60,7 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val passwordFocusRequester = remember { FocusRequester() }
-    
+
     val imeState = rememberImeState()
     val scrollState = rememberScrollState()
 
@@ -97,6 +98,13 @@ fun LoginScreen(isDarkMode: Boolean, viewModel: AuthViewModel, navController: Na
         }
     }
 
+    AccountRecoveredDialog(showDialog = viewModel.showDialogState, onDismiss = {
+        viewModel.showDialogState = false
+        navController.navigate(Screens.HomeScreen.route)
+    }) {
+        viewModel.showDialogState = false
+        navController.navigate(Screens.HomeScreen.route)
+    }
 
     Scaffold(
         topBar = {

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -35,24 +34,21 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.social.people_book.navigation.Screens
-import com.social.people_book.ui.common_views.CenterBox
+import com.social.people_book.ui.layout.CenterBox
 import com.social.people_book.ui.layout.MyText
-import com.social.people_book.ui.theme.RobotoFontFamily
 import com.social.people_book.model.util.google_sign_in.GoogleSignInHelper
 import com.social.people_book.model.util.rememberImeState
+import com.social.people_book.ui.common_views.AccountRecoveredDialog
 import com.social.people_book.ui.theme.OutfitFontFamily
 import com.social.people_book.views.auth_screen.components.DividerWithText
 import com.social.people_book.views.auth_screen.components.GoogleSignUpButton
@@ -99,6 +95,14 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel, isDarkM
                 Toast.makeText(context, "Failed to SingUp", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    AccountRecoveredDialog(showDialog = viewModel.showDialogState, onDismiss = {
+        viewModel.showDialogState = false
+        navController.navigate(Screens.HomeScreen.route)
+    }) {
+        viewModel.showDialogState = false
+        navController.navigate(Screens.HomeScreen.route)
     }
 
     Scaffold(

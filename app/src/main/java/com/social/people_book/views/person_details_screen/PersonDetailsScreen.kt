@@ -332,21 +332,74 @@ fun SharedTransitionScope.PersonDetailsScreen(
 
                 }
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-//                        .padding(top = 10.dp),
-                        .padding(top = 0.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    MyText(text = "Email:", color = textColor)
-                    Spacer(modifier = Modifier.width(10.dp))
-                    MyText(text = viewModel.thisPerson.email.toString(), color = textColor)
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(8.dp)
+////                        .padding(top = 10.dp),
+//                        .padding(top = 0.dp),
+//                    verticalAlignment = Alignment.CenterVertically,
+//                    horizontalArrangement = Arrangement.SpaceBetween
+//                ) {
+//                    MyText(text = "Email:", color = textColor)
+//                    Spacer(modifier = Modifier.width(10.dp))
+//                    MyText(text = viewModel.thisPerson.email.toString(), color = textColor)
+//
+//                    Row(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        horizontalArrangement = Arrangement.End
+//                    ) {
+//                        if (viewModel.thisPerson.email != null && viewModel.thisPerson.email != "") {
+//                            IconButton(onClick = {
+//                                viewModel.copyToClipboard(
+//                                    context,
+//                                    viewModel.thisPerson.email!!,
+//                                    "Email"
+//                                )
+//                            }) {
+//                                Icon(
+//                                    painter = painterResource(id = R.drawable.ic_copy_icon),
+//                                    tint = iconButtonColor,
+//                                    contentDescription = "Copy"
+//                                )
+//                            }
+//                            if (viewModel.isValidEmail(viewModel.thisPerson.email!!)) {
+//                                IconButton(onClick = {
+//                                    viewModel.openEmailComposer(
+//                                        context,
+//                                        viewModel.thisPerson.email!!,
+//                                        ""
+//                                    )
+//                                }) {
+//                                    Icon(
+//                                        imageVector = Icons.Default.MailOutline,
+//                                        tint = iconButtonColor,
+//                                        contentDescription = "Mail"
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                }
 
+                Box(modifier = Modifier.fillMaxWidth()) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+//                        .padding(top = 10.dp),
+                            .padding(top = 0.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        MyText(text = "Email:", color = textColor)
+                        Spacer(modifier = Modifier.width(10.dp))
+                        MyText(text = viewModel.thisPerson.email.toString(), color = textColor)
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth().padding(end = 8.dp)
+                            .align(Alignment.BottomEnd),
                         horizontalArrangement = Arrangement.End
                     ) {
                         if (viewModel.thisPerson.email != null && viewModel.thisPerson.email != "") {
@@ -374,14 +427,15 @@ fun SharedTransitionScope.PersonDetailsScreen(
                                     Icon(
                                         imageVector = Icons.Default.MailOutline,
                                         tint = iconButtonColor,
-                                        contentDescription = "Call"
+                                        contentDescription = "Mail"
                                     )
                                 }
                             }
                         }
                     }
-
                 }
+
+
 
                 Row(
                     modifier = Modifier
