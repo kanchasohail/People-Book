@@ -15,7 +15,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
-import com.social.people_book.model.LocalFileStorageRepository
+import com.social.people_book.model.repositories.LocalFileStorageRepository
 import com.social.people_book.navigation.Screens
 
 
@@ -113,6 +113,11 @@ class AuthViewModel : ViewModel() {
     }
 
     fun login(navController: NavController, context: Context) {
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(context, "Please enter the email and password", Toast.LENGTH_SHORT)
+                .show()
+            return
+        }
         isLoginButtonLoading = true
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             isLoginButtonLoading = false
@@ -145,7 +150,7 @@ class AuthViewModel : ViewModel() {
             }
 
             // Save the user info and set isDeleted to false
-            userDoc.set(
+            userDoc.update(
                 mapOf(
                     "email" to email,
                     "withPassword" to withPassword,

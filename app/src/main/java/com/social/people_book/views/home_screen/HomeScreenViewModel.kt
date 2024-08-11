@@ -11,7 +11,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.social.people_book.MainActivity
 import com.social.people_book.model.room_database.Person
-import com.social.people_book.model.room_database.Tag
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +30,7 @@ class HomeScreenViewModel : ViewModel() {
     private val auth = Firebase.auth
     private val personDao = MainActivity.db.personDao()
 
-    val tagsList = Tag.values()
+    private val tagsList = MainActivity.tagsRepository.tagsList.value
 
     // Search Field Logic
     private val _searchText = MutableStateFlow("")
@@ -43,7 +42,7 @@ class HomeScreenViewModel : ViewModel() {
 
     //    var selectedTagItem by mutableStateOf("All")
 //    var selectedTagItem by mutableStateOf(Tag.None)
-    var selectedTagItem by mutableStateOf<Tag?>(null)
+    var selectedTagItem by mutableStateOf<String?>(null)
 
     var isLoading by mutableStateOf(false)
 
@@ -62,8 +61,8 @@ class HomeScreenViewModel : ViewModel() {
     var filteredPersons = MutableStateFlow<List<Person>>(emptyList())
 
 
-    fun filterPerson(tag: Tag) {
-        if (tag == Tag.None) {
+    fun filterPerson(tag: String?) {
+        if (tag == null) {
             filteredPersons.value = emptyList()
             filteredPersons.value = persons.value
         } else {
@@ -120,7 +119,7 @@ class HomeScreenViewModel : ViewModel() {
                         about = null,
                         isDeleted = document["is_deleted"].toString() == "true",
                         isFavorite = document["is_favorite"].toString() == "true",
-                        tag = tagsList.find { it.name == document["tag"].toString() } ?: Tag.None,
+                        tag = tagsList.find { it == document["tag"].toString() },
                         image = null,
                         deletedAt = null
                     )

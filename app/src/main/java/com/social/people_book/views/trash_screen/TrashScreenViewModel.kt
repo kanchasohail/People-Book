@@ -24,13 +24,11 @@ import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
 import com.social.people_book.model.room_database.Person
-import com.social.people_book.model.room_database.Tag
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.sql.Date
-import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
@@ -52,7 +50,7 @@ class TrashScreenViewModel : ViewModel() {
             "",
             "",
             "",
-            Tag.None,
+            null,
             null,
             false,
             false,

@@ -2,10 +2,10 @@ package com.social.people_book.views.person_details_screen
 
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,6 +23,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -45,12 +47,12 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
@@ -150,6 +152,11 @@ fun PersonDetailsEditingScreen(
                 actions = {
                     IconButton(onClick = {
                         viewModel.isFavorite = !viewModel.isFavorite
+                        if (viewModel.isFavorite) {
+                            Toast.makeText(context, "Added to Favorite", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "Removed from Favorite", Toast.LENGTH_SHORT).show()
+                        }
                     }) {
                         Icon(
                             painter = painterResource(id = if (viewModel.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outlined),
@@ -158,22 +165,45 @@ fun PersonDetailsEditingScreen(
                             contentDescription = "Favorite"
                         )
                     }
-                    OutlinedButton(
-                        onClick = {
-                            if (!viewModel.isLoading) {
-                                viewModel.viewModelScope.launch {
-                                    viewModel.updatePerson(context, navController)
+                    if (isDarkMode) {
+                        OutlinedButton(
+                            onClick = {
+                                if (!viewModel.isLoading) {
+                                    viewModel.viewModelScope.launch {
+                                        viewModel.updatePerson(context, navController)
+                                    }
                                 }
-                            }
-                        },
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        MyText(
-                            text = if (!viewModel.isLoading) "Save" else "Saving...",
-                            color = appBarTextColor,
-                            fontSize = 16.sp
-                        )
+                            },
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+                            MyText(
+                                text = if (!viewModel.isLoading) "Save" else "Saving...",
+                                color = appBarTextColor,
+                                fontSize = 16.sp
+                            )
+                        }
+                    } else {
+                        Button(
+                            onClick = {
+                                if (!viewModel.isLoading) {
+                                    viewModel.viewModelScope.launch {
+                                        viewModel.updatePerson(context, navController)
+                                    }
+                                }
+                            },
+                            modifier = Modifier.padding(8.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.White
+                            )
+                        ) {
+                            MyText(
+                                text = if (!viewModel.isLoading) "Save" else "Saving...",
+                                color = Color.Black,
+                                fontSize = 16.sp
+                            )
+                        }
                     }
+
                 }
             )
         }
@@ -207,7 +237,7 @@ fun PersonDetailsEditingScreen(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (viewModel.thisPerson.image == null && viewModel.selectedImage == null || ( viewModel.imageBitmap == null && viewModel.selectedImage == null)) {
+                    if (viewModel.thisPerson.image == null && viewModel.selectedImage == null || (viewModel.imageBitmap == null && viewModel.selectedImage == null)) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_blank_profile),
                             contentDescription = "Profile",
@@ -279,7 +309,11 @@ fun PersonDetailsEditingScreen(
                                     viewModel.selectedImage = null
                                     viewModel.imageBitmap = null
                                 }) {
-                                    MyText(text = "Remove", color = MaterialTheme.colorScheme.error)
+                                    MyText(
+                                        text = "Remove",
+                                        color = MaterialTheme.colorScheme.error,
+                                        fontSize = 18.sp
+                                    )
                                 }
                         }
 //                        OutlinedButton(onClick = {
@@ -304,6 +338,10 @@ fun PersonDetailsEditingScreen(
                         viewModel.name = it
                     },
                     label = { Text(text = "Name") },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words
+                    ),
+                    maxLines = 1,
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(.85f)

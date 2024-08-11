@@ -1,4 +1,4 @@
-package com.social.people_book.model
+package com.social.people_book.model.repositories
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.io.IOException
 
 class LocalFileStorageRepository(

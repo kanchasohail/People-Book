@@ -29,6 +29,8 @@ sealed class Screens(val route: String) {
 
     object SettingsScreen : Screens("settings_screen")
 
+    object AddTagScreen : Screens("add_tag_screen")
+
 
     object TrashScreenGroup : Screens("trash_screen_group") // Trash Screen Group
     object TrashScreen : Screens("trash_screen")

@@ -35,7 +35,8 @@ fun ConfirmAccountDeletionDialog(
             },
             text = {
                 Text(
-                    text = "Your account will be deleted after 7 days. Once deleted, all data will be lost Forever",
+//                    text = "Your account will be deleted after 7 days. Once deleted, all data will be lost Forever",
+                    text = "Your account will be deleted Forever. Once deleted, all data will be lost",
                     style = TextStyle(
                         fontFamily = OutfitFontFamily,
                         fontSize = 16.sp,
@@ -65,7 +66,7 @@ fun ConfirmAccountDeletionDialog(
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    MyText("Cancel", fontSize = 17.sp, color = MaterialTheme.colorScheme.outline)
+                    MyText("Cancel", fontSize = 17.sp, color = MaterialTheme.colorScheme.onSurface.copy(.75f))
                 }
             },
             shape = RoundedCornerShape(8.dp)

@@ -3,8 +3,6 @@ package com.social.people_book.ui.common_views
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -22,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import com.social.people_book.R
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.OutfitFontFamily
-import com.social.people_book.ui.theme.RobotoFontFamily
 import com.social.people_book.ui.theme.dialogButtonBlackColor
 
 
@@ -65,7 +62,7 @@ fun ConfirmDeleteItemFromTrash(
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    MyText("Cancel", fontSize = 17.sp, color = MaterialTheme.colorScheme.outline)
+                    MyText("Cancel", fontSize = 17.sp, color = MaterialTheme.colorScheme.onSurface.copy(.75f))
                 }
             },
             shape = RoundedCornerShape(8.dp)

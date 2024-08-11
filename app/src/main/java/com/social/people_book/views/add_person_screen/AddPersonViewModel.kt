@@ -16,9 +16,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
-import com.social.people_book.model.LocalFileStorageRepository
+import com.social.people_book.model.repositories.LocalFileStorageRepository
 import com.social.people_book.model.room_database.Person
-import com.social.people_book.model.room_database.Tag
 import com.social.people_book.model.util.image_converters.getBitmapFromUri
 import com.social.people_book.navigation.Screens
 import kotlinx.coroutines.launch
@@ -31,14 +30,16 @@ class AddPersonViewModel : ViewModel() {
 
     private val personDao = MainActivity.db.personDao()
 
-    val tagsList = Tag.values()
+    //    val tagsList = Tag.values()
+//    val tagsList = listOf("Friends", "Family", "Work")
+    val tagsList = MainActivity.tagsRepository.tagsList.value
 
     var name by mutableStateOf("")
     var number by mutableStateOf("")
     var email by mutableStateOf("")
     var about by mutableStateOf("")
     var isFavorite by mutableStateOf(false)
-    var selectedTag by mutableStateOf(Tag.None)
+    var selectedTag by mutableStateOf<String?>(null)
 
     var selectedImage by mutableStateOf<Uri?>(null)
 

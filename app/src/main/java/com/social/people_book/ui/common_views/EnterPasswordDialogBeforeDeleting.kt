@@ -15,16 +15,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -121,13 +117,17 @@ fun EnterPasswordDialogBeforeDeleting(
                         contentDescription = "Confirm",
                         modifier = Modifier.size(22.dp)
                     )
-                    MyText(if (viewModel.isLoading) "Loading..." else "Confirm", fontSize = 17.sp)
+                    MyText(if (viewModel.isLoading) "Deleting..." else "Confirm", fontSize = 17.sp)
                 }
 
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    MyText("Cancel", fontSize = 17.sp, color = MaterialTheme.colorScheme.outline)
+                    MyText(
+                        "Cancel",
+                        fontSize = 17.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(.75f)
+                    )
                 }
             },
             shape = RoundedCornerShape(8.dp)

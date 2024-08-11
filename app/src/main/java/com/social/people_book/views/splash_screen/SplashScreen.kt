@@ -3,6 +3,7 @@ package com.social.people_book.views.splash_screen
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -49,24 +51,26 @@ fun SplashScreen(navController: NavController, isDarkMode: Boolean, auth: Fireba
             navController.navigate(Screens.AuthScreen.route)
         }
     }
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
 //            .background(MaterialTheme.colorScheme.surface),
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.SpaceBetween
-//    ) {
+            .background(if (isDarkMode) Color(0xFF0F1F2C) else Color(0xFFFFFFFF)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
 //        Spacer(modifier = Modifier.fillMaxWidth())
-//
+
 //        Icon(
-//            painter = painterResource(id = if (isDarkMode) R.drawable.app_icon_horizontal_dark else R.drawable.app_icon_horizontal_light),
+        Image(
+            painter = painterResource(id = if (isDarkMode) R.drawable.splash_logo_dark else R.drawable.splash_logo_light),
 //            tint = iconColor,
-//            contentDescription = "logo",
-//            modifier = Modifier
-//                .scale(scale.value)
-//        )
-//
+            contentDescription = "logo",
+            modifier = Modifier
+                .scale(scale.value)
+        )
+
 //        Icon(
 //            painter = painterResource(id = R.drawable.app_brand_logo),
 //            tint = iconColor,
@@ -76,6 +80,6 @@ fun SplashScreen(navController: NavController, isDarkMode: Boolean, auth: Fireba
 //                .padding(vertical = 32.dp)
 //                .padding(bottom = 16.dp)
 //        )
-//
-//    }
+
+    }
 }

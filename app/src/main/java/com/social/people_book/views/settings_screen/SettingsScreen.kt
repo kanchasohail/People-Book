@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Card
@@ -41,18 +40,17 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.social.people_book.MainViewModel
-import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.common_views.ConfirmAccountDeletionDialog
 import com.social.people_book.ui.common_views.ConfirmLogoutDialog
 import com.social.people_book.ui.common_views.ConfirmResetPasswordDialog
 import com.social.people_book.ui.common_views.EnterPasswordDialogBeforeDeleting
-import com.social.people_book.ui.layout.CustomSwitch
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.layout.navigateBack
 
@@ -62,6 +60,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
     val context = LocalContext.current
 
 
+//    val isDarkMode = mainViewModel.themeMode.value == ThemeMode.Dark
     val isDarkMode = mainViewModel.isDarkMode.value ?: isSystemInDarkTheme()
 
     val appBarBackGroundColor =
@@ -98,7 +97,7 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
             showPasswordDialog = false
             viewModel.password = ""
         }) {
-        viewModel.verifyPasswordAndDelete(context , navController)
+        viewModel.verifyPasswordAndDelete(context, navController)
     }
 
     SideEffect {
@@ -174,57 +173,56 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                     .fillMaxWidth()
                     .nestedScroll(scrollBehavior.nestedScrollConnection)
             ) {
-
-                item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-//                Spacer(modifier = Modifier.height(8.dp))
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    mainViewModel.setThemeMode(!isDarkMode)
-                                }
-                                .padding(horizontal = 12.dp, vertical = 18.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            MyText(text = "Dark Theme", fontSize = 18.sp, color = textColor)
-
-                            CustomSwitch(
-                                height = 10.dp,
-                                width = 20.dp,
-                                gapBetweenThumbAndTrackEdge = 1.6.dp,
-                                checked = isDarkMode,
-                                onCheckedChange = {
-                                    mainViewModel.setThemeMode(it)
-                                },
-                                modifier = Modifier.padding(top = 5.dp)
-                            )
-                        }
-
-//                Spacer(modifier = Modifier.height(10.dp))
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    navController.navigate(Screens.TrashScreen.route)
-                                }
-                                .padding(horizontal = 12.dp, vertical = 18.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            MyText(text = "Trash", fontSize = 18.sp, color = textColor)
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "trash",
-                                tint = textColor,
-                                modifier = Modifier.size(28.dp)
-                            )
-                        }
-                    }
-                }
+//                item {
+//                    Column(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                    ) {
+////                Spacer(modifier = Modifier.height(8.dp))
+//                        Row(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .clickable {
+//                                    mainViewModel.setThemeMode(!isDarkMode)
+//                                }
+//                                .padding(horizontal = 12.dp, vertical = 18.dp),
+//                            verticalAlignment = Alignment.CenterVertically,
+//                            horizontalArrangement = Arrangement.SpaceBetween
+//                        ) {
+//                            MyText(text = "Dark Theme", fontSize = 18.sp, color = textColor)
+//
+//                            CustomSwitch(
+//                                height = 10.dp,
+//                                width = 20.dp,
+//                                gapBetweenThumbAndTrackEdge = 1.6.dp,
+//                                checked = isDarkMode,
+//                                onCheckedChange = {
+//                                    mainViewModel.setThemeMode(it)
+//                                },
+//                                modifier = Modifier.padding(top = 5.dp)
+//                            )
+//                        }
+//
+////                Spacer(modifier = Modifier.height(10.dp))
+//                        Row(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .clickable {
+//                                    navController.navigate(Screens.TrashScreen.route)
+//                                }
+//                                .padding(horizontal = 12.dp, vertical = 18.dp),
+//                            horizontalArrangement = Arrangement.SpaceBetween
+//                        ) {
+//                            MyText(text = "Trash", fontSize = 18.sp, color = textColor)
+//                            Icon(
+//                                imageVector = Icons.Default.Delete,
+//                                contentDescription = "trash",
+//                                tint = textColor,
+//                                modifier = Modifier.size(28.dp)
+//                            )
+//                        }
+//                    }
+//                }
 
                 item {
                     Card(
@@ -312,19 +310,19 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
 //                                }
 
 
-                                OutlinedButton(
-                                    onClick = { showDialogState = true },
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    MyText(text = "Delete Account")
-//                                    Spacer(modifier = Modifier.width(3.dp))
-//                                    MyText(text = "!", fontSize = 20.sp, fontWeight = FontWeight.Bold,color = MaterialTheme.colorScheme.error)
-//                                    Icon(
-//                                        imageVector = Icons.Default.Delete,
-//                                        contentDescription = "Delete account",
-//                                        modifier = Modifier.size(24.dp)
-//                                    )
-                                }
+//                                OutlinedButton(
+//                                    onClick = { showDialogState = true },
+//                                    modifier = Modifier.fillMaxWidth()
+//                                ) {
+//                                    MyText(text = "Delete Account")
+////                                    Spacer(modifier = Modifier.width(3.dp))
+////                                    MyText(text = "!", fontSize = 20.sp, fontWeight = FontWeight.Bold,color = MaterialTheme.colorScheme.error)
+////                                    Icon(
+////                                        imageVector = Icons.Default.Delete,
+////                                        contentDescription = "Delete account",
+////                                        modifier = Modifier.size(24.dp)
+////                                    )
+//                                }
                                 Spacer(modifier = Modifier.height(4.dp))
                                 OutlinedButton(
                                     onClick = { viewModel.logoutDialogState = true },
@@ -346,6 +344,21 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
                 item {
                     AboutUsCard(textColor = textColor, viewModel = viewModel)
                     Spacer(modifier = Modifier.weight(1f))
+
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        MyText(
+                            text = "Delete Account",
+                            fontWeight = FontWeight.W500,
+                            fontSize = 17.sp,
+                            color = Color(0xFFc72020),
+                            modifier = Modifier
+                                .clickable {
+                                    showDialogState = true
+                                }
+                                .padding(horizontal = 8.dp)
+                        )
+                    }
+
                     MyText(
                         text = "App version: 1.0.0",
                         textAlign = TextAlign.Center,

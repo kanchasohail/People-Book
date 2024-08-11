@@ -85,23 +85,26 @@ class SettingsViewModel : ViewModel() {
         isLoading = true
         val userDoc = db.collection("users").document(auth.currentUser?.uid.toString())
         val accountDeletionTimestamp = DocumentTransform.FieldTransform.ServerValue.REQUEST_TIME
-//        userDoc.set(
-//            mapOf(
-//                "deletedAt" to accountDeletionTimestamp,
-//                "isDeleted" to true
-//            )
-//        )
-        userDoc.update(
-            mapOf(
-                "deletedAt" to accountDeletionTimestamp,
-                "isDeleted" to true
+
+        //Todo deleting the account immediately for now
+        auth.currentUser?.delete()?.addOnSuccessListener {
+            userDoc.update(
+                mapOf(
+                    "deletedAt" to accountDeletionTimestamp,
+                    "isDeleted" to true
+                )
             )
-        )
+
+            auth.signOut()
+            navController.popBackStack(Screens.HomeScreen.route, inclusive = true)
+            navController.navigate(Screens.AuthScreen.route)
+
+            Toast.makeText(context, "Account Deleted", Toast.LENGTH_SHORT).show()
+        }?.addOnFailureListener {
+            Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+        }
         isLoading = false
-        Toast.makeText(context, "Account Deleted", Toast.LENGTH_SHORT).show()
-        auth.signOut()
-        navController.popBackStack(Screens.HomeScreen.route, inclusive = true)
-        navController.navigate(Screens.AuthScreen.route)
+
     }
 
     fun verifyPasswordAndDelete(context: Context, navController: NavController) {

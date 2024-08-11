@@ -13,30 +13,24 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.social.people_book.model.LocalFileStorageRepository
 import com.social.people_book.navigation.Screens
-import com.social.people_book.ui.layout.BackButtonArrow
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.layout.navigateBack
 import com.social.people_book.views.home_screen.components.ItemCard
@@ -50,14 +44,6 @@ fun SharedTransitionScope.FavoritesScreen(
     isDarkMode: Boolean
 ) {
 
-    val context = LocalContext.current
-    val localFileStorage = LocalFileStorageRepository(context)
-
-    val appBarBackGroundColor =
-        if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
-
-    val appBarTextColor =
-        if (isDarkMode) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
     val textColor = if (isDarkMode) Color.White else Color.Black
 
     val favoritePerson = viewModel.getFavoritePersons()
@@ -84,7 +70,8 @@ fun SharedTransitionScope.FavoritesScreen(
                         text = "Favourites",
                         fontSize = 33.sp,
                         modifier = Modifier
-                            .fillMaxWidth().padding(end = 20.dp), textAlign = TextAlign.Center
+                            .fillMaxWidth()
+                            .padding(end = 20.dp), textAlign = TextAlign.Center
                     )
                 },
                 actions = {
@@ -110,8 +97,8 @@ fun SharedTransitionScope.FavoritesScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            if(favoritePerson.isEmpty()){
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            if (favoritePerson.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     MyText(text = "No Favorite", fontSize = 22.sp)
                 }
             }
@@ -124,7 +111,6 @@ fun SharedTransitionScope.FavoritesScreen(
                 items(favoritePerson) {
                     ItemCard(
                         animatedVisibilityScope = animatedVisibilityScope,
-                        localFileStorageRepository = localFileStorage,
                         textColor = textColor,
                         person = it,
                         onClick = {

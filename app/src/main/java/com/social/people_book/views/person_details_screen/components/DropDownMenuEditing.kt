@@ -16,12 +16,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.views.person_details_screen.PersonDetailsViewModel
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun DropDownMenuEditing(viewModel: PersonDetailsViewModel, color: Color) {
     Box(modifier = Modifier.fillMaxWidth()) {
         TextButton(onClick = { viewModel.isDropDownOpen = true }) {
-            MyText(text = viewModel.selectedTag.name, fontSize = 18.sp, color = color)
+            MyText(text = viewModel.selectedTag ?: "No Tag", fontSize = 18.sp, color = color)
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
                 tint = color,
@@ -36,7 +37,7 @@ fun DropDownMenuEditing(viewModel: PersonDetailsViewModel, color: Color) {
             viewModel.tagsList.map {
                 DropdownMenuItem(text = {
                     MyText(
-                        text = it.name,
+                        text = it,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()

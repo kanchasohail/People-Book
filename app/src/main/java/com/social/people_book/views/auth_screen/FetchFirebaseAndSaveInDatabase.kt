@@ -4,10 +4,10 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.social.people_book.model.LocalFileStorageRepository
+import com.social.people_book.MainActivity
+import com.social.people_book.model.repositories.LocalFileStorageRepository
 import com.social.people_book.model.room_database.Person
 import com.social.people_book.model.room_database.PersonDao
-import com.social.people_book.model.room_database.Tag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -33,7 +33,7 @@ fun fetchAndSaveDataFromFirebase(
                         number = document.data["number"].toString(),
                         email = document.data["email"].toString(),
                         about = document.data["about"].toString(),
-                        tag = Tag.valueOf(if (document.data["tag"].toString() == "null") "None" else document.data["tag"].toString()),
+                        tag = if (document.data["tag"].toString() == "null") null else document.data["tag"].toString(),
 //                        image = loadPersonImage(storage, document.id, userId),
                         image = if (document.data["image"].toString() == "null") null else document.data["image"].toString(),
                         isFavorite = document.data["is_favorite"].toString() == "true",
@@ -50,6 +50,7 @@ fun fetchAndSaveDataFromFirebase(
                     )
                 }
             }
+            MainActivity.tagsRepository.saveTagsOnLogin()
         }
 }
 
