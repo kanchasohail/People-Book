@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.social.people_book.MainViewModel
 import com.social.people_book.model.util.sharedViewModel
 import com.social.people_book.views.add_person_screen.AddPersonScreen
+import com.social.people_book.views.add_tag_screen.AddTagScreen
 import com.social.people_book.views.auth_screen.AuthViewModel
 import com.social.people_book.views.auth_screen.ForgotPasswordScreen
 import com.social.people_book.views.auth_screen.LoginScreen
@@ -158,6 +159,11 @@ fun SharedTransitionScope.NavigationGraph(
         //Settings Screen
         composable(Screens.SettingsScreen.route) {
             SettingsScreen(mainViewModel, navController)
+        }
+
+        // Add Tag Screen
+        composable(Screens.AddTagScreen.route) {
+            AddTagScreen(mainViewModel, navController, isDarkMode)
         }
 
         // Trash Navigation Group

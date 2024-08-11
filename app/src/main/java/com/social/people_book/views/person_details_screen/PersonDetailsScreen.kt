@@ -30,7 +30,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,16 +38,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.social.people_book.MainViewModel
 import com.social.people_book.R
 import com.social.people_book.model.util.image_converters.loadImageBitmap
@@ -112,9 +107,10 @@ fun SharedTransitionScope.PersonDetailsScreen(
                 ),
                 title = {
                     MyText(
-                        text = viewModel.thisPerson.tag.toString(),
-                        color = appBarTextColor,
-                        fontSize = 22.sp,
+                        text = viewModel.thisPerson.tag ?: "No Tag",
+                        color = appBarTextColor.copy(.9f),
+                        fontSize = 23.sp,
+                        letterSpacing = 2.sp,
                         fontWeight = FontWeight.SemiBold,
                     )
                 },
@@ -268,10 +264,13 @@ fun SharedTransitionScope.PersonDetailsScreen(
 
                         }
                     }
+
                     MyText(
-                        text = viewModel.thisPerson.name,
+                        text = viewModel.thisPerson.name.ifEmpty { "Name Unavailable" },
                         fontSize = 24.sp,
-                        color = textColor,
+                        color = if (viewModel.thisPerson.name.isNotEmpty()) textColor else textColor.copy(
+                            .7f
+                        ),
                         modifier = Modifier
                             .padding(8.dp)
                             .sharedElement(
@@ -294,7 +293,15 @@ fun SharedTransitionScope.PersonDetailsScreen(
                 ) {
                     MyText(text = "Phone:", color = textColor)
                     Spacer(modifier = Modifier.width(10.dp))
-                    MyText(text = viewModel.thisPerson.number.toString(), color = textColor)
+                    MyText(
+                        text = viewModel.thisPerson.number.toString()
+                            .ifEmpty { "Phone Unavailable" },
+                        color = if (viewModel.thisPerson.number.toString()
+                                .isNotEmpty()
+                        ) textColor else textColor.copy(
+                            .7f
+                        )
+                    )
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -394,11 +401,18 @@ fun SharedTransitionScope.PersonDetailsScreen(
                     ) {
                         MyText(text = "Email:", color = textColor)
                         Spacer(modifier = Modifier.width(10.dp))
-                        MyText(text = viewModel.thisPerson.email.toString(), color = textColor)
+                        MyText(
+                            text = viewModel.thisPerson.email.toString()
+                                .ifEmpty { "Email Unavailable" },
+                            color = if (viewModel.thisPerson.email.toString()
+                                    .isNotEmpty()
+                            ) textColor else textColor.copy(.7f)
+                        )
                     }
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth().padding(end = 8.dp)
+                            .fillMaxWidth()
+                            .padding(end = 8.dp)
                             .align(Alignment.BottomEnd),
                         horizontalArrangement = Arrangement.End
                     ) {
@@ -441,11 +455,17 @@ fun SharedTransitionScope.PersonDetailsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .padding(top = 10.dp)
+                        .padding(top = 0.dp)
                 ) {
                     MyText(text = "About:", color = textColor)
                     Spacer(modifier = Modifier.width(10.dp))
-                    MyText(text = viewModel.thisPerson.about.toString(), color = textColor)
+                    MyText(
+                        text = viewModel.thisPerson.about.toString()
+                            .ifEmpty { "About Unavailable" },
+                        color = if (viewModel.thisPerson.about.toString()
+                                .isNotEmpty()
+                        ) textColor else textColor.copy(.7f)
+                    )
                 }
 
                 Spacer(modifier = Modifier.weight(1f))

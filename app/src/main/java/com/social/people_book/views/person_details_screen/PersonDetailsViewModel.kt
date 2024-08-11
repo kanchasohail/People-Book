@@ -26,9 +26,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.social.people_book.MainActivity
-import com.social.people_book.model.LocalFileStorageRepository
+import com.social.people_book.model.repositories.LocalFileStorageRepository
 import com.social.people_book.model.room_database.Person
-import com.social.people_book.model.room_database.Tag
 import com.social.people_book.model.util.image_converters.getBitmapFromUri
 import com.social.people_book.model.util.workers.DeleteTrashPersonWork
 import kotlinx.coroutines.launch
@@ -41,9 +40,10 @@ class PersonDetailsViewModel : ViewModel() {
     private val auth = Firebase.auth
     private val storage = Firebase.storage
     private val personDao = MainActivity.db.personDao()
-    val tagsList = Tag.values()
+//    val tagsList = Tag.values()
+    val tagsList = MainActivity.tagsRepository.tagsList.value
 
-    var savedPerson = Person(null, "", "", "", "", Tag.None, null, false, false, null)
+    var savedPerson = Person(null, "", "", "", "", null, null, false, false, null)
 
 
     var thisPerson by mutableStateOf(
@@ -53,7 +53,7 @@ class PersonDetailsViewModel : ViewModel() {
             "",
             "",
             "",
-            Tag.None,
+            null,
             null,
             false,
             false,
@@ -66,7 +66,7 @@ class PersonDetailsViewModel : ViewModel() {
     var about by mutableStateOf("")
     var isFavorite by mutableStateOf(false)
 
-    var selectedTag by mutableStateOf(Tag.None)
+    var selectedTag by mutableStateOf<String?>(null)
 
     var selectedImage by mutableStateOf<Uri?>(null)
 

@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.social.people_book.ui.layout.MyText
 import com.social.people_book.ui.theme.OutfitFontFamily
-import com.social.people_book.ui.theme.RobotoFontFamily
 import com.social.people_book.ui.theme.dialogButtonBlackColor
 
 @Composable
@@ -73,7 +72,7 @@ fun ConfirmResetPasswordDialog(
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    MyText("Cancel", fontSize = 17.sp, color = MaterialTheme.colorScheme.outline)
+                    MyText("Cancel", fontSize = 17.sp, color = MaterialTheme.colorScheme.onSurface.copy(.75f))
                 }
             },
             shape = RoundedCornerShape(8.dp)

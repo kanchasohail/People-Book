@@ -37,7 +37,7 @@ fun ConfirmSaveOrExitDialog(
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    MyText("Cancel", fontSize = 17.sp, color = MaterialTheme.colorScheme.outline)
+                    MyText("Cancel", fontSize = 17.sp, color = MaterialTheme.colorScheme.onSurface.copy(.75f))
                 }
             },
             shape = RoundedCornerShape(8.dp)

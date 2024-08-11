@@ -65,7 +65,7 @@ fun TrashScreen(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    BackButtonArrow(iconColor = MaterialTheme.colorScheme.outline, navController)
+                    BackButtonArrow(iconColor = textColor, navController)
                 },
                 title = {
                     MyText(text = "Trash")

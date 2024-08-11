@@ -26,13 +26,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.social.people_book.model.LocalFileStorageRepository
 import com.social.people_book.navigation.Screens
-import com.social.people_book.ui.layout.CenterBox
 import com.social.people_book.ui.layout.BackButtonArrow
+import com.social.people_book.ui.layout.CenterBox
 import com.social.people_book.ui.layout.LoadingIndicator
 import com.social.people_book.views.home_screen.components.ItemCard
 import com.social.people_book.views.home_screen.components.SearchBar
@@ -45,8 +43,6 @@ fun SharedTransitionScope.SearchScreen(
     viewModel: HomeScreenViewModel,
     isDarkMode: Boolean
 ) {
-    val context = LocalContext.current
-    val localFileStorage = LocalFileStorageRepository(context)
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
@@ -118,7 +114,6 @@ fun SharedTransitionScope.SearchScreen(
                     ) {
                         items(persons) {
                             ItemCard(animatedVisibilityScope = animatedVisibilityScope,
-                                localFileStorageRepository = localFileStorage,
                                 textColor = textColor,
                                 person = it,
                                 onClick = {

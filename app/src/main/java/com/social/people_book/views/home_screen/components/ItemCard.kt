@@ -9,14 +9,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -25,14 +23,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import coil.compose.SubcomposeAsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.social.people_book.R
-import com.social.people_book.model.LocalFileStorageRepository
+import com.social.people_book.model.repositories.LocalFileStorageRepository
 import com.social.people_book.model.room_database.Person
-import com.social.people_book.model.room_database.Tag
 import com.social.people_book.model.util.image_converters.loadImageBitmap
 import com.social.people_book.ui.layout.MyText
 
@@ -41,7 +34,6 @@ import com.social.people_book.ui.layout.MyText
 fun SharedTransitionScope.ItemCard(
     modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    localFileStorageRepository: LocalFileStorageRepository,
     person: Person,
     textColor: Color,
     onClick: () -> Unit
@@ -54,6 +46,9 @@ fun SharedTransitionScope.ItemCard(
 //            .size(width = 150.dp, height = 250.dp)
 //            .size(width = 150.dp)
             .border(.7.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(8.dp))
+            .clip(
+                RoundedCornerShape(8.dp)
+            )
             .clickable {
                 onClick()
             }
@@ -127,7 +122,7 @@ fun SharedTransitionScope.ItemCard(
             )
         }
 
-        if (person.tag != Tag.None) {
+        if (person.tag != null) {
             MyText(
                 text = person.tag.toString(), color = textColor, fontSize = 17.sp,
                 modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)

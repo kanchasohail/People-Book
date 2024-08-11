@@ -43,10 +43,14 @@ interface PersonDao {
     suspend fun emptyTrash(isDeleted: Boolean = true)
 
 
+    @Query("UPDATE person SET tag = :value WHERE tag = :tag")
+    suspend fun deleteTag(tag: String, value: String? = null)
+
+
     @Query("DELETE FROM person WHERE is_deleted = :isDeleted AND id = :personId")
     suspend fun deletePersonFromTrash(personId: Long, isDeleted: Boolean = true)
 
-   @Query("DELETE FROM person")
+    @Query("DELETE FROM person")
     suspend fun clearDatabase()
 
 }

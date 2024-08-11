@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,15 +46,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.social.people_book.MainActivity
 import com.social.people_book.MainViewModel
 import com.social.people_book.R
-import com.social.people_book.model.LocalFileStorageRepository
-import com.social.people_book.model.room_database.Tag
 import com.social.people_book.model.util.isScrollingUp
 import com.social.people_book.navigation.Screens
 import com.social.people_book.ui.layout.CenterBox
@@ -76,8 +75,6 @@ fun SharedTransitionScope.HomeScreen(
     viewModel: HomeScreenViewModel,
     mainViewModel: MainViewModel
 ) {
-    val context = LocalContext.current
-    val localFileStorage = LocalFileStorageRepository(context)
 
     val appBarBackGroundColor =
         if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
@@ -91,6 +88,7 @@ fun SharedTransitionScope.HomeScreen(
 //    val persons by viewModel.persons.collectAsState()
     val persons = viewModel.filteredPersons.collectAsState().value
     val isSearching by viewModel.isSearching.collectAsState()
+    val tagsList = MainActivity.tagsRepository.tagsList.collectAsState()
 
     val localCoroutineScope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -131,10 +129,10 @@ fun SharedTransitionScope.HomeScreen(
                     ),
                     navigationIcon = {
                         IconButton(onClick = {
-//                            localCoroutineScope.launch {
-//                                drawerState.open()
-//                            }
-                            navController.navigate(Screens.SettingsScreen.route)
+                            localCoroutineScope.launch {
+                                drawerState.open()
+                            }
+//                            navController.navigate(Screens.SettingsScreen.route)
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
@@ -229,22 +227,20 @@ fun SharedTransitionScope.HomeScreen(
 //                            }
 //                        }
 
-                        viewModel.tagsList.map {
-                            if (it != Tag.None) {
-                                TagsChip(
-                                    chipText = it.name,
-                                    textColor = textColor,
-                                    isSelected = it == viewModel.selectedTagItem,
-                                    isDarkMode = isDarkMode
-                                ) {
-                                    if (viewModel.selectedTagItem == it) {
-                                        viewModel.selectedTagItem = null
-                                        viewModel.filterPerson(Tag.None)
-                                        return@TagsChip
-                                    }
-                                    viewModel.selectedTagItem = it
-                                    viewModel.filterPerson(it)
+                        tagsList.value.map {
+                            TagsChip(
+                                chipText = it,
+                                textColor = textColor,
+                                isSelected = it == viewModel.selectedTagItem,
+                                isDarkMode = isDarkMode
+                            ) {
+                                if (viewModel.selectedTagItem == it) {
+                                    viewModel.selectedTagItem = null
+                                    viewModel.filterPerson(null)
+                                    return@TagsChip
                                 }
+                                viewModel.selectedTagItem = it
+                                viewModel.filterPerson(it)
                             }
                         }
                     }
@@ -257,6 +253,19 @@ fun SharedTransitionScope.HomeScreen(
                         ) {
                             LoadingIndicator()
                         }
+                    } else if (persons.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(1f)
+                                .padding(bottom = 100.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(id = if (isDarkMode) R.drawable.no_items_dark else R.drawable.no_items_light),
+                                contentDescription = "Everything about a person one click away",
+                                modifier = Modifier.size(300.dp)
+                            )
+                        }
                     } else {
                         LazyVerticalStaggeredGrid(
                             columns = StaggeredGridCells.Adaptive(150.dp),
@@ -266,7 +275,6 @@ fun SharedTransitionScope.HomeScreen(
                             items(persons) {
                                 ItemCard(
                                     animatedVisibilityScope = animatedVisibilityScope,
-                                    localFileStorageRepository = localFileStorage,
                                     textColor = textColor,
                                     person = it,
                                     onClick = {
@@ -328,7 +336,9 @@ private fun TagsChip(
             null
         },
         colors = FilterChipDefaults.filterChipColors(
-            containerColor = if (isSelected) Color.White else if(isDarkMode) Color.Gray.copy(.3f) else Color.LightGray.copy(.3f)
+            containerColor = if (isSelected) Color.White else if (isDarkMode) Color.Gray.copy(.3f) else Color.LightGray.copy(
+                .3f
+            )
         ),
         border = FilterChipDefaults.filterChipBorder(
             enabled = false,

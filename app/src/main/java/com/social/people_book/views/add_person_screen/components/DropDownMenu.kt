@@ -10,6 +10,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -19,9 +20,10 @@ import com.social.people_book.views.add_person_screen.AddPersonViewModel
 
 @Composable
 fun DropDownMenu(viewModel: AddPersonViewModel, color: Color) {
+
     Box(modifier = Modifier.fillMaxWidth()) {
         TextButton(onClick = { viewModel.isDropDownOpen = true }) {
-            MyText(text = viewModel.selectedTag.name, fontSize = 18.sp, color = color)
+            MyText(text = viewModel.selectedTag ?: "No Tag", fontSize = 18.sp, color = color)
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
                 tint = color,
@@ -36,7 +38,7 @@ fun DropDownMenu(viewModel: AddPersonViewModel, color: Color) {
             viewModel.tagsList.map {
                 DropdownMenuItem(text = {
                     MyText(
-                        text = it.name,
+                        text = it,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()

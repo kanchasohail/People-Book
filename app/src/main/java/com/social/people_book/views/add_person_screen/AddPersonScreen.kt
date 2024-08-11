@@ -3,6 +3,7 @@ package com.social.people_book.views.add_person_screen
 import android.net.Uri
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,6 +32,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -55,6 +58,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -200,6 +204,11 @@ fun AddPersonScreen(
                 actions = {
                     IconButton(onClick = {
                         viewModel.isFavorite = !viewModel.isFavorite
+                        if (viewModel.isFavorite) {
+                            Toast.makeText(context, "Added to Favorite", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "Removed from Favorite", Toast.LENGTH_SHORT).show()
+                        }
                     }) {
                         Icon(
                             painter = painterResource(id = if (viewModel.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outlined),
@@ -208,22 +217,45 @@ fun AddPersonScreen(
                             contentDescription = "Favorite"
                         )
                     }
-                    OutlinedButton(
-                        onClick = {
-                            if (!viewModel.isLoading) {
-                                viewModel.viewModelScope.launch {
-                                    viewModel.addPerson(context, navController)
+                    if (isDarkMode) {
+                        OutlinedButton(
+                            onClick = {
+                                if (!viewModel.isLoading) {
+                                    viewModel.viewModelScope.launch {
+                                        viewModel.addPerson(context, navController)
+                                    }
                                 }
-                            }
-                        },
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        MyText(
-                            text = if (!viewModel.isLoading) "Save" else "Saving...",
-                            color = appBarTextColor,
-                            fontSize = 16.sp
-                        )
+                            },
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+                            MyText(
+                                text = if (!viewModel.isLoading) "Save" else "Saving...",
+                                color = appBarTextColor,
+                                fontSize = 16.sp
+                            )
+                        }
+                    } else {
+                        Button(
+                            onClick = {
+                                if (!viewModel.isLoading) {
+                                    viewModel.viewModelScope.launch {
+                                        viewModel.addPerson(context, navController)
+                                    }
+                                }
+                            },
+                            modifier = Modifier.padding(8.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.White
+                            )
+                        ) {
+                            MyText(
+                                text = if (!viewModel.isLoading) "Save" else "Saving...",
+                                color = Color.Black,
+                                fontSize = 16.sp
+                            )
+                        }
                     }
+
                 }
             )
         }
@@ -295,7 +327,11 @@ fun AddPersonScreen(
                                 TextButton(onClick = {
                                     viewModel.selectedImage = null
                                 }) {
-                                    MyText(text = "Remove", color = MaterialTheme.colorScheme.error)
+                                    MyText(
+                                        text = "Remove",
+                                        color = MaterialTheme.colorScheme.error,
+                                        fontSize = 18.sp
+                                    )
                                 }
 
                         }
@@ -321,7 +357,10 @@ fun AddPersonScreen(
                     textStyle = TextStyle(fontFamily = OutfitFontFamily, fontSize = 18.sp),
                     onValueChange = {
                         viewModel.name = it
-                    },
+                    }, keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words
+                    ),
+                    maxLines = 1,
                     label = { Text(text = "Name") },
                     modifier = Modifier
                         .padding(8.dp)

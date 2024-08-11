@@ -16,6 +16,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -23,14 +24,17 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.social.people_book.model.repositories.TagsRepository
 import com.social.people_book.model.room_database.PersonDatabase
 import com.social.people_book.navigation.NavigationGraph
 import com.social.people_book.ui.theme.PeopleBookTheme
+import com.social.people_book.ui.theme.ThemeMode
 
 class MainActivity : ComponentActivity() {
 
     companion object {
         lateinit var db: PersonDatabase
+        lateinit var tagsRepository: TagsRepository
     }
 
     private lateinit var auth: FirebaseAuth
@@ -38,6 +42,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalSharedTransitionApi::class)
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
         val context: Context = this
@@ -45,6 +50,7 @@ class MainActivity : ComponentActivity() {
         // Initialize Firebase Auth
         auth = Firebase.auth
         db = PersonDatabase.getInstance(context)
+        tagsRepository = TagsRepository(context)
 
         setContent {
             val viewModel = viewModel<MainViewModel>(
@@ -56,7 +62,8 @@ class MainActivity : ComponentActivity() {
             val isSystemDark = isSystemInDarkTheme()
             val darkMode by remember {
                 derivedStateOf {
-                    viewModel.isDarkMode.value ?: isSystemDark
+                    viewModel.themeMode.value == ThemeMode.Dark || viewModel.themeMode.value == ThemeMode.System && isSystemDark
+//                    viewModel.isDarkMode.value ?: isSystemDark
                 }
             }
 
