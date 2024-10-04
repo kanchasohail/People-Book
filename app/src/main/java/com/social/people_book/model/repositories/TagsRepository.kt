@@ -89,6 +89,4 @@ class TagsRepository(context: Context) {
         }
         _tagsList.value = getTags()
     }
-
-
 }
