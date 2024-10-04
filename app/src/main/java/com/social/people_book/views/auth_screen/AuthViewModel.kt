@@ -146,7 +146,11 @@ class AuthViewModel : ViewModel() {
             if (isDeleted) {
                 showDialogState = true
             } else {
-                navController.navigate(Screens.HomeScreen.route)
+                navController.navigate(Screens.HomeScreen.route) {
+                    popUpTo(Screens.AuthScreen.route) {
+                        inclusive = true
+                    }
+                }
             }
 
             // Save the user info and set isDeleted to false

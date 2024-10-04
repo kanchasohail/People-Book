@@ -63,11 +63,8 @@ fun SettingsScreen(mainViewModel: MainViewModel, navController: NavHostControlle
 //    val isDarkMode = mainViewModel.themeMode.value == ThemeMode.Dark
     val isDarkMode = mainViewModel.isDarkMode.value ?: isSystemInDarkTheme()
 
-    val appBarBackGroundColor =
-        if (isDarkMode) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary
-    val appBarTextColor =
-        if (isDarkMode) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
-    val textColor = if (isDarkMode) Color.White else Color.Black
+//    val textColor = if (isDarkMode) Color.White else Color.Black
+    val textColor = MaterialTheme.colorScheme.onSurface
 
     val viewModel = viewModel<SettingsViewModel>()
 
